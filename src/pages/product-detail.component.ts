@@ -31,13 +31,13 @@ import { StoreService, Product } from '../services/store.service';
               
               <!-- Main Image with Zoom -->
               <div 
-                class="relative bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 overflow-hidden group cursor-crosshair h-[600px] flex items-center justify-center"
+                class="relative bg-white rounded-3xl shadow-2xl p-6 md:p-10 border border-gray-100 overflow-hidden group cursor-crosshair h-[400px] md:h-[600px] flex items-center justify-center"
                 (mousemove)="handleMagnify($event)"
                 (mouseleave)="isMagnifying.set(false)"
                 #imageContainer>
                 
-                <div class="absolute top-8 left-8 z-10">
-                   <span class="bg-safs-dark text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl border border-white/10 backdrop-blur-md">Premium Collection</span>
+                <div class="absolute top-6 left-6 md:top-8 md:left-8 z-10">
+                   <span class="bg-safs-dark text-white text-[9px] md:text-[10px] font-bold px-3 py-1 md:px-4 md:py-1.5 rounded-full uppercase tracking-widest shadow-xl border border-white/10 backdrop-blur-md">Premium Collection</span>
                 </div>
 
                 <!-- Base Image -->
@@ -51,7 +51,7 @@ import { StoreService, Product } from '../services/store.service';
                 <!-- Magnifier Lens View -->
                 @if (isMagnifying()) {
                   <div 
-                    class="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-3xl"
+                    class="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-3xl hidden md:block"
                     style="background-repeat: no-repeat;"
                     [style.background-image]="'url(' + p.image + ')'"
                     [style.background-position]="magnifyPos()"
@@ -60,43 +60,49 @@ import { StoreService, Product } from '../services/store.service';
                   
                   <!-- Magnifier Circle UI Overlay -->
                   <div 
-                    class="absolute w-40 h-40 rounded-full border-4 border-white shadow-2xl pointer-events-none z-30 flex items-center justify-center overflow-hidden"
+                    class="absolute w-40 h-40 rounded-full border-4 border-white shadow-2xl pointer-events-none z-30 hidden md:flex items-center justify-center overflow-hidden"
                     [style.left.px]="mousePos().x - 80"
                     [style.top.px]="mousePos().y - 80">
                      <div class="absolute inset-0 bg-safs-gold/10"></div>
                   </div>
                 }
 
-                <div class="absolute bottom-8 left-8 flex justify-between items-end">
-                   <div class="p-4 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100 text-left">
-                      <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-1">Interactive Detail</p>
-                      <p class="text-xs font-serif font-bold text-safs-dark">Hover image to explore textures</p>
+                <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 flex justify-between items-end">
+                   <div class="p-3 md:p-4 bg-white/90 backdrop-blur-md rounded-xl md:rounded-2xl shadow-xl border border-gray-100 text-left">
+                      <p class="text-[9px] md:text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-1">Interactive Detail</p>
+                      <p class="text-[10px] md:text-xs font-serif font-bold text-safs-dark">Hover image to explore</p>
                    </div>
                 </div>
               </div>
               
               <!-- Feature Badges -->
-              <div class="grid grid-cols-3 gap-6">
-                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center transform hover:-translate-y-1 transition-all">
-                    <div class="w-12 h-12 bg-safs-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                       <svg class="text-safs-gold" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                 <div class="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 shadow-sm text-center transform hover:-translate-y-1 transition-all flex md:block items-center gap-4 md:gap-0 text-left md:text-center">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-safs-gold/10 rounded-full flex items-center justify-center md:mx-auto md:mb-4 shrink-0">
+                       <svg class="text-safs-gold" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-safs-dark mb-1">Quality Guaranteed</h4>
-                    <p class="text-[10px] text-gray-400 uppercase">Hand-finished details</p>
+                    <div>
+                       <h4 class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-safs-dark mb-1">Quality Guaranteed</h4>
+                       <p class="text-[9px] md:text-[10px] text-gray-400 font-medium uppercase">Hand-finished details</p>
+                    </div>
                  </div>
-                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center transform hover:-translate-y-1 transition-all">
-                    <div class="w-12 h-12 bg-safs-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                       <svg class="text-safs-gold" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                 <div class="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 shadow-sm text-center transform hover:-translate-y-1 transition-all flex md:block items-center gap-4 md:gap-0 text-left md:text-center">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-safs-gold/10 rounded-full flex items-center justify-center md:mx-auto md:mb-4 shrink-0">
+                       <svg class="text-safs-gold" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                     </div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-safs-dark mb-1">Structural Integrity</h4>
-                    <p class="text-[10px] text-gray-400 uppercase">Reinforced Base</p>
+                    <div>
+                       <h4 class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-safs-dark mb-1">Structural Integrity</h4>
+                       <p class="text-[9px] md:text-[10px] text-gray-400 font-medium uppercase">Reinforced Base</p>
+                    </div>
                  </div>
-                 <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm text-center transform hover:-translate-y-1 transition-all">
-                    <div class="w-12 h-12 bg-safs-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                       <svg class="text-safs-gold" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                 <div class="bg-white p-5 md:p-6 rounded-2xl border border-gray-100 shadow-sm text-center transform hover:-translate-y-1 transition-all flex md:block items-center gap-4 md:gap-0 text-left md:text-center">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-safs-gold/10 rounded-full flex items-center justify-center md:mx-auto md:mb-4 shrink-0">
+                       <svg class="text-safs-gold" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1-1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                     </div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-safs-dark mb-1">Ethical Sourcing</h4>
-                    <p class="text-[10px] text-gray-400 uppercase">Sustainable Material</p>
+                    <div>
+                       <h4 class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-safs-dark mb-1">Ethical Sourcing</h4>
+                       <p class="text-[9px] md:text-[10px] text-gray-400 font-medium uppercase">Sustainable Material</p>
+                    </div>
                  </div>
               </div>
             </div>
@@ -162,23 +168,23 @@ import { StoreService, Product } from '../services/store.service';
 
                 <!-- Quantity & Add to Quote -->
                 <div class="space-y-6">
-                    <div class="flex items-center gap-6">
-                       <h3 class="font-bold text-safs-dark text-xs uppercase tracking-widest">Quantity</h3>
-                       <div class="flex items-center bg-gray-50 rounded-2xl p-2 border border-gray-100">
-                          <button (click)="updateQuantity(-1)" class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center hover:bg-gray-100 text-safs-dark transition-colors">-</button>
-                          <span class="w-12 text-center font-bold text-lg">{{ quantity() }}</span>
-                          <button (click)="updateQuantity(1)" class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center hover:bg-gray-100 text-safs-dark transition-colors">+</button>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                       <h3 class="font-bold text-safs-dark text-[10px] md:text-xs uppercase tracking-widest shrink-0">Quantity</h3>
+                       <div class="flex items-center bg-gray-50 rounded-2xl p-1.5 md:p-2 border border-gray-100">
+                          <button (click)="updateQuantity(-1)" class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white shadow-sm flex items-center justify-center hover:bg-gray-100 text-safs-dark transition-colors font-bold text-base">-</button>
+                          <span class="w-10 md:w-12 text-center font-bold text-base md:text-lg">{{ quantity() }}</span>
+                          <button (click)="updateQuantity(1)" class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-white shadow-sm flex items-center justify-center hover:bg-gray-100 text-safs-dark transition-colors font-bold text-base">+</button>
                        </div>
                     </div>
 
-                    <button (click)="addToCart()" class="w-full bg-safs-gold text-safs-dark font-black py-6 rounded-[1.5rem] hover:bg-yellow-600 transition-all flex items-center justify-center gap-4 text-xl shadow-2xl shadow-safs-gold/40 transform active:scale-95 group">
+                    <button (click)="addToCart()" class="w-full bg-safs-gold text-safs-dark font-black py-4 md:py-6 rounded-2xl md:rounded-[1.5rem] hover:bg-yellow-600 transition-all flex items-center justify-center gap-3 md:gap-4 text-base md:text-xl shadow-xl shadow-safs-gold/30 transform active:scale-95 group">
                       <span>Add to Quote Request</span>
-                      <svg class="group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                      <svg class="group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                     
-                    <a routerLink="/cart" class="w-full text-center py-4 text-gray-400 font-bold hover:text-safs-dark transition-colors flex items-center justify-center gap-3 text-sm">
-                       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
-                       Go to Quote Summary ({{ store.cartCount() }})
+                    <a routerLink="/cart" class="w-full text-center py-2 text-gray-400 font-bold hover:text-safs-dark transition-colors flex items-center justify-center gap-2 text-[11px] md:text-sm">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+                       Review Quote List ({{ store.cartCount() }})
                     </a>
                 </div>
 

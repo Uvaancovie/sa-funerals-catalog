@@ -19,43 +19,74 @@ import { RouterLink } from '@angular/router';
           <div class="flex flex-col lg:flex-row gap-8">
             <!-- Cart Items -->
             <div class="lg:w-2/3">
-              <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <table class="w-full text-left">
-                  <thead class="bg-gray-100 text-gray-600 text-sm uppercase">
+              <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                <!-- Desktop Table -->
+                <table class="w-full text-left hidden md:table">
+                  <thead class="bg-gray-50 text-gray-500 text-[10px] uppercase tracking-widest font-bold">
                     <tr>
-                      <th class="p-4">Product</th>
-                      <th class="p-4 text-center">Quantity</th>
-                      <th class="p-4"></th>
+                      <th class="p-6">Product Information</th>
+                      <th class="p-6 text-center">Qty</th>
+                      <th class="p-6"></th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-100">
                     @for (item of store.cart(); track item.product.id + item.variant) {
-                      <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="p-4">
-                          <div class="flex items-center gap-4">
-                            <img [src]="item.product.image" class="w-16 h-16 object-cover rounded-lg bg-gray-100 border border-gray-200">
+                      <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="p-6">
+                          <div class="flex items-center gap-6">
+                            <div class="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center p-2 border border-gray-100">
+                               <img [src]="item.product.image" class="max-w-full max-h-full object-contain">
+                            </div>
                             <div>
-                              <div class="font-bold text-safs-dark">{{ item.product.name }}</div>
-                              <div class="text-sm text-gray-500">Variant: {{ item.variant }}</div>
+                               <div class="font-bold text-safs-dark text-lg mb-1">{{ item.product.name }}</div>
+                               <div class="text-xs font-bold text-safs-gold uppercase tracking-widest">{{ item.variant }}</div>
                             </div>
                           </div>
                         </td>
-                        <td class="p-4">
-                          <div class="flex items-center justify-center gap-3">
-                            <button (click)="store.updateQuantity(item.product.id, item.variant, -1)" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">-</button>
-                            <span class="font-bold w-6 text-center text-safs-dark">{{ item.quantity }}</span>
-                            <button (click)="store.updateQuantity(item.product.id, item.variant, 1)" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">+</button>
+                        <td class="p-6">
+                          <div class="flex items-center justify-center gap-4">
+                            <button (click)="store.updateQuantity(item.product.id, item.variant, -1)" class="w-10 h-10 rounded-xl bg-gray-50 hover:bg-gray-200 flex items-center justify-center text-safs-dark font-bold transition-all shadow-sm">-</button>
+                            <span class="font-black w-6 text-center text-lg">{{ item.quantity }}</span>
+                            <button (click)="store.updateQuantity(item.product.id, item.variant, 1)" class="w-10 h-10 rounded-xl bg-gray-50 hover:bg-gray-200 flex items-center justify-center text-safs-dark font-bold transition-all shadow-sm">+</button>
                           </div>
                         </td>
-                        <td class="p-4 text-center">
-                          <button (click)="store.removeFromCart(item.product.id, item.variant)" class="text-red-400 hover:text-red-600 transition-colors p-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                        <td class="p-6 text-right">
+                          <button (click)="store.removeFromCart(item.product.id, item.variant)" class="text-gray-300 hover:text-red-500 transition-colors p-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
                           </button>
                         </td>
                       </tr>
                     }
                   </tbody>
                 </table>
+
+                <!-- Mobile List -->
+                <div class="md:hidden divide-y divide-gray-100">
+                  @for (item of store.cart(); track item.product.id + item.variant) {
+                    <div class="p-5 space-y-4">
+                       <div class="flex gap-4">
+                          <div class="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center p-2 border border-gray-100 shrink-0">
+                             <img [src]="item.product.image" class="max-w-full max-h-full object-contain">
+                          </div>
+                          <div class="flex-1 min-w-0">
+                             <div class="font-bold text-safs-dark text-base mb-1 truncate">{{ item.product.name }}</div>
+                             <div class="text-[10px] font-bold text-safs-gold uppercase tracking-widest">{{ item.variant }}</div>
+                             
+                             <div class="flex items-center justify-between mt-4">
+                                <div class="flex items-center gap-3">
+                                   <button (click)="store.updateQuantity(item.product.id, item.variant, -1)" class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-safs-dark font-bold">-</button>
+                                   <span class="font-black w-4 text-center text-base">{{ item.quantity }}</span>
+                                   <button (click)="store.updateQuantity(item.product.id, item.variant, 1)" class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-safs-dark font-bold">+</button>
+                                </div>
+                                <button (click)="store.removeFromCart(item.product.id, item.variant)" class="text-red-400 p-2">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                                </button>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                  }
+                </div>
               </div>
 
               <!-- Clear Cart -->
@@ -88,12 +119,12 @@ import { RouterLink } from '@angular/router';
                   </p>
                 </div>
 
-                <button (click)="generateQuote()" class="w-full bg-safs-gold text-safs-dark font-bold py-3.5 rounded-lg hover:bg-yellow-600 transition-colors mb-3 flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                <button (click)="generateQuote()" class="w-full bg-safs-gold text-safs-dark font-bold py-3.5 rounded-lg hover:bg-yellow-600 transition-colors mb-4 flex items-center justify-center gap-2 shadow-sm hover:shadow-md text-sm md:text-base">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                  Generate Quote PDF
+                  Generate PDF Quote
                 </button>
 
-                <button (click)="showEmailForm.set(!showEmailForm())" class="w-full bg-safs-dark text-white font-bold py-3.5 rounded-lg hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2">
+                <button (click)="showEmailForm.set(!showEmailForm())" class="w-full bg-safs-dark text-white font-bold py-3.5 rounded-lg hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2 text-sm md:text-base">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                   Email Quote Request
                 </button>
