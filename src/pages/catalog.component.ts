@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
         
         <!-- Header -->
         <div class="text-center mb-12">
-          <h1 class="font-serif text-4xl font-bold text-safs-dark mb-4">Product Catalogue 2024</h1>
+          <h1 class="font-serif text-4xl font-bold text-safs-dark mb-4">Product Catalogue 2026</h1>
           <p class="text-gray-600 max-w-2xl mx-auto mb-8">
             Browse our extensive range of high-quality caskets and funeral accessories.
           </p>
