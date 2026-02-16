@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { StoreService } from '../services/store.service';
+import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -31,8 +32,34 @@ import { CommonModule } from '@angular/common';
             <a routerLink="/contact" routerLinkActive="text-safs-gold active-nav" class="text-xs uppercase tracking-[0.2em] hover:text-safs-gold transition-all duration-300 font-bold relative py-2">Get Quote</a>
           </div>
 
-          <!-- Cart & Mobile Menu -->
+          <!-- Auth & Admin Links (Desktop) -->
           <div class="flex items-center gap-2 md:gap-4">
+            @if (!authService.isAuthenticated()) {
+              <div class="hidden md:flex items-center gap-2">
+                <a routerLink="/login" class="px-4 py-2 text-xs font-bold uppercase tracking-wider hover:text-safs-gold transition-colors">Login</a>
+                <a routerLink="/register" class="px-4 py-2 bg-safs-gold text-safs-dark text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-yellow-600 transition-colors">Register</a>
+              </div>
+            } @else {
+              <div class="hidden md:flex items-center gap-3">
+                @if (authService.isAdmin()) {
+                  <a routerLink="/admin" class="px-4 py-2 bg-safs-gold text-safs-dark text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-yellow-600 transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Admin Portal
+                  </a>
+                }
+                <div class="text-xs">
+                  <div class="font-bold text-white">{{ authService.currentUser()?.companyName }}</div>
+                  @if (authService.isPending()) {
+                    <div class="text-yellow-400 text-[10px]">Pending Approval</div>
+                  } @else if (authService.isApproved()) {
+                    <div class="text-green-400 text-[10px]">Approved</div>
+                  }
+                </div>
+              </div>
+            }
+
             <a routerLink="/cart" (click)="closeMenu()" class="relative p-2.5 hover:bg-white/5 rounded-2xl transition-all group overflow-hidden border border-transparent hover:border-white/10">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-safs-gold group-hover:scale-110 transition-transform">
                 <circle cx="8" cy="21" r="1"></circle>
@@ -74,6 +101,10 @@ import { CommonModule } from '@angular/common';
           <a routerLink="/about" (click)="closeMenu()" routerLinkActive="text-safs-gold" class="block text-xl font-serif font-bold tracking-widest border-l-4 border-transparent hover:border-safs-gold pl-4 transition-all uppercase">Our Story</a>
           <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="text-safs-gold" class="block text-xl font-serif font-bold tracking-widest border-l-4 border-transparent hover:border-safs-gold pl-4 transition-all uppercase">Get Quote</a>
           
+          @if (authService.isAdmin()) {
+            <a routerLink="/admin" (click)="closeMenu()" routerLinkActive="text-safs-gold" class="block text-xl font-serif font-bold tracking-widest border-l-4 border-safs-gold bg-safs-gold/10 pl-4 transition-all uppercase">Admin Portal</a>
+          }
+          
           <div class="pt-8 border-t border-white/5">
              <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-4">Contact Assistance</p>
              <p class="text-safs-gold font-bold">+27 31 508 6700</p>
@@ -111,6 +142,7 @@ import { CommonModule } from '@angular/common';
 })
 export class NavbarComponent {
   store = inject(StoreService);
+  authService = inject(AuthService);
   isMenuOpen = signal(false);
 
   toggleMenu() {

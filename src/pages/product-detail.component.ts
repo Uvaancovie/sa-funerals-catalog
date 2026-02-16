@@ -2,6 +2,7 @@ import { Component, inject, computed, signal, ElementRef, ViewChild } from '@ang
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { StoreService, Product } from '../services/store.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -237,6 +238,7 @@ import { StoreService, Product } from '../services/store.service';
 export class ProductDetailComponent {
   route = inject(ActivatedRoute);
   store = inject(StoreService);
+  authService = inject(AuthService);
 
   @ViewChild('imageContainer') imageContainer!: ElementRef<HTMLDivElement>;
 
