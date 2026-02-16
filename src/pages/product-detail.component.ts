@@ -31,9 +31,12 @@ import { StoreService, Product } from '../services/store.service';
               
               <!-- Main Image with Zoom -->
               <div 
-                class="relative bg-white rounded-3xl shadow-2xl p-6 md:p-10 border border-gray-100 overflow-hidden group cursor-crosshair h-[400px] md:h-[600px] flex items-center justify-center"
+                class="relative bg-white rounded-3xl shadow-2xl p-6 md:p-10 border border-gray-100 overflow-hidden group cursor-crosshair h-[400px] md:h-[600px] flex items-center justify-center touch-none"
                 (mousemove)="handleMagnify($event)"
                 (mouseleave)="isMagnifying.set(false)"
+                (touchstart)="handleTouch($event)"
+                (touchmove)="handleTouch($event)"
+                (touchend)="isMagnifying.set(false)"
                 #imageContainer>
                 
                 <div class="absolute top-6 left-6 md:top-8 md:left-8 z-10">
@@ -51,7 +54,7 @@ import { StoreService, Product } from '../services/store.service';
                 <!-- Magnifier Lens View -->
                 @if (isMagnifying()) {
                   <div 
-                    class="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-3xl hidden md:block"
+                    class="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-3xl"
                     style="background-repeat: no-repeat;"
                     [style.background-image]="'url(' + p.image + ')'"
                     [style.background-position]="magnifyPos()"
@@ -60,7 +63,7 @@ import { StoreService, Product } from '../services/store.service';
                   
                   <!-- Magnifier Circle UI Overlay -->
                   <div 
-                    class="absolute w-40 h-40 rounded-full border-4 border-white shadow-2xl pointer-events-none z-30 hidden md:flex items-center justify-center overflow-hidden"
+                    class="absolute w-40 h-40 rounded-full border-4 border-white shadow-2xl pointer-events-none z-30 flex items-center justify-center overflow-hidden"
                     [style.left.px]="mousePos().x - 80"
                     [style.top.px]="mousePos().y - 80">
                      <div class="absolute inset-0 bg-safs-gold/10"></div>
@@ -70,7 +73,7 @@ import { StoreService, Product } from '../services/store.service';
                 <div class="absolute bottom-6 left-6 md:bottom-8 md:left-8 flex justify-between items-end">
                    <div class="p-3 md:p-4 bg-white/90 backdrop-blur-md rounded-xl md:rounded-2xl shadow-xl border border-gray-100 text-left">
                       <p class="text-[9px] md:text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-1">Interactive Detail</p>
-                      <p class="text-[10px] md:text-xs font-serif font-bold text-safs-dark">Hover image to explore</p>
+                      <p class="text-[10px] md:text-xs font-serif font-bold text-safs-dark">Hold & slide to explore</p>
                    </div>
                 </div>
               </div>
@@ -279,7 +282,21 @@ export class ProductDetailComponent {
     const rect = this.imageContainer.nativeElement.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
+    this.updateMagnify(x, y, rect);
+  }
 
+  handleTouch(event: TouchEvent) {
+    if (!this.imageContainer || event.touches.length === 0) return;
+    this.isMagnifying.set(true);
+
+    const rect = this.imageContainer.nativeElement.getBoundingClientRect();
+    const touch = event.touches[0];
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    this.updateMagnify(x, y, rect);
+  }
+
+  private updateMagnify(x: number, y: number, rect: DOMRect) {
     this.mousePos.set({ x, y });
 
     // Calculate percentage for background position
