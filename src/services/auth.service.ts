@@ -3,16 +3,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 export interface User {
-    id: string;
+    id: number;
     email: string;
-    companyName: string;
-    contactPerson: string;
+    companyName: string | null;
+    contactPerson: string | null;
+    phone: string | null;
+    address: string | null;
     role: 'customer' | 'admin';
     status: 'pending' | 'approved' | 'declined';
 }
 
-export interface AuthResponse {
-    success: boolean;
+export interface LoginResponse {
     token: string;
     user: User;
 }
@@ -59,31 +60,24 @@ export class AuthService {
         localStorage.removeItem('current_user');
     }
 
-    register(data: {
-        email: string;
-        password: string;
-        companyName: string;
-        contactPerson: string;
-        phone: string;
-        address?: string;
-    }): Observable<any> {
-        return this.http.post(`${this.apiUrl}/auth/register`, data);
-    }
-
-    login(email: string, password: string): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, { email, password })
+    login(email: string, password: string): Observable<LoginResponse> {
+        return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, { email, password })
             .pipe(
                 tap(response => {
-                    if (response.success) {
-                        this.token.set(response.token);
-                        this.currentUser.set(response.user);
-                        this.saveToStorage(response.token, response.user);
-                    }
+                    this.token.set(response.token);
+                    this.currentUser.set(response.user);
+                    this.saveToStorage(response.token, response.user);
                 })
             );
     }
 
     logout() {
+        // Call backend to record logout in audit logs
+        const headers = this.getAuthHeaders();
+        this.http.post(`${this.apiUrl}/auth/logout`, {}, { headers }).subscribe({
+            complete: () => { },
+            error: () => { } // Silent fail — we still clear locally
+        });
         this.token.set(null);
         this.currentUser.set(null);
         this.clearStorage();

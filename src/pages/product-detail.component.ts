@@ -46,7 +46,7 @@ import { AuthService } from '../services/auth.service';
 
                 <!-- Base Image -->
                 <img 
-                  [src]="p.image" 
+                  [src]="getCurrentImage(p)" 
                   [alt]="p.name" 
                   class="max-w-full max-h-full object-contain transition-all duration-500"
                   [style.opacity]="isMagnifying() ? '0.3' : '1'"
@@ -57,7 +57,7 @@ import { AuthService } from '../services/auth.service';
                   <div 
                     class="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-3xl"
                     style="background-repeat: no-repeat;"
-                    [style.background-image]="'url(' + p.image + ')'"
+                    [style.background-image]="'url(' + getCurrentImage(p) + ')'"
                     [style.background-position]="magnifyPos()"
                     [style.background-size]="'200%'">
                   </div>
@@ -140,32 +140,58 @@ import { AuthService } from '../services/auth.service';
                   </p>
                 </div>
 
-                <!-- Variants selection -->
+                <!-- Color Variations or Variants selection -->
                 <div class="mb-12">
                   <h3 class="font-bold text-safs-dark mb-6 text-xs uppercase tracking-widest flex items-center justify-between">
                      <span>Selective Finish</span>
                      <span class="text-safs-gold text-[10px] font-black">{{ selectedVariant() }}</span>
                   </h3>
                   <div class="flex flex-wrap gap-5">
-                    @for (variant of p.variants; track variant) {
-                      <button 
-                        (click)="selectedVariant.set(variant)"
-                        class="group relative"
-                        [title]="variant">
-                        <div 
-                           [style.background-color]="getVariantColor(variant)" 
-                           class="w-14 h-14 rounded-2xl border-2 transition-all duration-300 transform group-hover:scale-110 shadow-sm"
-                           [class.border-safs-gold]="selectedVariant() === variant"
-                           [class.scale-110]="selectedVariant() === variant"
-                           [class.shadow-xl]="selectedVariant() === variant"
-                           [class.border-transparent]="selectedVariant() !== variant">
-                        </div>
-                        @if (selectedVariant() === variant) {
-                          <div class="absolute -top-2 -right-2 w-5 h-5 bg-safs-gold rounded-full flex items-center justify-center shadow-lg border-2 border-white">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    @if (getColorVariations(p).length > 0) {
+                      @for (variation of getColorVariations(p); track variation.color; let i = $index) {
+                        <button 
+                          (click)="selectColorVariation(i, variation.color)"
+                          class="group relative"
+                          [title]="variation.color">
+                          <div 
+                             [style.background-color]="getVariantColor(variation.color)" 
+                             class="w-14 h-14 rounded-2xl border-2 transition-all duration-300 transform group-hover:scale-110 shadow-sm"
+                             [class.border-safs-gold]="selectedColorIndex() === i"
+                             [class.scale-110]="selectedColorIndex() === i"
+                             [class.shadow-xl]="selectedColorIndex() === i"
+                             [class.border-transparent]="selectedColorIndex() !== i">
                           </div>
-                        }
-                      </button>
+                          @if (selectedColorIndex() === i) {
+                            <div class="absolute -top-2 -right-2 w-5 h-5 bg-safs-gold rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                          }
+                          <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-bold text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                            {{ variation.color }}
+                          </div>
+                        </button>
+                      }
+                    } @else {
+                      @for (variant of store.parseFeatures(p); track variant) {
+                        <button 
+                          (click)="selectedVariant.set(variant)"
+                          class="group relative"
+                          [title]="variant">
+                          <div 
+                             [style.background-color]="getVariantColor(variant)" 
+                             class="w-14 h-14 rounded-2xl border-2 transition-all duration-300 transform group-hover:scale-110 shadow-sm"
+                             [class.border-safs-gold]="selectedVariant() === variant"
+                             [class.scale-110]="selectedVariant() === variant"
+                             [class.shadow-xl]="selectedVariant() === variant"
+                             [class.border-transparent]="selectedVariant() !== variant">
+                          </div>
+                          @if (selectedVariant() === variant) {
+                            <div class="absolute -top-2 -right-2 w-5 h-5 bg-safs-gold rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                          }
+                        </button>
+                      }
                     }
                   </div>
                 </div>
@@ -213,7 +239,7 @@ import { AuthService } from '../services/auth.service';
                @for (related of relatedProducts(); track related.id) {
                  <div class="bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all border border-gray-100 p-6 flex flex-col cursor-pointer group" [routerLink]="['/product', related.id]">
                     <div class="aspect-square bg-gray-50 rounded-2xl mb-6 flex items-center justify-center p-6 border border-gray-50 overflow-hidden">
-                       <img [src]="related.image" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                       <img [src]="store.parseImages(related)[0] || ''" class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div class="text-[9px] font-black text-safs-gold uppercase tracking-[0.3em] mb-2">{{ related.category }}</div>
                     <h4 class="font-serif text-xl font-bold text-safs-dark mb-4 group-hover:text-safs-gold transition-colors leading-tight">{{ related.name }}</h4>
@@ -244,6 +270,7 @@ export class ProductDetailComponent {
 
   productId = signal<string>('');
   selectedVariant = signal<string>('');
+  selectedColorIndex = signal<number>(0);
   quantity = signal<number>(1);
 
   // Magnifier signals
@@ -268,13 +295,44 @@ export class ProductDetailComponent {
       const id = params.get('id');
       if (id) {
         this.productId.set(id);
+        this.selectedColorIndex.set(0);
         const p = this.store.products().find(p => p.id === id);
-        if (p && p.variants.length > 0) {
-          this.selectedVariant.set(p.variants[0]);
+        if (p) {
+          const colorVars = this.store.parseColorVariations(p);
+          if (colorVars.length > 0) {
+            this.selectedVariant.set(colorVars[0].color);
+          } else {
+            const features = this.store.parseFeatures(p);
+            if (features.length > 0) {
+              this.selectedVariant.set(features[0]);
+            }
+          }
         }
         this.quantity.set(1);
       }
     });
+  }
+
+  getColorVariations(product: Product): { color: string; images: string[] }[] {
+    return this.store.parseColorVariations(product);
+  }
+
+  getCurrentImage(product: Product): string {
+    const colorVars = this.getColorVariations(product);
+    if (colorVars.length > 0) {
+      const selectedIndex = this.selectedColorIndex();
+      if (selectedIndex >= 0 && selectedIndex < colorVars.length) {
+        const images = colorVars[selectedIndex].images;
+        return images.length > 0 ? images[0] : '';
+      }
+    }
+    const images = this.store.parseImages(product);
+    return images.length > 0 ? images[0] : '';
+  }
+
+  selectColorVariation(index: number, color: string) {
+    this.selectedColorIndex.set(index);
+    this.selectedVariant.set(color);
   }
 
   handleMagnify(event: MouseEvent) {

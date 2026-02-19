@@ -31,7 +31,7 @@ import { StoreService } from '../services/store.service';
 
           <!-- Product Info -->
           <div class="flex items-center gap-3 mb-4 bg-gray-50 rounded-lg p-3">
-            <img [src]="store.toastItem()?.product?.image" class="w-14 h-14 object-cover rounded-lg border border-gray-200">
+            <img [src]="store.parseImages(store.toastItem()?.product!)[0] || ''" class="w-14 h-14 object-cover rounded-lg border border-gray-200">
             <div class="flex-1 min-w-0">
               <p class="font-bold text-safs-dark text-sm truncate">{{ store.toastItem()?.product?.name }}</p>
               <p class="text-xs text-gray-500">Variant: {{ store.toastItem()?.variant }}</p>

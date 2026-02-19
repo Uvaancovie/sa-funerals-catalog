@@ -35,7 +35,7 @@ import { RouterLink } from '@angular/router';
                         <td class="p-6">
                           <div class="flex items-center gap-6">
                             <div class="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center p-2 border border-gray-100">
-                               <img [src]="item.product.image" class="max-w-full max-h-full object-contain">
+                               <img [src]="store.parseImages(item.product)[0] || ''" class="max-w-full max-h-full object-contain">
                             </div>
                             <div>
                                <div class="font-bold text-safs-dark text-lg mb-1">{{ item.product.name }}</div>
@@ -66,7 +66,7 @@ import { RouterLink } from '@angular/router';
                     <div class="p-5 space-y-4">
                        <div class="flex gap-4">
                           <div class="w-20 h-20 bg-gray-50 rounded-xl flex items-center justify-center p-2 border border-gray-100 shrink-0">
-                             <img [src]="item.product.image" class="max-w-full max-h-full object-contain">
+                             <img [src]="store.parseImages(item.product)[0] || ''" class="max-w-full max-h-full object-contain">
                           </div>
                           <div class="flex-1 min-w-0">
                              <div class="font-bold text-safs-dark text-base mb-1 truncate">{{ item.product.name }}</div>
@@ -256,7 +256,7 @@ export class CartComponent {
         <td>${i + 1}</td>
         <td>
           <div class="product-info">
-            <img src="${item.product.image}" alt="${item.product.name}">
+            <img src="${this.store.parseImages(item.product)[0] || ''}" alt="${item.product.name}">
             <div>
               <strong>${item.product.name}</strong>
               <div style="color: #888; font-size: 12px; text-transform: uppercase;">${item.product.category}</div>

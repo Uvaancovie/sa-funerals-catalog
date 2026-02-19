@@ -24,3 +24,67 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# --- Node / Angular ---
+node_modules/
+dist/
+out-tsc/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.pnp.*
+.cache/
+.store/
+
+# Angular / Vite caches
+.angular/
+.angular/cache/
+.vite/
+.vite/deps_temp_*/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+appsettings.Development.json
+local.settings.json
+secrets.json
+
+# --- .NET / Visual Studio ---
+**/bin/
+**/obj/
+**/publish/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+*.trx
+
+# EF / Local DB files
+*.mdf
+*.ldf
+
+# NuGet / packages
+*.nupkg
+.packages/
+
+# IDEs / editors
+.vscode/
+.idea/
+*.iml
+
+# OS / misc
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# Local tools / build artifacts
+acli.exe
+dotnet-ef.exe
+
+# Docker / temp
+docker-compose.override.yml

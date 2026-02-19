@@ -1,7 +1,8 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, inject, computed, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { StoreService, Product } from '../services/store.service';
 import { AuthService } from '../services/auth.service';
+import { WishlistService } from '../services/wishlist.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -153,12 +154,32 @@ import { CommonModule } from '@angular/common';
                   
                   <!-- Image Area -->
                   <div class="relative h-64 overflow-hidden bg-gray-50">
-                    <img [src]="product.image" [alt]="product.name" class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500">
+                    <img [src]="getProductDisplayImage(product)" [alt]="product.name" class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                        <span class="bg-white text-safs-dark font-bold py-2 px-6 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-lg">
                          View Details
                        </span>
                     </div>
+                    
+                    <!-- Color Variation Swatches -->
+                    @if (getProductColorVariations(product).length > 0) {
+                      <div class="absolute bottom-3 left-3 right-3 flex gap-2 flex-wrap bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-md">
+                        @for (variation of getProductColorVariations(product); track variation.color) {
+                          <button
+                            (click)="selectColor(product, variation.color, $event)"
+                            [class.ring-2]="isColorSelected(product, variation.color)"
+                            [class.ring-safs-gold]="isColorSelected(product, variation.color)"
+                            [class.ring-offset-2]="isColorSelected(product, variation.color)"
+                            class="group/swatch relative flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-gray-100 transition-all"
+                            [title]="variation.color">
+                            <div 
+                              [style.background-color]="getFinishColor(variation.color)" 
+                              class="w-5 h-5 rounded-full border-2 border-gray-300 shadow-sm"></div>
+                            <span class="text-xs font-medium text-gray-700">{{ variation.color }}</span>
+                          </button>
+                        }
+                      </div>
+                    }
                   </div>
 
                   <!-- Content -->
@@ -167,7 +188,7 @@ import { CommonModule } from '@angular/common';
                     <h3 class="font-serif text-lg font-bold text-safs-dark mb-2 group-hover:text-safs-gold transition-colors leading-tight">{{ product.name }}</h3>
                     <div class="mt-auto">
                        <div class="flex flex-wrap gap-1 mb-4">
-                         @for (v of product.variants; track v) {
+                         @for (v of store.parseFeatures(product); track v) {
                            <span class="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-500 rounded uppercase font-medium">{{ v }}</span>
                          }
                        </div>
@@ -178,11 +199,30 @@ import { CommonModule } from '@angular/common';
                          } @else if (authService.isPending()) {
                            <span class="text-xs text-yellow-600 italic font-medium">Awaiting Approval</span>
                          } @else {
-                           <a routerLink="/register" (click)="$event.stopPropagation()" class="text-xs text-safs-gold font-bold hover:underline">Login to View Price</a>
+                           <a routerLink="/login" (click)="$event.stopPropagation()" class="text-xs text-safs-gold font-bold hover:underline">Login to View Price</a>
                          }
-                         <button (click)="$event.preventDefault(); $event.stopPropagation(); addToCart(product)" class="p-2.5 rounded-full bg-gray-50 text-safs-dark hover:bg-safs-gold hover:text-white transition-all shadow-sm flex items-center justify-center" title="Add to Quote">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                         </button>
+                         <div class="flex gap-2">
+                           <!-- Wishlist Button (only for authenticated customers) -->
+                           @if (authService.isAuthenticated() && !authService.isAdmin()) {
+                             <button 
+                               (click)="$event.preventDefault(); $event.stopPropagation(); toggleWishlist(product)" 
+                               [class.bg-red-500]="wishlistService.isInWishlist(product.id)"
+                               [class.text-white]="wishlistService.isInWishlist(product.id)"
+                               [class.bg-gray-50]="!wishlistService.isInWishlist(product.id)"
+                               [class.text-safs-dark]="!wishlistService.isInWishlist(product.id)"
+                               [class.hover:bg-red-600]="wishlistService.isInWishlist(product.id)"
+                               [class.hover:bg-gray-100]="!wishlistService.isInWishlist(product.id)"
+                               class="p-2.5 rounded-full transition-all shadow-sm flex items-center justify-center" 
+                               [title]="wishlistService.isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" [attr.fill]="wishlistService.isInWishlist(product.id) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                               </svg>
+                             </button>
+                           }
+                           <button (click)="$event.preventDefault(); $event.stopPropagation(); addToCart(product)" class="p-2.5 rounded-full bg-gray-50 text-safs-dark hover:bg-safs-gold hover:text-white transition-all shadow-sm flex items-center justify-center" title="Add to Quote">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                           </button>
+                         </div>
                        </div>
                     </div>
                   </div>
@@ -220,14 +260,23 @@ import { CommonModule } from '@angular/common';
     }
   `]
 })
-export class CatalogComponent {
+export class CatalogComponent implements OnInit {
   store = inject(StoreService);
   authService = inject(AuthService);
+  wishlistService = inject(WishlistService);
+
+  ngOnInit() {
+    // Load wishlist if user is authenticated
+    if (this.authService.isAuthenticated()) {
+      this.wishlistService.getMyWishlist().subscribe();
+    }
+  }
 
   activeFilter = signal<string>('all');
   searchQuery = signal<string>('');
   selectedStyles = signal<string[]>([]);
   selectedFinishes = signal<string[]>([]);
+  selectedColors = signal<Map<string, string>>(new Map()); // Map<productId, selectedColor>
 
   // Derived filter options
   readonly casketStyles = ['Dome', 'Halfview', 'Figurine', 'Woodturning', 'Traditional'];
@@ -269,7 +318,7 @@ export class CatalogComponent {
     // 4. Finish/Color Filter
     if (finishes.length > 0) {
       products = products.filter(p =>
-        p.variants.some(v => finishes.some(f => v.toLowerCase().includes(f.toLowerCase())))
+        this.store.parseFeatures(p).some(v => finishes.some(f => v.toLowerCase().includes(f.toLowerCase())))
       );
     }
 
@@ -279,7 +328,7 @@ export class CatalogComponent {
   private matchesSearch(p: Product, query: string): boolean {
     return p.name.toLowerCase().includes(query)
       || p.category.toLowerCase().includes(query)
-      || p.variants.some(v => v.toLowerCase().includes(query));
+      || this.store.parseFeatures(p).some(v => v.toLowerCase().includes(query));
   }
 
   getCategoryCount(cat: string): number {
@@ -321,7 +370,8 @@ export class CatalogComponent {
   }
 
   addToCart(product: Product) {
-    this.store.addToCart(product, product.variants[0]);
+    const features = this.store.parseFeatures(product);
+    this.store.addToCart(product, features[0] || 'Standard');
   }
 
   getFinishColor(finish: string): string {
@@ -339,4 +389,82 @@ export class CatalogComponent {
     };
     return colors[finish] || '#ccc';
   }
+
+  getProductColorVariations(product: Product): { color: string; images: string[] }[] {
+    return this.store.parseColorVariations(product);
+  }
+
+  getProductDisplayImage(product: Product): string {
+    const colorVariations = this.getProductColorVariations(product);
+
+    if (colorVariations.length > 0) {
+      const selectedColor = this.selectedColors().get(product.id);
+      if (selectedColor) {
+        const variation = colorVariations.find(v => v.color === selectedColor);
+        if (variation && variation.images.length > 0) {
+          return variation.images[0];
+        }
+      }
+      // Default to first color variation's first image
+      return colorVariations[0].images[0] || this.store.parseImages(product)[0] || '';
+    }
+
+    // No color variations, use regular images
+    return this.store.parseImages(product)[0] || '';
+  }
+
+  selectColor(product: Product, color: string, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.selectedColors.update(map => {
+      const newMap = new Map(map);
+      newMap.set(product.id, color);
+      return newMap;
+    });
+  }
+
+  isColorSelected(product: Product, color: string): boolean {
+    const selectedColor = this.selectedColors().get(product.id);
+    if (!selectedColor) {
+      // First color is selected by default
+      const variations = this.getProductColorVariations(product);
+      return variations.length > 0 && variations[0].color === color;
+    }
+    return selectedColor === color;
+  }
+
+  toggleWishlist(product: Product) {
+    if (!this.authService.isAuthenticated()) {
+      return;
+    }
+
+    if (this.wishlistService.isInWishlist(product.id)) {
+      // Find the wishlist item and remove it
+      const wishlistItem = this.wishlistService.wishlistItems()
+        .find(item => item.productId === product.id);
+
+      if (wishlistItem) {
+        this.wishlistService.removeFromWishlist(wishlistItem.id).subscribe({
+          next: () => {
+            console.log('Removed from wishlist');
+          },
+          error: (err) => {
+            console.error('Error removing from wishlist:', err);
+          }
+        });
+      }
+    } else {
+      // Add to wishlist
+      this.wishlistService.addToWishlist(product.id).subscribe({
+        next: () => {
+          console.log('Added to wishlist');
+        },
+        error: (err) => {
+          console.error('Error adding to wishlist:', err);
+        }
+      });
+    }
+  }
 }
+
