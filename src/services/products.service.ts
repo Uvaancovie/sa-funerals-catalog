@@ -1,7 +1,6 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { from, Observable, map, tap, catchError, throwError } from 'rxjs';
-import { SupabaseService } from './supabase.service';
+import { Observable, map, tap, catchError, throwError } from 'rxjs';
 
 export interface Product {
     productId: number;
@@ -37,69 +36,20 @@ export interface ProductFilters {
     search?: string;
 }
 
-export interface ProductAuditLog {
-    id: number;
-    productId: string;
-    productName: string;
-    action: string;
-    changes: string | null;
-    changedBy: string;
-    timestamp: string;
-}
+
 
 @Injectable({
     providedIn: 'root'
 })
 export class ProductsService {
-    private supabase = inject(SupabaseService).client;
     private http = inject(HttpClient);
-    private apiUrl = '/api/products';
 
     // Signals
     products = signal<Product[]>([]);
     loading = signal<boolean>(false);
     error = signal<string | null>(null);
 
-    /**
-     * Map database row (PascalCase) to Angular model (camelCase)
-     */
-    private mapDbRowToProduct(dbRow: any): Product {
-        return {
-            productId: dbRow.ProductId || 0,
-            id: dbRow.Id || '',
-            name: dbRow.Name || '',
-            category: dbRow.Category || '',
-            description: dbRow.Description || null,
-            price: dbRow.Price || null,
-            priceOnRequest: dbRow.PriceOnRequest || false,
-            images: dbRow.Images || '[]',
-            colorVariations: dbRow.ColorVariations || null,
-            specifications: dbRow.Specifications || null,
-            features: dbRow.Features || null,
-            inStock: dbRow.InStock === undefined ? true : dbRow.InStock,
-            featured: dbRow.Featured || false,
-            createdAt: dbRow.CreatedAt || new Date().toISOString(),
-            updatedAt: dbRow.UpdatedAt || null
-        };
-    }
 
-    private mapProductToDbRow(product: Partial<Product>): any {
-        const row: any = {};
-        if (product.productId !== undefined) row.ProductId = product.productId;
-        if (product.id !== undefined) row.Id = product.id;
-        if (product.name !== undefined) row.Name = product.name;
-        if (product.category !== undefined) row.Category = product.category;
-        if (product.description !== undefined) row.Description = product.description;
-        if (product.price !== undefined) row.Price = product.price;
-        if (product.priceOnRequest !== undefined) row.PriceOnRequest = product.priceOnRequest;
-        if (product.images !== undefined) row.Images = product.images;
-        if (product.colorVariations !== undefined) row.ColorVariations = product.colorVariations;
-        if (product.specifications !== undefined) row.Specifications = product.specifications;
-        if (product.features !== undefined) row.Features = product.features;
-        if (product.inStock !== undefined) row.InStock = product.inStock;
-        if (product.featured !== undefined) row.Featured = product.featured;
-        return row;
-    }
 
     /**
      * Get all products with optional filters
@@ -108,20 +58,34 @@ export class ProductsService {
         this.loading.set(true);
         this.error.set(null);
 
-        let query = this.supabase.from('Products').select('*');
+        return this.http.get<any[]>('assets/products.json').pipe(
+            map(data => {
+                let products = data.map(item => ({
+                    productId: item.id,
+                    id: item.id,
+                    name: item.name,
+                    category: item.category,
+                    description: null,
+                    price: item.price,
+                    priceOnRequest: false,
+                    images: JSON.stringify([item.image]),
+                    colorVariations: item.variants ? JSON.stringify(item.variants.map((v: string) => ({ color: v, images: [item.image] }))) : null,
+                    specifications: null,
+                    features: null,
+                    inStock: true,
+                    featured: false,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: null
+                } as Product));
 
-        if (filters?.category) {
-            query = query.eq('Category', filters.category);
-        }
-        if (filters?.search) {
-            query = query.ilike('Name', `%${filters.search}%`);
-        }
+                if (filters?.category) {
+                    products = products.filter(p => p.category === filters.category);
+                }
+                if (filters?.search) {
+                    products = products.filter(p => p.name.toLowerCase().includes(filters.search!.toLowerCase()));
+                }
 
-        return from(query).pipe(
-            map(response => {
-                if (response.error) throw new Error(response.error.message);
-                const dbRows = response.data || [];
-                return dbRows.map(row => this.mapDbRowToProduct(row));
+                return products;
             }),
             tap({
                 next: (data) => {
@@ -141,26 +105,16 @@ export class ProductsService {
      * Get a single product by ID
      */
     getProduct(id: string): Observable<Product> {
-        return from(this.supabase.from('Products').select('*').eq('Id', id).single()).pipe(
-            map(response => {
-                if (response.error) throw new Error(response.error.message);
-                return this.mapDbRowToProduct(response.data);
+        return this.getProducts().pipe(
+            map(products => {
+                const product = products.find(p => p.id === id);
+                if (!product) throw new Error('Product not found');
+                return product;
             })
         );
     }
 
-    /**
-     * Create a new product (Admin only logic built-in to RLS)
-     */
-    createProduct(product: Partial<Product>): Observable<Product> {
-        const dbRow = this.mapProductToDbRow(product);
-        return from(this.supabase.from('Products').insert(dbRow).select().single()).pipe(
-            map(response => {
-                if (response.error) throw new Error(response.error.message);
-                return this.mapDbRowToProduct(response.data);
-            })
-        );
-    }
+
 
     /**
      * Update an existing product (Admin only logic built-in to RLS)
@@ -187,31 +141,7 @@ export class ProductsService {
         );
     }
 
-    /**
-     * Get history/audit logs for a specific product
-     */
-    getProductHistory(id: string): Observable<ProductAuditLog[]> {
-        return from(
-            this.supabase
-                .from('ProductAuditLogs')
-                .select('*')
-                .eq('ProductId', id)
-                .order('Timestamp', { ascending: false })
-        ).pipe(
-            map(response => {
-                if (response.error) throw new Error(response.error.message);
-                return (response.data || []).map((row: any) => ({
-                    id: row.Id,
-                    productId: row.ProductId,
-                    productName: row.ProductName,
-                    action: row.Action,
-                    changes: row.Changes,
-                    changedBy: row.ChangedBy,
-                    timestamp: row.Timestamp
-                }));
-            })
-        );
-    }
+
 
     /**
      * Helper methods to parse JSON fields
@@ -255,16 +185,5 @@ export class ProductsService {
         }
     }
 
-    /**
-     * Get all products marked for expo/kiosk display (from backend API)
-     * Public endpoint - no authentication required
-     */
-    getExpoProducts(): Observable<ExpoProduct[]> {
-        return this.http.get<ExpoProduct[]>(`${this.apiUrl}/expo`).pipe(
-            catchError(err => {
-                console.error('Failed to load expo products:', err);
-                return throwError(() => err);
-            })
-        );
-    }
+
 }
