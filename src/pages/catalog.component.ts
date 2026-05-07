@@ -246,11 +246,11 @@ import { RouterLink } from '@angular/router';
       <div class="flex-1 h-full overflow-y-auto bg-gray-50 flex flex-col relative w-full">
         
         <!-- Header & Search -->
-        <div class="bg-white px-8 py-10 lg:px-16 lg:py-12 border-b border-gray-200 shadow-sm sticky top-0 z-20">
-          <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 items-center justify-between">
+        <div class="bg-white px-4 py-6 sm:px-6 sm:py-8 lg:px-16 lg:py-12 border-b border-gray-200 shadow-sm sticky top-0 z-20">
+          <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-8 items-center justify-between">
             <div>
-              <h1 class="text-4xl lg:text-5xl font-bold text-safs-dark mb-2">Product Expo</h1>
-              <p class="text-gray-500 text-lg">Tap on any product to view variations and details.</p>
+              <h1 class="text-2xl sm:text-3xl lg:text-5xl font-bold text-safs-dark mb-1 sm:mb-2">Product Expo</h1>
+              <p class="text-gray-500 text-sm sm:text-base lg:text-lg">Tap on any product to view variations and details.</p>
             </div>
             
             <!-- Search Bar -->
