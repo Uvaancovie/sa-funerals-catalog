@@ -9,11 +9,41 @@ import { RouterLink } from '@angular/router';
   selector: 'app-catalog',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  template: `
-    <div class="bg-gray-50 h-screen w-full overflow-hidden flex flex-col sm:flex-row">
-      
-      <!-- Filters Sidebar (Left Split) -->
-      <div class="w-full sm:w-[280px] lg:w-[320px] sm:h-full sm:overflow-y-auto border-r border-gray-200 bg-white p-6 sm:p-8 space-y-8 flex-shrink-0 z-10 shadow-sm relative">
+   template: `
+     <div class="bg-gray-50 h-screen w-full overflow-hidden flex flex-col">
+
+       <!-- Mobile Filters Toggle -->
+       <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+         <button
+           (click)="toggleMobileFilters()"
+           class="flex items-center gap-3 bg-safs-dark text-white px-4 py-2 rounded-lg hover:bg-safs-gold-dark transition-colors"
+         >
+           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+           </svg>
+           Filters
+           @if (activeFilterCount() > 0) {
+             <span class="bg-safs-gold text-black text-xs px-2 py-1 rounded-full font-bold">{{ activeFilterCount() }}</span>
+           }
+         </button>
+         <div class="text-sm text-gray-500">
+           Showing <span class="font-bold text-safs-dark">{{ filteredProducts().length }}</span> products
+         </div>
+       </div>
+
+       <div class="flex flex-1 overflow-hidden">
+         <!-- Filters Sidebar (Desktop) -->
+         <div class="hidden lg:block w-[320px] h-full overflow-y-auto border-r border-gray-200 bg-white p-8 space-y-8 flex-shrink-0 shadow-sm relative">
+
+           <!-- Desktop Filters Header -->
+           <div class="sticky top-0 bg-white z-20 pb-4 mb-4 border-b border-gray-100">
+             <h2 class="text-2xl font-bold text-safs-dark">Filters</h2>
+             @if (activeFilterCount() > 0) {
+               <button (click)="resetFilters()" class="mt-2 text-safs-gold-dark font-medium hover:text-safs-dark transition-colors">
+                 Clear all filters
+               </button>
+             }
+           </div>
         <div class="sticky top-0 bg-white z-20 pb-4 mb-4 border-b border-gray-100 hidden sm:block">
           <h2 class="text-2xl font-bold text-safs-dark">Filters</h2>
         </div>
@@ -94,10 +124,123 @@ import { RouterLink } from '@angular/router';
           </div>
         </div>
 
-        <button (click)="resetFilters()" class="w-full py-4 text-safs-gold-dark font-bold text-lg uppercase tracking-widest hover:bg-orange-50 rounded-xl transition-colors mb-12">
-          Clear All Filters
-        </button>
-      </div>
+           <button (click)="resetFilters()" class="w-full py-4 text-safs-gold-dark font-bold text-lg uppercase tracking-widest hover:bg-orange-50 rounded-xl transition-colors mb-12">
+             Clear All Filters
+           </button>
+         </div>
+
+         <!-- Mobile Filters Modal -->
+         @if (showMobileFilters()) {
+           <div class="lg:hidden fixed inset-0 z-50 flex items-start justify-center pt-16">
+             <!-- Backdrop -->
+             <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" (click)="closeMobileFilters()"></div>
+
+             <!-- Modal Content -->
+             <div class="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl max-h-[80vh] overflow-hidden animate-modal-pop">
+               <!-- Header -->
+               <div class="flex items-center justify-between p-6 border-b border-gray-100">
+                 <h2 class="text-xl font-bold text-safs-dark">Filters</h2>
+                 <button (click)="closeMobileFilters()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                     <line x1="18" y1="6" x2="6" y2="18"></line>
+                     <line x1="6" y1="6" x2="18" y2="18"></line>
+                   </svg>
+                 </button>
+               </div>
+
+               <!-- Filters Content -->
+               <div class="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+                 <!-- Main Category Filter -->
+                 <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-100">
+                   <h3 class="font-bold text-safs-dark mb-3 uppercase tracking-wider text-sm flex items-center gap-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                     Categories
+                   </h3>
+                   <div class="space-y-2">
+                     @for (cat of categoryOptions; track cat.value) {
+                       <button
+                         (click)="activeFilter.set(cat.value)"
+                         [class.bg-safs-dark]="activeFilter() === cat.value"
+                         [class.text-white]="activeFilter() === cat.value"
+                         [class.text-gray-600]="activeFilter() !== cat.value"
+                         [class.hover:bg-gray-200]="activeFilter() !== cat.value"
+                         class="w-full text-left px-3 py-2 rounded-lg font-bold transition-all flex justify-between items-center text-sm shadow-sm border border-transparent"
+                         [class.border-gray-200]="activeFilter() !== cat.value">
+                         <span>{{ cat.label }}</span>
+                         <span class="text-xs font-medium opacity-60 bg-black/10 px-2 py-1 rounded-full">{{ getCategoryCount(cat.value) }}</span>
+                       </button>
+                     }
+                   </div>
+                 </div>
+
+                 <!-- SAFS Collection Toggle -->
+                 <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-100">
+                   <h3 class="font-bold text-safs-dark mb-3 uppercase tracking-wider text-sm">Collections</h3>
+                   <button
+                     (click)="show2026Only.set(!show2026Only())"
+                     [class.bg-safs-dark]="show2026Only()"
+                     [class.text-white]="show2026Only()"
+                     [class.bg-white]="!show2026Only()"
+                     [class.text-gray-600]="!show2026Only()"
+                     class="w-full text-left px-4 py-3 rounded-lg font-bold transition-all text-base flex items-center justify-between shadow-sm border border-gray-200">
+                     <span>SAFS 2026</span>
+                     <span class="text-xs px-2 py-1 rounded-full font-black uppercase tracking-wider" [class.bg-white]="show2026Only()" [class.text-safs-dark]="show2026Only()" [class.bg-gray-200]="!show2026Only()">NEW</span>
+                   </button>
+                 </div>
+
+                 <!-- Product Style Filter -->
+                 @if (showStyleFilter()) {
+                   <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-100 animate-fade-in">
+                     <h3 class="font-bold text-safs-dark mb-3 uppercase tracking-wider text-sm">Product Styles</h3>
+                     <div class="flex flex-wrap gap-2">
+                       @for (style of casketStyles; track style) {
+                         <button
+                           (click)="toggleStyle(style)"
+                           [class.bg-safs-gold]="selectedStyles().includes(style)"
+                           [class.text-black]="selectedStyles().includes(style)"
+                           [class.bg-white]="!selectedStyles().includes(style)"
+                           [class.text-gray-600]="!selectedStyles().includes(style)"
+                           class="px-3 py-2 rounded-lg text-sm font-bold transition-all shadow-sm border border-gray-200 border-b-3 hover:brightness-95 active:border-b active:translate-y-0.5">
+                           {{ style }}
+                         </button>
+                       }
+                     </div>
+                   </div>
+                 }
+
+                 <!-- Color/Finish Filter -->
+                 <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-100 mb-4">
+                   <h3 class="font-bold text-safs-dark mb-3 uppercase tracking-wider text-sm">Finishes & Colors</h3>
+                   <div class="grid grid-cols-1 gap-2">
+                     @for (finish of availableFinishes; track finish) {
+                       <button
+                         (click)="toggleFinish(finish)"
+                         [class.ring-2]="selectedFinishes().includes(finish)"
+                         [class.ring-safs-gold]="selectedFinishes().includes(finish)"
+                         [class.ring-offset-2]="selectedFinishes().includes(finish)"
+                         class="flex items-center gap-3 px-3 py-3 rounded-lg bg-white hover:bg-gray-100 transition-all text-sm font-medium shadow-sm border border-gray-200 group">
+                         <div [style.background-color]="getFinishColor(finish)" class="w-4 h-4 rounded-full border border-gray-300 shadow-inner"></div>
+                         <span class="text-gray-700 group-hover:text-safs-dark text-left whitespace-normal break-words leading-tight">{{ finish }}</span>
+                       </button>
+                     }
+                   </div>
+                 </div>
+               </div>
+
+               <!-- Footer Actions -->
+               <div class="border-t border-gray-100 p-4 bg-gray-50">
+                 <div class="flex gap-3">
+                   <button (click)="resetFilters()" class="flex-1 py-3 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition-colors">
+                     Clear All
+                   </button>
+                   <button (click)="closeMobileFilters()" class="flex-1 py-3 bg-safs-dark text-white rounded-lg font-bold hover:bg-safs-gold-dark transition-colors">
+                     Apply Filters
+                   </button>
+                 </div>
+               </div>
+             </div>
+           </div>
+         }
 
       <!-- Main Content Area (Right Split) -->
       <div class="flex-1 h-full overflow-y-auto bg-gray-50 flex flex-col relative w-full">
@@ -136,16 +279,16 @@ import { RouterLink } from '@angular/router';
           </div>
         </div>
         
-        <!-- Product Grid Area -->
-        <div class="p-8 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32">
-          
-          <!-- Active Filters & Count -->
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-            <div class="text-lg text-gray-500 bg-white px-5 py-2 rounded-full shadow-sm border border-gray-100">
-              Showing <span class="font-bold text-safs-dark text-xl">{{ filteredProducts().length }}</span> product(s)
-            </div>
-            
-            @if (hasActiveFilters()) {
+         <!-- Product Grid Area -->
+         <div class="p-4 sm:p-8 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32">
+
+           <!-- Active Filters & Count (Desktop) -->
+           <div class="hidden lg:flex justify-between items-center gap-4 mb-8">
+             <div class="text-lg text-gray-500 bg-white px-5 py-2 rounded-full shadow-sm border border-gray-100">
+               Showing <span class="font-bold text-safs-dark text-xl">{{ filteredProducts().length }}</span> product(s)
+             </div>
+
+             @if (hasActiveFilters()) {
               <div class="flex flex-wrap gap-2">
                 @if (searchQuery()) {
                   <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-safs-dark text-white text-sm font-bold shadow-sm">
@@ -169,13 +312,13 @@ import { RouterLink } from '@angular/router';
             }
           </div>
 
-          <!-- Grid -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+           <!-- Grid -->
+           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             @for (product of filteredProducts(); track product.id) {
               <div data-testid="catalog-card" class="bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 group flex flex-col border border-gray-100 cursor-pointer overflow-hidden transform hover:-translate-y-1" [routerLink]="['/product', product.id]">
                 
-                <!-- Image Area -->
-                <div class="relative h-80 sm:h-96 overflow-hidden bg-gray-50">
+                 <!-- Image Area -->
+                 <div class="relative h-64 sm:h-80 lg:h-96 overflow-hidden bg-gray-50">
                   <img [src]="getProductDisplayImage(product)" [alt]="product.name" class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-700 ease-out">
                   
                   <div class="absolute inset-0 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100 bg-white/20 backdrop-blur-[2px]">
@@ -197,10 +340,10 @@ import { RouterLink } from '@angular/router';
                   }
                 </div>
 
-                <!-- Content -->
-                <div class="p-6 flex-1 flex flex-col border-t border-gray-100">
-                  <div class="text-xs font-black text-safs-gold-dark uppercase tracking-[0.2em] mb-2">{{ getCategoryDisplayName(product.category) }}</div>
-                  <h2 class="text-xl font-bold text-safs-dark mb-3 group-hover:text-safs-gold-dark transition-colors leading-tight">{{ product.name }}</h2>
+                 <!-- Content -->
+                 <div class="p-4 sm:p-6 flex-1 flex flex-col border-t border-gray-100">
+                   <div class="text-xs font-black text-safs-gold-dark uppercase tracking-[0.2em] mb-2">{{ getCategoryDisplayName(product.category) }}</div>
+                   <h2 class="text-lg sm:text-xl font-bold text-safs-dark mb-3 group-hover:text-safs-gold-dark transition-colors leading-tight">{{ product.name }}</h2>
                   
                   <div class="mt-auto">
                     <div class="flex items-center justify-between pt-4 border-t border-gray-50">
@@ -369,7 +512,10 @@ export class CatalogComponent implements OnInit {
   selectedStyles = signal<string[]>([]);
   selectedFinishes = signal<string[]>([]);
   selectedColors = signal<Map<string, string>>(new Map()); // Map<productId, selectedColor>
-  
+
+  // Mobile filters
+  showMobileFilters = signal<boolean>(false);
+
   // Modal state
   selectedProductForModal = signal<Product | null>(null);
   modalSelectedColor = signal<string | null>(null);
@@ -580,6 +726,24 @@ export class CatalogComponent implements OnInit {
 
   hasActiveFilters(): boolean {
     return this.searchQuery().length > 0 || this.selectedStyles().length > 0 || this.selectedFinishes().length > 0;
+  }
+
+  activeFilterCount = computed(() => {
+    let count = 0;
+    if (this.searchQuery().length > 0) count++;
+    if (this.selectedStyles().length > 0) count++;
+    if (this.selectedFinishes().length > 0) count++;
+    if (this.activeFilter() !== 'all') count++;
+    if (this.show2026Only()) count++;
+    return count;
+  });
+
+  toggleMobileFilters() {
+    this.showMobileFilters.set(!this.showMobileFilters());
+  }
+
+  closeMobileFilters() {
+    this.showMobileFilters.set(false);
   }
 
   onSearch(event: Event) {

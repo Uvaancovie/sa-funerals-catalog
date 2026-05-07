@@ -9,7 +9,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
   template: `
     <footer class="bg-safs-dark text-white pt-16 pb-8 border-t-4 border-safs-gold">
       <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8 lg:mb-12">
           
           <!-- Brand -->
           <div class="col-span-1 md:col-span-1">
@@ -74,13 +74,13 @@ import { GoogleReviewsComponent } from './google-reviews.component';
           </div>
         </div>
 
-        <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-300">
-          <p>&copy; 2024 South African Funeral Supplies. All rights reserved.</p>
-          <div class="flex gap-4 mt-4 md:mt-0">
-            <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
-          </div>
-        </div>
+        <div class="border-t border-white/10 pt-6 lg:pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-300">
+           <p class="text-center sm:text-left">&copy; 2024 South African Funeral Supplies. All rights reserved.</p>
+           <div class="flex gap-4 mt-3 sm:mt-0">
+             <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+             <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+           </div>
+         </div>
       </div>
     </footer>
   `

@@ -9,42 +9,68 @@ import { WishlistService } from '../services/wishlist.service';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-        <a routerLink="/" class="font-serif font-bold text-safs-dark text-xl tracking-wide">
-          SA Funeral Supplies
-        </a>
+     <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
+       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+         <a routerLink="/" class="font-serif font-bold text-safs-dark text-xl sm:text-2xl tracking-wide">
+           SA Funeral Supplies
+         </a>
 
-        <button
-          type="button"
-          class="px-4 py-2 rounded-xl bg-safs-dark text-white font-bold shadow-sm hover:opacity-95 active:scale-95"
-          (click)="toggleMenu()"
-          aria-label="Toggle menu"
-        >
-          Menu
-        </button>
-      </div>
+         <button
+           type="button"
+           class="lg:hidden p-2 rounded-lg bg-safs-dark text-white hover:bg-safs-gold-dark transition-colors duration-200"
+           (click)="toggleMenu()"
+           aria-label="Toggle menu"
+           [class.bg-safs-gold-dark]="isMenuOpen()"
+         >
+           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <line x1="3" y1="12" x2="21" y2="12" [attr.class]="isMenuOpen() ? 'opacity-0' : 'opacity-100'"></line>
+             <line x1="3" y1="6" x2="21" y2="6" [attr.transform]="isMenuOpen() ? 'rotate(45 12 12)' : ''" [attr.x2]="isMenuOpen() ? '21' : '21'" [attr.y2]="isMenuOpen() ? '12' : '6'"></line>
+             <line x1="3" y1="18" x2="21" y2="18" [attr.transform]="isMenuOpen() ? 'rotate(-45 12 12)' : ''" [attr.x2]="isMenuOpen() ? '21' : '21'" [attr.y2]="isMenuOpen() ? '18' : '18'"></line>
+           </svg>
+         </button>
 
-      @if (isMenuOpen()) {
-        <nav class="animate-in border-t border-gray-100 bg-white px-4 sm:px-6 py-4">
-          <a
-            routerLink="/catalog"
-            routerLinkActive="text-safs-gold-dark font-bold"
-            (click)="closeMenu()"
-            class="block py-2 text-gray-700 hover:text-safs-dark transition-colors"
-          >
-            Full Catalogue
-          </a>
+         <!-- Desktop menu items -->
+         <nav class="hidden lg:flex items-center space-x-8">
+           <a
+             routerLink="/catalog"
+             routerLinkActive="text-safs-gold-dark font-bold"
+             class="text-gray-700 hover:text-safs-dark transition-colors font-medium"
+           >
+             Full Catalogue
+           </a>
+           <button
+             type="button"
+             (click)="logout()"
+             class="bg-safs-dark text-white px-6 py-2 rounded-lg hover:bg-safs-gold-dark transition-colors font-medium"
+           >
+             Logout
+           </button>
+         </nav>
+       </div>
 
-          <button
-            type="button"
-            (click)="logout()"
-            class="mt-2 block w-full text-left py-2 text-gray-700 hover:text-safs-dark transition-colors font-bold"
-          >
-            Logout
-          </button>
-        </nav>
-      }
+       <!-- Mobile menu -->
+       @if (isMenuOpen()) {
+         <nav class="lg:hidden animate-in border-t border-gray-100 bg-white shadow-lg">
+           <div class="px-4 py-6 space-y-4">
+             <a
+               routerLink="/catalog"
+               routerLinkActive="text-safs-gold-dark font-bold"
+               (click)="closeMenu()"
+               class="block py-3 px-4 text-gray-700 hover:text-safs-dark hover:bg-gray-50 transition-colors rounded-lg font-medium"
+             >
+               Full Catalogue
+             </a>
+
+             <button
+               type="button"
+               (click)="logout()"
+               class="w-full text-left py-3 px-4 text-gray-700 hover:text-safs-dark hover:bg-gray-50 transition-colors rounded-lg font-medium"
+             >
+               Logout
+             </button>
+           </div>
+         </nav>
+       }
     </header>
   `,
   styles: [`

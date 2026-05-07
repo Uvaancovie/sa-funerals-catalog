@@ -25,7 +25,7 @@ import { Product, StoreService } from '../services/store.service';
             <div class="text-gray-600 font-semibold">Loading product...</div>
           </div>
         } @else {
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             <!-- Gallery -->
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
               <div class="p-4 sm:p-6 border-b border-gray-100">
@@ -49,45 +49,47 @@ import { Product, StoreService } from '../services/store.service';
                   />
                 </div>
 
-                @if (activeThumbnails().length > 1) {
-                  <div class="mt-4 flex gap-3 overflow-x-auto pb-2">
-                    @for (img of activeThumbnails(); track img) {
-                      <button
-                        type="button"
-                        class="shrink-0 rounded-xl border border-gray-200 overflow-hidden hover:border-safs-gold transition-colors"
-                        (click)="selectedImage.set(img)"
-                        [class.ring-2]="img === selectedImage()"
-                        [class.ring-safs-gold]="img === selectedImage()"
-                      >
-                        <img class="w-16 h-16 sm:w-18 sm:h-18 object-cover" [src]="img" [alt]="product()!.name" />
-                      </button>
-                    }
-                  </div>
-                }
+                 @if (activeThumbnails().length > 1) {
+                   <div class="mt-4 flex gap-2 sm:gap-3 overflow-x-auto pb-2">
+                     @for (img of activeThumbnails(); track img) {
+                       <button
+                         type="button"
+                         class="shrink-0 rounded-lg sm:rounded-xl border border-gray-200 overflow-hidden hover:border-safs-gold transition-colors"
+                         (click)="selectedImage.set(img)"
+                         [class.ring-2]="img === selectedImage()"
+                         [class.ring-safs-gold]="img === selectedImage()"
+                       >
+                         <img class="w-14 h-14 sm:w-16 sm:h-16 object-cover" [src]="img" [alt]="product()!.name" />
+                       </button>
+                     }
+                   </div>
+                 }
               </div>
 
-              <!-- Mobile Wishlist -->
-              <div class="px-4 sm:px-6 pb-6 lg:hidden">
-                <button
-                  type="button"
-                  class="w-full py-4 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all shadow-sm font-bold text-gray-700 flex items-center justify-center gap-3"
-                  (click)="toggleWishlist(product()!)"
-                  [disabled]="!authService.isAuthenticated()"
-                  [class.opacity-60]="!authService.isAuthenticated()"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"
-                    [attr.fill]="wishlistActive() ? 'currentColor' : 'none'"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                    ></path>
-                  </svg>
-                  {{ wishlistActive() ? 'Remove from wishlist' : 'Add to wishlist' }}
-                </button>
-                <div class="text-xs text-gray-500 mt-2" >
-                  Login to save items.
-                </div>
-              </div>
+               <!-- Mobile Wishlist -->
+               <div class="px-4 sm:px-6 pb-6 lg:hidden">
+                 <button
+                   type="button"
+                   class="w-full py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all shadow-sm font-semibold text-gray-700 flex items-center justify-center gap-2"
+                   (click)="toggleWishlist(product()!)"
+                   [disabled]="!authService.isAuthenticated()"
+                   [class.opacity-60]="!authService.isAuthenticated()"
+                 >
+                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                     [attr.fill]="wishlistActive() ? 'currentColor' : 'none'"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                     <path
+                       d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                     ></path>
+                   </svg>
+                   {{ wishlistActive() ? 'Remove from wishlist' : 'Add to wishlist' }}
+                 </button>
+                 @if (!authService.isAuthenticated()) {
+                   <div class="text-xs text-gray-500 mt-2 text-center">
+                     Login to save items.
+                   </div>
+                 }
+               </div>
             </div>
 
             <!-- Details / options -->
@@ -195,38 +197,38 @@ import { Product, StoreService } from '../services/store.service';
                 </div>
               }
 
-              <!-- Actions -->
-              <div class="mt-10 pt-6 border-t border-gray-100 flex flex-col gap-4">
-                @if (authService.isApproved() || authService.isAdmin()) {
-                  <button
-                    type="button"
-                    class="py-4 w-full rounded-2xl bg-safs-dark text-white font-bold text-xl hover:opacity-95 transition-all shadow-xl"
-                    (click)="addToCart()"
-                  >
-                    Add to Quote
-                  </button>
-                } @else if (authService.isPending()) {
-                  <button
-                    type="button"
-                    class="py-4 w-full rounded-2xl bg-white border border-yellow-200 text-yellow-700 font-bold text-xl hover:bg-yellow-50 transition-all shadow-sm"
-                    disabled
-                  >
-                    Awaiting Approval
-                  </button>
-                } @else {
-                  <button
-                    type="button"
-                    class="py-4 w-full rounded-2xl bg-white border border-gray-200 text-safs-dark font-bold text-xl hover:bg-gray-50 transition-all shadow-sm"
-                    disabled
-                  >
-                    Login to Price
-                  </button>
-                }
+               <!-- Actions -->
+               <div class="mt-8 lg:mt-10 pt-6 border-t border-gray-100 flex flex-col gap-4">
+                 @if (authService.isApproved() || authService.isAdmin()) {
+                   <button
+                     type="button"
+                     class="py-3 lg:py-4 w-full rounded-xl lg:rounded-2xl bg-safs-dark text-white font-bold text-lg lg:text-xl hover:opacity-95 transition-all shadow-xl"
+                     (click)="addToCart()"
+                   >
+                     Add to Quote
+                   </button>
+                 } @else if (authService.isPending()) {
+                   <button
+                     type="button"
+                     class="py-3 lg:py-4 w-full rounded-xl lg:rounded-2xl bg-white border border-yellow-200 text-yellow-700 font-bold text-lg lg:text-xl hover:bg-yellow-50 transition-all shadow-sm"
+                     disabled
+                   >
+                     Awaiting Approval
+                   </button>
+                 } @else {
+                   <button
+                     type="button"
+                     class="py-3 lg:py-4 w-full rounded-xl lg:rounded-2xl bg-white border border-gray-200 text-safs-dark font-bold text-lg lg:text-xl hover:bg-gray-50 transition-all shadow-sm"
+                     disabled
+                   >
+                     Login to Price
+                   </button>
+                 }
 
-                <div class="text-xs text-gray-500">
-                  Selected variant: <span class="font-semibold text-gray-700">{{ selectedVariant() }}</span>
-                </div>
-              </div>
+                 <div class="text-xs text-gray-500 text-center lg:text-left">
+                   Selected variant: <span class="font-semibold text-gray-700">{{ selectedVariant() }}</span>
+                 </div>
+               </div>
             </div>
           </div>
         }
