@@ -1,34 +1,22 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 /**
- * HTTP Interceptor to automatically add JWT token to requests and handle 401s
+ * Adds a Bearer token when `AuthService.token()` is available.
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const authService = inject(AuthService);
-    const router = inject(Router);
-    const token = authService.token();
+  const auth = inject(AuthService);
+  const token = auth.token();
 
-    // If we have a token and the request is to our API, add the Authorization header
-    if (token && req.url.startsWith('/api')) {
-        req = req.clone({
-            setHeaders: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    }
+  if (!token) return next(req);
 
-    return next(req).pipe(
-        catchError((error: HttpErrorResponse) => {
-            if (error.status === 401) {
-                // Token is missing, expired, or invalid
-                authService.logout();
-                router.navigate(['/']);
-            }
-            return throwError(() => error);
-        })
-    );
+  return next(
+    req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  );
 };
+
