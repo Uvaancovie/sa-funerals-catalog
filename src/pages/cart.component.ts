@@ -1,6 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { StoreService } from '../services/store.service';
-import { OrdersService } from '../services/orders.service';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -173,7 +172,6 @@ import { FormsModule } from '@angular/forms';
 })
 export class CartComponent {
   store = inject(StoreService);
-  ordersService = inject(OrdersService);
   authService = inject(AuthService);
   private router = inject(Router);
 
