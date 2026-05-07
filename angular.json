@@ -34,6 +34,11 @@
                 "output": "/SAFS IMAGES"
               },
               {
+                "glob": "products-safs.json",
+                "input": "./",
+                "output": "/"
+              },
+              {
                 "glob": "wall-chart.html",
                 "input": "./",
                 "output": "/"

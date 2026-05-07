@@ -2,21 +2,23 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 
 export interface Product {
-  productId: number;
+  // This service is used by the catalog UI. Supabase-backed products and the local
+  // `products-safs.json` format are not identical, so most fields are optional.
+  productId?: number;
   id: string; // slug
   name: string;
   category: string;
-  description: string | null;
-  price: number | null;
-  priceOnRequest: boolean;
-  images: string; // JSON string array
-  colorVariations: string | null; // JSON string array of color variation objects
-  specifications: string | null; // JSON object as string
-  features: string | null; // JSON string array
-  inStock: boolean;
-  featured: boolean;
-  createdAt: string;
-  updatedAt: string | null;
+  description?: string | null;
+  price?: number | null;
+  priceOnRequest?: boolean;
+  images: string; // JSON string array (Supabase) OR encoded as a string by our local adapter
+  colorVariations?: string | null; // JSON string array of color variation objects
+  specifications?: string | null; // JSON object as string
+  features?: string | null; // JSON string array
+  inStock?: boolean;
+  featured?: boolean;
+  createdAt?: string;
+  updatedAt?: string | null;
 }
 
 export interface CartItem {
@@ -37,24 +39,118 @@ export class StoreService {
   readonly wishlist = signal<Product[]>([]);
 
   constructor() {
+    // Always start with the local dataset (SAFS IMAGES), so the catalog
+    // renders correctly even if Supabase is misconfigured/unavailable.
+    this.loadLocalProducts();
     this.loadProducts();
+  }
+
+  private normalizeImageUrl(url: string): string {
+    // Make image paths absolute so routes like `#/catalog` don't break relative URLs.
+    if (!url) return url;
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    if (url.startsWith('/')) return url;
+    return `/${url}`;
+  }
+
+  private async loadLocalProducts(): Promise<void> {
+    // Local dataset referencing images under `src/SAFS IMAGES`.
+    try {
+      const res = await fetch('/products-safs.json');
+      if (!res.ok) {
+        console.warn('Local products fetch failed:', res.status, res.statusText);
+        return;
+      }
+
+      const raw = (await res.json()) as any[];
+      if (!Array.isArray(raw) || raw.length === 0) return;
+
+      const now = new Date().toISOString();
+
+      const mapped: Product[] = raw.map((p) => {
+        const imageList: string[] = Array.isArray(p.images)
+          ? p.images
+          : typeof p.image === 'string'
+            ? [p.image]
+            : [];
+
+        const images = JSON.stringify(imageList.map((u) => this.normalizeImageUrl(String(u))));
+
+        const variants: string[] = Array.isArray(p.variants) ? p.variants.map(String) : [];
+        const featureList = variants;
+
+        const colorVariations = JSON.stringify(
+          (variants.length > 0 ? variants : (imageList.length > 0 ? ['Standard'] : []))
+            .map((color) => ({
+              color,
+              images: imageList.map((u) => this.normalizeImageUrl(String(u))),
+            }))
+        );
+
+        return {
+          productId: 0,
+          id: String(p.id ?? ''),
+          name: String(p.name ?? ''),
+          category: String(p.category ?? ''),
+          description: null,
+          price: typeof p.price === 'number' ? p.price : 0,
+          priceOnRequest: false,
+          images,
+          colorVariations,
+          specifications: null,
+          features: JSON.stringify(featureList),
+          inStock: true,
+          featured: false,
+          createdAt: now,
+          updatedAt: null,
+        } satisfies Product;
+      });
+
+      // Guard against empty mapping or missing identifiers.
+      this.products.set(mapped.filter((p) => p.id && p.name && p.category));
+      console.warn(`Loaded ${this.products().length} products from local dataset.`);
+    } catch (err) {
+      console.error('Failed to load local products dataset', err);
+    }
   }
 
   async loadProducts() {
     try {
       const { data, error } = await this.supabaseService.client
-        .from('products')
+        // Supabase error hints the actual table name is `Products` (capital P).
+        // Using the correct case avoids REST 404s for a non-existent table.
+        .from('Products')
         .select('*');
       
       if (error) {
         console.error('Supabase error loading products:', error);
         return;
       }
-      if (data) {
-        this.products.set(data as Product[]);
+      if (data && Array.isArray(data) && data.length > 0) {
+        // Only override local SAFS dataset when Supabase images appear compatible
+        // (i.e., they reference SAFS IMAGES). Otherwise, keep the local dataset.
+        const first: any = data[0];
+        const imagesRaw = first?.images;
+        let looksLikeSafs = false;
+        try {
+          const parsed = typeof imagesRaw === 'string' ? JSON.parse(imagesRaw) : imagesRaw;
+          if (Array.isArray(parsed)) {
+            looksLikeSafs = parsed.some((u: any) => String(u).includes('SAFS IMAGES'));
+          }
+        } catch {
+          // ignore parse failures; treat as not compatible
+        }
+
+        if (looksLikeSafs) {
+          this.products.set(data as Product[]);
+        } else {
+          console.warn('Supabase products loaded, but images are not SAFS IMAGES. Keeping local dataset.');
+        }
+        return;
       }
     } catch (err) {
       console.error('Failed to load products', err);
+      // Keep local dataset
     }
   }
 
@@ -65,7 +161,9 @@ export class StoreService {
   // Helper methods to parse JSON fields
   parseImages(product: Product): string[] {
     try {
-      return JSON.parse(product.images);
+      const parsed = typeof product.images === 'string' ? JSON.parse(product.images) : product.images;
+      const list = Array.isArray(parsed) ? parsed : [];
+      return list.map((u) => this.normalizeImageUrl(String(u)));
     } catch {
       return [];
     }
@@ -73,7 +171,9 @@ export class StoreService {
 
   parseFeatures(product: Product): string[] {
     try {
-      return product.features ? JSON.parse(product.features) : [];
+      if (!product.features) return [];
+      const parsed = typeof product.features === 'string' ? JSON.parse(product.features) : product.features;
+      return Array.isArray(parsed) ? parsed.map(String) : [];
     } catch {
       return [];
     }
@@ -95,9 +195,10 @@ export class StoreService {
       // Normalize both PascalCase (Color/Images from seeder) and camelCase
       return parsed.map((v: any) => ({
         color: v.color ?? v.Color ?? '',
-        images: Array.isArray(v.images) ? v.images
+        images: (Array.isArray(v.images) ? v.images
           : Array.isArray(v.Images) ? v.Images
             : []
+        ).map((u: any) => this.normalizeImageUrl(String(u))),
       })).filter(v => v.color);
     } catch {
       return [];
