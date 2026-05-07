@@ -177,8 +177,6 @@ export class CartComponent {
 
   showEmailForm = signal(false);
   showSubmitSuccess = signal(false);
-  placingOrder = signal(false);
-  orderError = signal<string | null>(null);
 
   companyName = '';
   contactPerson = '';
@@ -296,27 +294,6 @@ export class CartComponent {
     }
   }
 
-  placeOrder() {
-    this.placingOrder.set(true);
-    this.orderError.set(null);
-    const items = this.store.cart().map(item => ({
-      productId: item.product.id,
-      productName: item.product.name,
-      variant: item.variant,
-      quantity: item.quantity
-    }));
-    this.ordersService.placeOrder({ items }).subscribe({
-      next: () => {
-        this.store.clearCart();
-        this.placingOrder.set(false);
-        this.router.navigate(['/orders']);
-      },
-      error: (err) => {
-        this.orderError.set(err.error?.error || 'Failed to place order. Please try again.');
-        this.placingOrder.set(false);
-      }
-    });
-  }
 
   submitQuoteRequest() {
     this.showSubmitSuccess.set(true);
