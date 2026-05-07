@@ -141,7 +141,7 @@ export interface CustomerFilters {
 
 export type UserRole = 'customer' | 'admin';
 export type UserStatus = 'pending' | 'approved' | 'declined';
-export type ProductCategory = 'casket' | 'accessory' | 'child';
+export type ProductCategory = 'baby-caskets' | 'bespoke' | 'coffins' | 'domes' | 'equipment' | 'executive-domes' | 'flatlids' | 'skinz';
 
 // ============================================================================
 // Wishlist Types

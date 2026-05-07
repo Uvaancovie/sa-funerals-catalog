@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAFS Product Wall Chart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .a1-poster {
+            width: 100%;
+            max-width: 594mm;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+        .header-section {
+            position: relative;
+            background-color: #1a103c;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            z-index: 10;
+        }
+
+        .header-wave {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 5;
+        }
+
+        .content-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 15px;
+            padding: 40px 20px 20px 20px;
+            z-index: 1;
+        }
+
+        .product-card {
+            border: 3px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: white;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            border-top: 2px solid #e5e7eb;
+            padding-top: 12px;
+        }
+
+        .footer-section {
+            background-color: #1a103c;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .safs-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .safs-subtitle {
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .safs-slogan {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #8a7a3b;
+        }
+
+        /* Responsive Breakpoints for Grid & Print */
+        @media (min-width: 640px) {
+            .content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px), print {
+            .a1-poster {
+                width: 594mm;
+                min-height: 841mm;
+            }
+            .header-section { padding: 3rem 0; }
+            .content-grid {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+                gap: 15mm 15mm;
+                padding: 35mm 20mm 20mm 20mm;
+            }
+            
+            /* Enlarge product elements for A1 size */
+            .product-image {
+                height: 260px;
+                margin-bottom: 15px;
+            }
+            .product-title {
+                font-size: 28px;
+                padding-top: 15px;
+            }
+
+            .footer-section {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 30mm;
+                font-size: 24px;
+                text-align: left;
+            }
+            .safs-title { font-size: 64px; letter-spacing: 6px; }
+            .safs-subtitle { font-size: 32px; letter-spacing: 14px; }
+            .safs-slogan { font-size: 22px; letter-spacing: 3px; }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .a1-poster {
+                box-shadow: none;
+                width: 100%;
+                height: 100vh;
+            }
+            @page {
+                size: A1 portrait;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="a1-poster">
+        
+        <!-- HEADER -->
+        <div class="header-section">
+            <!-- Simple SVG Tree Logo Representation -->
+            <svg class="mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 100 100">
+                <path d="M50 80 L50 40 M30 50 C30 30 50 20 50 40 M70 50 C70 30 50 20 50 40 M40 30 C40 10 60 10 60 30 M30 50 L70 50" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 80 Q 50 60 80 80" stroke="#8a7a3b" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M10 90 Q 50 70 90 90" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+            
+            <div class="safs-title">SOUTH AFRICAN</div>
+            <div class="safs-subtitle">FUNERAL SUPPLIES</div>
+            <div class="safs-slogan">QUALITY &bull; VALUE &bull; SERVICE &bull; INNOVATION</div>
+
+            <!-- Wave overlay at bottom of header -->
+            <svg class="header-wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <path fill="#ffffff" fill-opacity="1" d="M0,224L80,202.7C160,181,320,139,480,144C640,149,800,203,960,208C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+                <path fill="#1a103c" fill-opacity="0.2" d="M0,192L80,186.7C160,181,320,171,480,176C640,181,800,203,960,208C1120,213,1280,203,1360,197.3L1440,192L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path>
+            </svg>
+        </div>
+
+        <!-- GRID -->
+        <div class="content-grid" id="productGrid">
+            <!-- Products will be injected by script -->
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-section">
+            <div class="flex items-center gap-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>160 Aberdare Drive,<br>Phoenix Industrial Park,<br>Durban</span>
+            </div>
+            
+            <div class="flex flex-col items-end gap-2">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+                    <span>www.safuneral.co.za</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span>031 508 6700</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const grid = document.getElementById('productGrid');
+
+        const normalizeImagePath = (imagePath) => {
+            if (!imagePath) return '';
+            if (imagePath.startsWith('./') || imagePath.startsWith('http')) return imagePath;
+            return `./src/${imagePath}`;
+        };
+
+        const renderProducts = (products) => {
+            const items = products.slice(0, 24);
+            items.forEach((product) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                const imageSrc = normalizeImagePath(product.image);
+                card.innerHTML = `
+                    <img src="${imageSrc}" alt="${product.name}" class="product-image" onerror="this.src='https://placehold.co/600x400?text=Image+Not+Found'">
+                    <div class="product-title">${product.name}</div>
+                `;
+                grid.appendChild(card);
+            });
+        };
+
+        fetch('./products-safs.json')
+            .then((response) => response.json())
+            .then((products) => renderProducts(products))
+            .catch((error) => {
+                console.error('Failed to load products:', error);
+            });
+    </script>
+</body>
+</html>

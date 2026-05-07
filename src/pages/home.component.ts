@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { GoogleReviewsComponent } from '../components/google-reviews.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, GoogleReviewsComponent],
   template: `
     <!-- Hero Section -->
     <section class="relative h-[600px] flex items-center justify-center bg-safs-dark overflow-hidden">
@@ -12,7 +13,7 @@ import { RouterLink } from '@angular/router';
       <div class="absolute inset-0 bg-gradient-to-r from-safs-dark via-safs-dark/90 to-transparent z-10"></div>
       <img src="https://placehold.co/1920x1080/2a1b4e/ffffff?text=Quality+Manufacturing" alt="Factory Background" class="absolute inset-0 w-full h-full object-cover opacity-30 z-0">
       
-      <div class="relative z-20 container mx-auto px-4 text-center md:text-left">
+      <div class="relative z-20 container mx-auto px-4 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-12">
         <div class="max-w-2xl">
           <div class="inline-block border-b-2 border-safs-gold mb-6 pb-1">
             <span class="text-safs-gold font-bold tracking-[0.3em] uppercase text-sm">Since 1998</span>
@@ -33,6 +34,11 @@ import { RouterLink } from '@angular/router';
             </a>
           </div>
         </div>
+
+        <!-- Google Reviews Integration -->
+        <div class="hidden lg:block transform hover:scale-105 transition-transform duration-300">
+           <app-google-reviews></app-google-reviews>
+        </div>
       </div>
     </section>
 
@@ -48,7 +54,7 @@ import { RouterLink } from '@angular/router';
           @for (item of strategy; track item.title) {
             <div class="p-8 bg-gray-50 hover:bg-safs-light hover:shadow-lg transition-all border-t-4 border-transparent hover:border-safs-gold group text-center">
               <div class="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center mx-auto mb-6 group-hover:bg-safs-gold transition-colors">
-                <span class="text-2xl group-hover:text-white text-safs-dark">{{ item.icon }}</span>
+                <span class="text-2xl group-hover:text-white text-safs-dark" [innerHTML]="item.icon"></span>
               </div>
               <h3 class="font-serif text-xl font-bold text-safs-dark mb-3">{{ item.title }}</h3>
               <p class="text-gray-600 text-sm leading-relaxed">{{ item.text }}</p>
@@ -87,17 +93,25 @@ import { RouterLink } from '@angular/router';
             </p>
             <ul class="space-y-4 mb-8">
               <li class="flex items-center gap-3 text-safs-dark font-medium">
-                <span class="w-6 h-6 rounded-full bg-safs-gold/20 flex items-center justify-center text-safs-gold text-xs">✓</span> Premium Wood Selection
+                <span class="w-6 h-6 rounded-full bg-safs-gold/20 flex items-center justify-center text-safs-gold text-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span> Premium Wood Selection
               </li>
               <li class="flex items-center gap-3 text-safs-dark font-medium">
-                <span class="w-6 h-6 rounded-full bg-safs-gold/20 flex items-center justify-center text-safs-gold text-xs">✓</span> Superior Craftsmanship
+                <span class="w-6 h-6 rounded-full bg-safs-gold/20 flex items-center justify-center text-safs-gold text-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span> Superior Craftsmanship
               </li>
               <li class="flex items-center gap-3 text-safs-dark font-medium">
-                <span class="w-6 h-6 rounded-full bg-safs-gold/20 flex items-center justify-center text-safs-gold text-xs">✓</span> Custom Finishing Options
+                <span class="w-6 h-6 rounded-full bg-safs-gold/20 flex items-center justify-center text-safs-gold text-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span> Custom Finishing Options
               </li>
             </ul>
             <a routerLink="/catalog" class="inline-flex items-center gap-2 text-safs-gold font-bold hover:text-safs-dark transition-colors group">
-              Explore Our Range <span class="group-hover:translate-x-1 transition-transform">→</span>
+              Explore Our Range <span class="group-hover:translate-x-1 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </span>
             </a>
           </div>
         </div>
@@ -136,9 +150,9 @@ import { RouterLink } from '@angular/router';
 })
 export class HomeComponent {
   strategy = [
-    { title: 'Quality', text: 'Maintaining the highest levels of quality and manufacturing excellence.', icon: '★' },
-    { title: 'Value', text: 'Optimal ROI whilst maintaining competitive pricing for our partners.', icon: '💎' },
-    { title: 'Service', text: 'Vigorous community leadership and support with exceptional delivery.', icon: '🤝' },
-    { title: 'Innovation', text: 'Forefront of product design and technological advancements.', icon: '💡' }
+    { title: 'Quality', text: 'Maintaining the highest levels of quality and manufacturing excellence.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>' },
+    { title: 'Value', text: 'Optimal ROI whilst maintaining competitive pricing for our partners.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9Z"></path><path d="M11 3 8 9l4 13"></path><path d="M12 15V3"></path></svg>' },
+    { title: 'Service', text: 'Vigorous community leadership and support with exceptional delivery.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>' },
+    { title: 'Innovation', text: 'Forefront of product design and technological advancements.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' }
   ];
 }

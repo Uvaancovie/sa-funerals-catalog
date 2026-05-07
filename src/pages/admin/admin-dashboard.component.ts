@@ -45,8 +45,7 @@ type SortDirection = 'asc' | 'desc';
       </div>
 
       <div class="container mx-auto px-4 py-8">
-        <!-- Quick Actions -->
-        <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <a 
             routerLink="/admin/products" 
             class="flex items-center gap-3 px-6 py-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all">
@@ -90,6 +89,22 @@ type SortDirection = 'asc' | 'desc';
             <div>
               <h3 class="font-bold text-safs-dark">Audit Logs</h3>
               <p class="text-xs text-gray-500">Login & logout compliance trail</p>
+            </div>
+          </a>
+          <a 
+            routerLink="/kiosk" 
+            target="_blank"
+            class="flex items-center gap-3 px-6 py-4 bg-safs-dark text-white rounded-xl shadow-sm hover:shadow-md transition-all group">
+            <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-safs-gold transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-bold">Launch Kiosk Mode</h3>
+              <p class="text-xs text-gray-400">Locked expo experience</p>
             </div>
           </a>
         </div>

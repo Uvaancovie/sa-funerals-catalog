@@ -6,13 +6,15 @@ module.exports = {
       colors: {
         safs: {
           dark: '#1a103c',
-          gold: '#a89f6e',
+          gold: '#8a7a3b',
+          'gold-light': '#c9b56b',
+          'gold-dark': '#6f5a2a',
           light: '#f8f9fa'
         }
       },
       fontFamily: {
         serif: ['Cinzel', 'serif'],
-        sans: ['Lato', 'sans-serif']
+        sans: ['Poppins', 'sans-serif']
       }
     }
   },

@@ -1,0 +1,558 @@
+[
+  {
+    "id": "2ft-minnie-mouse",
+    "name": "2FT Minnie Mouse Casket",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/2FT Minnie Mouse.jpg",
+    "variants": ["Pink"],
+    "price": 0
+  },
+  {
+    "id": "2ft-raised-halfview-white",
+    "name": "2FT Raised Halfview",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/2FT Raised Halfview White.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "3ft-batman",
+    "name": "3FT Batman Casket",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/3FT Batman.jpg",
+    "variants": ["Black"],
+    "price": 0
+  },
+  {
+    "id": "3ft-raised-halfview-white",
+    "name": "3FT Raised Halfview",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/3FT Raised Halfview White.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "4ft-raised-halfview-white",
+    "name": "4FT Raised Halfview",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/4FT Raised Halfview White.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "4ft-senator-imbuia",
+    "name": "4FT Senator Casket",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/4FT Senator Imbuia.jpg",
+    "variants": ["Imbuia"],
+    "price": 0
+  },
+  {
+    "id": "4ft-spiderman",
+    "name": "4FT SpiderMan Casket",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/4FT SpiderMan.jpg",
+    "variants": ["Red"],
+    "price": 0
+  },
+  {
+    "id": "5ft-dome-walnut",
+    "name": "5FT Dome Casket",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/5FT Dome - Walnut.jpg",
+    "variants": ["Walnut"],
+    "price": 0
+  },
+  {
+    "id": "5ft-senator-white",
+    "name": "5FT Senator Casket",
+    "category": "baby-caskets",
+    "image": "SAFS IMAGES/Baby Caskets/5FT Senator White.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "black-glitter-box",
+    "name": "Black Glitter Box",
+    "category": "bespoke",
+    "images": ["SAFS IMAGES/Bespoke/Black Glitter Box Closed.jpg", "SAFS IMAGES/Bespoke/Black Glitter Box Open.jpg"],
+    "image": "SAFS IMAGES/Bespoke/Black Glitter Box Closed.jpg",
+    "variants": ["Black"],
+    "price": 0
+  },
+  {
+    "id": "glitter-black",
+    "name": "Glitter Black Casket",
+    "category": "bespoke",
+    "images": ["SAFS IMAGES/Bespoke/Glitter Black - Closed.jpg", "SAFS IMAGES/Bespoke/Glitter Black - open.jpg"],
+    "image": "SAFS IMAGES/Bespoke/Glitter Black - Closed.jpg",
+    "variants": ["Black"],
+    "price": 0
+  },
+  {
+    "id": "glitter-purple",
+    "name": "Glitter Purple Casket",
+    "category": "bespoke",
+    "images": ["SAFS IMAGES/Bespoke/Glitter Purple.jpg", "SAFS IMAGES/Bespoke/Purple Glitter Box.jpg"],
+    "image": "SAFS IMAGES/Bespoke/Glitter Purple.jpg",
+    "variants": ["Purple"],
+    "price": 0
+  },
+  {
+    "id": "rose-gold-glitter-box",
+    "name": "Rose Gold Glitter Box",
+    "category": "bespoke",
+    "image": "SAFS IMAGES/Bespoke/Rose Gold Glitter Box.jpg",
+    "variants": ["Rose Gold"],
+    "price": 0
+  },
+  {
+    "id": "bespoke-senator-green",
+    "name": "Senator Green Bespoke",
+    "category": "bespoke",
+    "images": ["SAFS IMAGES/Bespoke/Senator - Green.jpg", "SAFS IMAGES/Bespoke/Senator - Green (2).jpg"],
+    "image": "SAFS IMAGES/Bespoke/Senator - Green.jpg",
+    "variants": ["Green"],
+    "price": 0
+  },
+  {
+    "id": "2-tier-oversize",
+    "name": "2 Tier Oversize Coffin",
+    "category": "coffins",
+    "image": "SAFS IMAGES/Coffins/2 Tier Oversize Kiaat.jpg",
+    "variants": ["Kiaat", "White"],
+    "price": 0
+  },
+  {
+    "id": "c-coffin",
+    "name": "C-Coffin",
+    "category": "coffins",
+    "images": ["SAFS IMAGES/Coffins/C-Coffin Cherry Closed.jpg", "SAFS IMAGES/Coffins/C-Coffin Cherry Open.jpg"],
+    "image": "SAFS IMAGES/Coffins/C-Coffin Cherry Closed.jpg",
+    "variants": ["Cherry"],
+    "price": 0
+  },
+  {
+    "id": "c-corner-coffin",
+    "name": "C-Corner Coffin",
+    "category": "coffins",
+    "image": "SAFS IMAGES/Coffins/C-Corner Coffin White.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "classic-coffin",
+    "name": "Classic Coffin",
+    "category": "coffins",
+    "image": "SAFS IMAGES/Coffins/Classic Coffin Mahogany.jpg",
+    "variants": ["Mahogany", "Mahogany Rose", "Pecan", "Pecan Rose"],
+    "price": 0
+  },
+  {
+    "id": "flatlid-coffin",
+    "name": "Flatlid Coffin",
+    "category": "coffins",
+    "image": "SAFS IMAGES/Coffins/Flatlid Coffin Kiaat.jpg",
+    "variants": ["Kiaat", "White"],
+    "price": 0
+  },
+  {
+    "id": "harvard-coffin",
+    "name": "Harvard Coffin",
+    "category": "coffins",
+    "images": ["SAFS IMAGES/Coffins/Harvard Coffin Cherry Closed.jpg", "SAFS IMAGES/Coffins/Harvard Coffin Cherry Open.jpg"],
+    "image": "SAFS IMAGES/Coffins/Harvard Coffin Cherry Closed.jpg",
+    "variants": ["Cherry", "White"],
+    "price": 0
+  },
+  {
+    "id": "lincoln-coffin",
+    "name": "Lincoln Coffin",
+    "category": "coffins",
+    "images": ["SAFS IMAGES/Coffins/Lincoln Coffin White Closed.jpg", "SAFS IMAGES/Coffins/Lincoln Coffin White Open.jpg"],
+    "image": "SAFS IMAGES/Coffins/Lincoln Coffin White Closed.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "prestige-coffin",
+    "name": "Prestige Coffin",
+    "category": "coffins",
+    "image": "SAFS IMAGES/Coffins/Prestige Coffin Mahogany Closed.jpg",
+    "variants": ["Mahogany", "Pecan", "White"],
+    "price": 0
+  },
+  {
+    "id": "redwood-coffin",
+    "name": "Redwood Coffin",
+    "category": "coffins",
+    "image": "SAFS IMAGES/Coffins/Redwood Coffin.jpg",
+    "variants": ["Redwood"],
+    "price": 0
+  },
+  {
+    "id": "repatriation-casket",
+    "name": "Repatriation Casket",
+    "category": "coffins",
+    "images": ["SAFS IMAGES/Coffins/Repatriation Casket Closed.jpg", "SAFS IMAGES/Coffins/Repatriation Casket Open.jpg"],
+    "image": "SAFS IMAGES/Coffins/Repatriation Casket Closed.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "senator-coffin",
+    "name": "Senator Coffin",
+    "category": "coffins",
+    "images": ["SAFS IMAGES/Coffins/Senator Coffin White Closed.jpg", "SAFS IMAGES/Coffins/Senator Coffin White Open.jpg"],
+    "image": "SAFS IMAGES/Coffins/Senator Coffin White Closed.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "solid-teak-casket",
+    "name": "Solid Teak Casket",
+    "category": "coffins",
+    "images": ["SAFS IMAGES/Coffins/Solid Teak Casket Closed.jpg", "SAFS IMAGES/Coffins/Solid Teak Casket Open.jpg"],
+    "image": "SAFS IMAGES/Coffins/Solid Teak Casket Closed.jpg",
+    "variants": ["Teak"],
+    "price": 0
+  },
+  {
+    "id": "top-end-coffin",
+    "name": "Top End Coffin",
+    "category": "coffins",
+    "image": "SAFS IMAGES/Coffins/Top End Coffin Cherry.jpg",
+    "variants": ["Cherry", "Kiaat", "White"],
+    "price": 0
+  },
+  {
+    "id": "4-corner-figurine",
+    "name": "4 Corner Figurine",
+    "category": "domes",
+    "images": ["SAFS IMAGES/domes/4 Corner Figurine - Cherry.jpg", "SAFS IMAGES/domes/4 Corner Figurine - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/domes/4 Corner Figurine - Cherry.jpg",
+    "variants": ["Cherry", "Kiaat", "Walnut"],
+    "price": 0
+  },
+  {
+    "id": "4-corner-prince-dome",
+    "name": "4 Corner Prince Dome",
+    "category": "domes",
+    "image": "SAFS IMAGES/domes/4 Corner Prince Dome Cherry.jpg",
+    "variants": ["Cherry"],
+    "price": 0
+  },
+  {
+    "id": "4-corner-woodturning",
+    "name": "4 Corner Woodturning",
+    "category": "domes",
+    "images": ["SAFS IMAGES/domes/4 Corner Woodturning - Cherry.jpg", "SAFS IMAGES/domes/4 Corner Woodturning - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/domes/4 Corner Woodturning - Cherry.jpg",
+    "variants": ["Cherry", "Teak"],
+    "price": 0
+  },
+  {
+    "id": "princeton-mini-dome",
+    "name": "Princeton Mini Dome",
+    "category": "domes",
+    "images": ["SAFS IMAGES/domes/Princeton Mini Dome - Cherry.jpg", "SAFS IMAGES/domes/Princeton Mini Dome - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/domes/Princeton Mini Dome - Cherry.jpg",
+    "variants": ["Cherry", "Kiaat", "Walnut", "White"],
+    "price": 0
+  },
+  {
+    "id": "royal-dome",
+    "name": "Royal Dome",
+    "category": "domes",
+    "images": ["SAFS IMAGES/domes/Royal Dome - Cherry Gloss.jpg", "SAFS IMAGES/domes/Royal Dome - Cherry Gloss (2).jpg"],
+    "image": "SAFS IMAGES/domes/Royal Dome - Cherry Gloss.jpg",
+    "variants": ["Cherry Gloss", "Hemlock", "Kiaat"],
+    "price": 0
+  },
+  {
+    "id": "santaco-mini-dome",
+    "name": "SANTACO Mini Dome",
+    "category": "domes",
+    "images": ["SAFS IMAGES/domes/SANTACO - Mini Dome White.jpg", "SAFS IMAGES/domes/SANTACO - Mini Dome White (2).jpg"],
+    "image": "SAFS IMAGES/domes/SANTACO - Mini Dome White.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "saps-4-corner-mini-dome",
+    "name": "SAPS 4 Corner Mini Dome Full Lid",
+    "category": "domes",
+    "images": ["SAFS IMAGES/domes/SAPS - 4 Corner Mini Dome Full Lid.jpg", "SAFS IMAGES/domes/SAPS - 4 Corner Mini Dome Full Lid (2).jpg"],
+    "image": "SAFS IMAGES/domes/SAPS - 4 Corner Mini Dome Full Lid.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "standard-dome",
+    "name": "Standard Dome",
+    "category": "domes",
+    "images": ["SAFS IMAGES/domes/Standard Dome - Cherry.jpg", "SAFS IMAGES/domes/Standard Dome - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/domes/Standard Dome - Cherry.jpg",
+    "variants": ["Cherry", "Cherry Gloss", "Hemlock", "Kiaat"],
+    "price": 0
+  },
+  {
+    "id": "1-man-stretcher",
+    "name": "1 Man Stretcher",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/1 Man Stretcher Red.jpg",
+    "variants": ["Red"],
+    "price": 0
+  },
+  {
+    "id": "body-box",
+    "name": "Body Box",
+    "category": "equipment",
+    "images": ["SAFS IMAGES/Equipment/Body Box.jpg", "SAFS IMAGES/Equipment/Body Box 2.jpg"],
+    "image": "SAFS IMAGES/Equipment/Body Box.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "casket-racking-system",
+    "name": "Casket Racking System",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/Casket Racking System.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "coffin-stand",
+    "name": "Coffin Stand",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/Coffin Stand.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "executive-church-trolley",
+    "name": "Executive Church Trolley",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/Executive Church Trolley Gold.jpg",
+    "variants": ["Gold"],
+    "price": 0
+  },
+  {
+    "id": "grassmats",
+    "name": "Grassmats",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/Grassmats.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "green-tent-3x6",
+    "name": "Green Tent 3x6",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/Green Tent 3x6.jpg",
+    "variants": ["Green"],
+    "price": 0
+  },
+  {
+    "id": "head-block",
+    "name": "Head Block",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/Head Block.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "lowering-device-set",
+    "name": "Lowering Device Set",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/Lowering Device Set.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "tent-grassmat-lowdev-set",
+    "name": "Tent, Grassmat & Lowering Device Set",
+    "category": "equipment",
+    "image": "SAFS IMAGES/Equipment/Tent,Grassmat & Lowdev Set.jpg",
+    "variants": ["Standard"],
+    "price": 0
+  },
+  {
+    "id": "4-corner-dome-candle",
+    "name": "4 Corner Dome Candle",
+    "category": "executive-domes",
+    "images": ["SAFS IMAGES/Executive Domes/4 Corner Dome Candle - Cherry.jpg", "SAFS IMAGES/Executive Domes/4 Corner Dome Candle - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Executive Domes/4 Corner Dome Candle - Cherry.jpg",
+    "variants": ["Cherry"],
+    "price": 0
+  },
+  {
+    "id": "balmoral",
+    "name": "Balmoral",
+    "category": "executive-domes",
+    "images": ["SAFS IMAGES/Executive Domes/Balmoral - Cherry.jpg", "SAFS IMAGES/Executive Domes/Balmoral - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Executive Domes/Balmoral - Cherry.jpg",
+    "variants": ["Cherry"],
+    "price": 0
+  },
+  {
+    "id": "emperor",
+    "name": "Emperor",
+    "category": "executive-domes",
+    "images": ["SAFS IMAGES/Executive Domes/Emperor - Dark Cherry.jpg", "SAFS IMAGES/Executive Domes/Emperor - Dark Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Executive Domes/Emperor - Dark Cherry.jpg",
+    "variants": ["Dark Cherry", "White"],
+    "price": 0
+  },
+  {
+    "id": "harvard-executive",
+    "name": "Harvard",
+    "category": "executive-domes",
+    "images": ["SAFS IMAGES/Executive Domes/Harvard - Cherry.jpg", "SAFS IMAGES/Executive Domes/Harvard - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Executive Domes/Harvard - Cherry.jpg",
+    "variants": ["Cherry"],
+    "price": 0
+  },
+  {
+    "id": "lapita",
+    "name": "Lapita",
+    "category": "executive-domes",
+    "images": ["SAFS IMAGES/Executive Domes/Lapita - Cherry.jpg", "SAFS IMAGES/Executive Domes/Lapita - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Executive Domes/Lapita - Cherry.jpg",
+    "variants": ["Cherry"],
+    "price": 0
+  },
+  {
+    "id": "lincoln-dome",
+    "name": "Lincoln Dome",
+    "category": "executive-domes",
+    "images": ["SAFS IMAGES/Executive Domes/Lincoln Dome - White.jpg", "SAFS IMAGES/Executive Domes/Lincoln Dome - White (2).jpg"],
+    "image": "SAFS IMAGES/Executive Domes/Lincoln Dome - White.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "oxford",
+    "name": "Oxford",
+    "category": "executive-domes",
+    "images": ["SAFS IMAGES/Executive Domes/Oxford - Cherry.jpg", "SAFS IMAGES/Executive Domes/Oxford - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Executive Domes/Oxford - Cherry.jpg",
+    "variants": ["Cherry"],
+    "price": 0
+  },
+  {
+    "id": "senator-executive",
+    "name": "Senator",
+    "category": "executive-domes",
+    "images": ["SAFS IMAGES/Executive Domes/Senator - Dark Cherry.jpg", "SAFS IMAGES/Executive Domes/Senator - Dark Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Executive Domes/Senator - Dark Cherry.jpg",
+    "variants": ["Dark Cherry"],
+    "price": 0
+  },
+  {
+    "id": "4-tier-flatlid",
+    "name": "4 Tier Flatlid",
+    "category": "flatlids",
+    "images": ["SAFS IMAGES/Flatlids/4 Tier - Ash.jpg", "SAFS IMAGES/Flatlids/4 Tier - Ash (2).jpg"],
+    "image": "SAFS IMAGES/Flatlids/4 Tier - Ash.jpg",
+    "variants": ["Ash", "Cherry", "Kiaat"],
+    "price": 0
+  },
+  {
+    "id": "pongee",
+    "name": "Pongee",
+    "category": "flatlids",
+    "image": "SAFS IMAGES/Flatlids/Pongee -  Cherry.jpg",
+    "variants": ["Cherry", "Imbuia", "Kiaat Gloss", "UV Dotted Mahogany", "Walnut"],
+    "price": 0
+  },
+  {
+    "id": "porthole",
+    "name": "Porthole",
+    "category": "flatlids",
+    "images": ["SAFS IMAGES/Flatlids/Porthole - Cherry.jpg", "SAFS IMAGES/Flatlids/Porthole - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Flatlids/Porthole - Cherry.jpg",
+    "variants": ["Cherry", "Kiaat", "Walnut"],
+    "price": 0
+  },
+  {
+    "id": "quarter-view",
+    "name": "Quarter View",
+    "category": "flatlids",
+    "image": "SAFS IMAGES/Flatlids/Quarter View - Kiaat Gloss.jpg",
+    "variants": ["Kiaat Gloss", "Redwood Gloss", "White"],
+    "price": 0
+  },
+  {
+    "id": "raised-halfview",
+    "name": "Raised Halfview",
+    "category": "flatlids",
+    "images": ["SAFS IMAGES/Flatlids/Raised Halfview - Cherry.jpg", "SAFS IMAGES/Flatlids/Raised Halfview Cherry.jpg"],
+    "image": "SAFS IMAGES/Flatlids/Raised Halfview - Cherry.jpg",
+    "variants": ["Cherry", "Kiaat", "Walnut", "White"],
+    "price": 0
+  },
+  {
+    "id": "santaco-raised-halfview",
+    "name": "SANTACO Raised Halfview",
+    "category": "flatlids",
+    "images": ["SAFS IMAGES/Flatlids/SANTACO - Raised Halfview White.jpg", "SAFS IMAGES/Flatlids/SANTACO - Raised Halfview White (2).jpg"],
+    "image": "SAFS IMAGES/Flatlids/SANTACO - Raised Halfview White.jpg",
+    "variants": ["White"],
+    "price": 0
+  },
+  {
+    "id": "alligator",
+    "name": "Alligator",
+    "category": "skinz",
+    "images": ["SAFS IMAGES/Skinz/Alligator - Cherry.jpg", "SAFS IMAGES/Skinz/Alligator - Cherry (2).jpg"],
+    "image": "SAFS IMAGES/Skinz/Alligator - Cherry.jpg",
+    "variants": ["Cherry"],
+    "price": 0
+  },
+  {
+    "id": "elephant",
+    "name": "Elephant",
+    "category": "skinz",
+    "images": ["SAFS IMAGES/Skinz/Elephant.jpg", "SAFS IMAGES/Skinz/Elephant Mahogany.jpg"],
+    "image": "SAFS IMAGES/Skinz/Elephant.jpg",
+    "variants": ["Mahogany"],
+    "price": 0
+  },
+  {
+    "id": "nguni",
+    "name": "Nguni",
+    "category": "skinz",
+    "images": ["SAFS IMAGES/Skinz/Nguni - Black.jpg", "SAFS IMAGES/Skinz/Nguni - Black (2).jpg"],
+    "image": "SAFS IMAGES/Skinz/Nguni - Black.jpg",
+    "variants": ["Black", "White", "Brown"],
+    "price": 0
+  },
+  {
+    "id": "nguni-drum",
+    "name": "Nguni Drum",
+    "category": "skinz",
+    "images": ["SAFS IMAGES/Skinz/Nguni Drum - Brown.jpg", "SAFS IMAGES/Skinz/Nguni Drum - Brown (2).jpg"],
+    "image": "SAFS IMAGES/Skinz/Nguni Drum - Brown.jpg",
+    "variants": ["Brown"],
+    "price": 0
+  },
+  {
+    "id": "nguni-horn",
+    "name": "Nguni Horn",
+    "category": "skinz",
+    "images": ["SAFS IMAGES/Skinz/Nguni Horn - Black.jpg", "SAFS IMAGES/Skinz/Nguni Horn - Black (2).jpg"],
+    "image": "SAFS IMAGES/Skinz/Nguni Horn - Black.jpg",
+    "variants": ["Black"],
+    "price": 0
+  },
+  {
+    "id": "ostrich",
+    "name": "Ostrich",
+    "category": "skinz",
+    "images": ["SAFS IMAGES/Skinz/Ostrich - Brown.jpg", "SAFS IMAGES/Skinz/Ostrich - Brown (2).jpg"],
+    "image": "SAFS IMAGES/Skinz/Ostrich - Brown.jpg",
+    "variants": ["Brown"],
+    "price": 0
+  }
+]

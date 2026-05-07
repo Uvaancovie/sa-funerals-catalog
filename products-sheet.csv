@@ -1,0 +1,25 @@
+product_uid,Name,Category,category_uid,Folder Location
+P001,Halfview Pongee Casket,Flatlids,C01,./src/SAFS IMAGES/Flatlids/Pongee Cherry.jpg
+P002,Raised Halfview Casket,Flatlids,C01,./src/SAFS IMAGES/Flatlids/Raised Halfview - White.jpg
+P003,Porthole Casket,Flatlids,C01,./src/SAFS IMAGES/Flatlids/Porthole - Kiaat.jpg
+P004,4 Tier Casket,Flatlids,C01,./src/SAFS IMAGES/Flatlids/4 Tier - Cherry.jpg
+P005,Princeton Mini Dome Casket,Domes,C02,./src/SAFS IMAGES/domes/Princeton Mini Dome - Cherry.jpg
+P006,Standard Dome Casket,Domes,C02,./src/SAFS IMAGES/domes/Standard Dome - Kiaat.jpg
+P007,4 Corner Woodturning Casket,Domes,C02,./src/SAFS IMAGES/domes/4 Corner Woodturning - Teak.jpg
+P008,4 Corner Figurine Casket,Domes,C02,./src/SAFS IMAGES/domes/4 Corner Figurine - Walnut.jpg
+P009,Royal Dome Casket,Domes,C02,./src/SAFS IMAGES/domes/Royal Dome - Cherry Gloss.jpg
+P010,Lincoln White Casket,Executive Domes,C03,./src/SAFS IMAGES/Executive Domes/Lincoln Dome - White.jpg
+P011,Harvard Ash Casket,Executive Domes,C03,./src/SAFS IMAGES/Executive Domes/Harvard - Cherry.jpg
+P012,Alligator Cherry Casket,Skinz,C04,./src/SAFS IMAGES/Skinz/Alligator Cherry.jpg
+P013,Ostrich Brown Casket,Skinz,C04,./src/SAFS IMAGES/Skinz/Ostrich - Brown.jpg
+P014,Woven Dome,Woven-Leather-Dome,C05,./src/SAFS IMAGES/Woven-Leather-Dome/woven-leather-dome (1).png
+P015,White Leather Casket,White-Leather,C06,./src/SAFS IMAGES/White-Leather/white-leather.jpeg
+P016,Nguni Casket Black,Skinz,C04,./src/SAFS IMAGES/Skinz/Nguni - Black.jpg
+P017,Oxford Classic,Executive Domes,C03,./src/SAFS IMAGES/Executive Domes/Oxford - Cherry.jpg
+P018,Balmoral Caskets,Executive Domes,C03,./src/SAFS IMAGES/Executive Domes/Balmoral - Cherry.jpg
+P019,Lapita Casket,Executive Domes,C03,./src/SAFS IMAGES/Executive Domes/Lapita Cherry.jpg
+P020,Senator Casket,Executive Domes,C03,./src/SAFS IMAGES/Executive Domes/Senator - Dark Cherry.jpg
+P021,Emperor Casket,Executive Domes,C03,./src/SAFS IMAGES/Executive Domes/Emperor - Dark Cherry.jpg
+P022,Bespoke Glitter Black,Bespoke,C07,./src/SAFS IMAGES/Bespoke/Black Glitter Box Closed.jpg
+P023,Bespoke Green,Bespoke,C07,./src/SAFS IMAGES/Bespoke/Senator - Green.jpg
+P024,Bespoke Purple,Bespoke,C07,./src/SAFS IMAGES/Bespoke/Glitter Purple.jpg

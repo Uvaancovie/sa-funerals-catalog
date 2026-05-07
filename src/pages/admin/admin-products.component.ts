@@ -1,9 +1,10 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProductsService, Product, ProductAuditLog } from '../../services/products.service';
+import { SupabaseService } from '../../services/supabase.service';
 
 interface ProductForm {
   id: string;
@@ -14,11 +15,11 @@ interface ProductForm {
   priceOnRequest: boolean;
   inStock: boolean;
   featured: boolean;
-  imageFiles: File[];
+  expoFeatured: boolean;
   imageUrls: string[];
   features: string[];
   specifications: { key: string; value: string; }[];
-  colorVariations: { color: string; imageFiles: File[]; imageUrls: string[]; }[];
+  colorVariations: { color: string; imageUrls: string[]; }[];
 }
 
 @Component({
@@ -72,7 +73,12 @@ interface ProductForm {
             [class.border-b-2]="activeTab() === 'list'"
             [class.border-safs-gold]="activeTab() === 'list'"
             [class.text-gray-500]="activeTab() !== 'list'">
-            All Products ({{ productsService.products().length }})
+            All Products 
+            @if (filteredProducts().length !== productsService.products().length) {
+              ({{ filteredProducts().length }} / {{ productsService.products().length }})
+            } @else {
+              ({{ productsService.products().length }})
+            }
           </button>
         </div>
 
@@ -198,10 +204,14 @@ interface ProductForm {
                   <button 
                     type="button"
                     (click)="fileInput.click()"
-                    class="px-6 py-3 bg-safs-gold text-white rounded-lg hover:bg-opacity-90 transition-colors font-bold">
+                    class="px-6 py-3 bg-safs-gold text-white rounded-lg hover:bg-opacity-90 transition-colors font-bold disabled:opacity-50"
+                    [disabled]="submitting() || !form.id">
                     Choose Images
                   </button>
-                  <p class="text-sm text-gray-500 mt-2">Upload multiple images (PNG, JPG)</p>
+                  <p class="text-sm text-gray-500 mt-2">
+                     @if (!form.id) { <span class="text-red-500 font-bold">Please enter Product ID first.</span> }
+                     @else { Upload multiple images (PNG, JPG) }
+                  </p>
                 </div>
 
                 <!-- Image Preview -->
@@ -297,14 +307,18 @@ interface ProductForm {
                           <button 
                             type="button"
                             (click)="triggerColorImageUpload($index)"
-                            class="px-4 py-2 bg-safs-dark text-white rounded-lg hover:bg-opacity-90 transition-colors text-sm font-bold">
+                            class="px-4 py-2 bg-safs-dark text-white rounded-lg hover:bg-opacity-90 transition-colors text-sm font-bold disabled:opacity-50"
+                            [disabled]="submitting() || !form.id">
                             Choose Images
                           </button>
-                          <p class="text-xs text-gray-500 mt-1">Upload images for {{ variation.color || 'this color' }}</p>
+                          <p class="text-xs text-gray-500 mt-1">
+                             @if (!form.id) { <span class="text-red-500 font-bold">Enter Product ID first</span> }
+                             @else { Upload images for {{ variation.color || 'this color' }} }
+                          </p>
                         </div>
                         
                         <!-- Color Variation Image Preview -->
-                        @if (variation.imageUrls.length > 0) {
+                        @if ((variation.imageUrls ?? []).length > 0) {
                           <div class="grid grid-cols-3 md:grid-cols-5 gap-2 mt-3">
                             @for (url of variation.imageUrls; track imgIdx) {
                               <div class="relative group">
@@ -388,12 +402,21 @@ interface ProductForm {
                 </label>
 
                 <label class="flex items-center gap-2 cursor-pointer">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     [(ngModel)]="form.featured"
                     name="featured"
                     class="w-5 h-5 text-safs-gold rounded focus:ring-2 focus:ring-safs-gold">
                   <span class="text-sm font-bold text-gray-700">Featured</span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="form.expoFeatured"
+                    name="expoFeatured"
+                    class="w-5 h-5 text-safs-gold rounded focus:ring-2 focus:ring-safs-gold">
+                  <span class="text-sm font-bold text-gray-700">Kiosk/Expo Featured</span>
                 </label>
               </div>
 
@@ -432,13 +455,40 @@ interface ProductForm {
         @if (activeTab() === 'list') {
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="p-6 border-b border-gray-200">
-              <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-safs-dark">All Products</h2>
-                <button 
-                  (click)="loadProducts()"
-                  class="px-4 py-2 bg-safs-gold text-white rounded-lg hover:bg-opacity-90 transition-colors text-sm font-bold">
-                  Refresh
-                </button>
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <h2 class="text-2xl font-bold text-safs-dark flex items-center gap-3">
+                  All Products
+                  <span class="text-sm font-normal px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
+                    @if (filteredProducts().length !== productsService.products().length) {
+                      {{ filteredProducts().length }} results found
+                    } @else {
+                      {{ productsService.products().length }} total
+                    }
+                  </span>
+                </h2>
+                <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                    <input type="text" 
+                        [ngModel]="searchQuery()" 
+                        (ngModelChange)="onSearchChange($event)"
+                        placeholder="Search products..." 
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-safs-gold focus:border-transparent min-w-[200px]" />
+                    
+                    <select 
+                        [ngModel]="categoryFilter()" 
+                        (ngModelChange)="onCategoryChange($event)"
+                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-safs-gold focus:border-transparent">
+                        <option value="all">All Categories</option>
+                        <option value="casket">Casket</option>
+                        <option value="child">Child Casket</option>
+                        <option value="accessory">Accessory</option>
+                    </select>
+
+                    <button 
+                      (click)="loadProducts()"
+                      class="px-4 py-2 bg-safs-gold text-white rounded-lg hover:bg-opacity-90 transition-colors text-sm font-bold min-w-max">
+                      Refresh
+                    </button>
+                </div>
               </div>
             </div>
 
@@ -447,7 +497,7 @@ interface ProductForm {
                 <div class="animate-spin rounded-full h-12 w-12 border-4 border-safs-gold border-t-transparent mx-auto"></div>
                 <p class="text-gray-500 mt-4">Loading products...</p>
               </div>
-            } @else if (productsService.products().length === 0) {
+            } @else if (filteredProducts().length === 0) {
               <div class="p-12 text-center">
                 <p class="text-gray-500">No products found</p>
               </div>
@@ -464,7 +514,7 @@ interface ProductForm {
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200">
-                    @for (product of productsService.products(); track product.id) {
+                    @for (product of paginatedProducts(); track product.id) {
                       <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4">
                           <img 
@@ -522,6 +572,30 @@ interface ProductForm {
                     }
                   </tbody>
                 </table>
+              </div>
+              
+              <!-- Pagination Controls -->
+              <div class="p-4 border-t border-gray-200 flex justify-between items-center bg-gray-50">
+                <span class="text-sm text-gray-600">
+                  Showing {{ ((currentPage() - 1) * itemsPerPage()) + 1 }} to {{ min(currentPage() * itemsPerPage(), filteredProducts().length) }} of {{ filteredProducts().length }} products
+                </span>
+                <div class="flex gap-2">
+                  <button 
+                    (click)="currentPage.set(currentPage() - 1)"
+                    [disabled]="currentPage() === 1"
+                    class="px-3 py-1 bg-white border border-gray-300 rounded text-sm font-bold hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Prev
+                  </button>
+                  <span class="px-3 py-1 text-sm font-bold text-gray-700">
+                    Page {{ currentPage() }} of {{ totalPages() }}
+                  </span>
+                  <button 
+                    (click)="currentPage.set(currentPage() + 1)"
+                    [disabled]="currentPage() >= totalPages()"
+                    class="px-3 py-1 bg-white border border-gray-300 rounded text-sm font-bold hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next
+                  </button>
+                </div>
               </div>
             }
           </div>
@@ -611,6 +685,7 @@ interface ProductForm {
 export class AdminProductsComponent implements OnInit {
   authService = inject(AuthService);
   productsService = inject(ProductsService);
+  supabaseService = inject(SupabaseService);
   router = inject(Router);
 
   activeTab = signal<'create' | 'list'>('create');
@@ -635,12 +710,45 @@ export class AdminProductsComponent implements OnInit {
     priceOnRequest: true,
     inStock: true,
     featured: false,
-    imageFiles: [],
+    expoFeatured: false,
     imageUrls: [],
     features: [''],
     specifications: [{ key: '', value: '' }],
     colorVariations: []
   };
+
+  // State for filtering and pagination
+  searchQuery = signal('');
+  categoryFilter = signal('all');
+  currentPage = signal(1);
+  itemsPerPage = signal(10);
+
+  filteredProducts = computed(() => {
+    let products = this.productsService.products();
+
+    if (this.categoryFilter() !== 'all') {
+      products = products.filter(p => p.category === this.categoryFilter());
+    }
+
+    const search = this.searchQuery().toLowerCase().trim();
+    if (search) {
+      products = products.filter(p =>
+        p.name.toLowerCase().includes(search) ||
+        p.id.toLowerCase().includes(search) ||
+        p.category.toLowerCase().includes(search)
+      );
+    }
+
+    return products;
+  });
+
+  paginatedProducts = computed(() => {
+    const products = this.filteredProducts();
+    const startIndex = (this.currentPage() - 1) * this.itemsPerPage();
+    return products.slice(startIndex, startIndex + this.itemsPerPage());
+  });
+
+  totalPages = computed(() => Math.max(1, Math.ceil(this.filteredProducts().length / this.itemsPerPage())));
 
   ngOnInit() {
     this.loadProducts();
@@ -650,25 +758,47 @@ export class AdminProductsComponent implements OnInit {
     this.productsService.getProducts().subscribe();
   }
 
-  onImageSelect(event: Event) {
+  min(a: number, b: number): number {
+    return Math.min(a, b);
+  }
+
+  onSearchChange(value: string) {
+    this.searchQuery.set(value);
+    this.currentPage.set(1);
+  }
+
+  onCategoryChange(value: string) {
+    this.categoryFilter.set(value);
+    this.currentPage.set(1);
+  }
+
+  async onImageSelect(event: Event) {
+    if (!this.form.id) {
+       this.errorMessage.set('Please enter a Product ID first before uploading images.');
+       return;
+    }
     const input = event.target as HTMLInputElement;
     if (input.files) {
+      this.submitting.set(true);
       const files = Array.from(input.files);
-      this.form.imageFiles = [...this.form.imageFiles, ...files];
-
-      // Create preview URLs
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.form.imageUrls.push(e.target?.result as string);
-        };
-        reader.readAsDataURL(file);
-      });
+      
+      for (const file of files) {
+          try {
+             const url = await this.supabaseService.uploadProductImage(file, this.form.id, 'base');
+             this.form.imageUrls.push(url);
+          } catch(e) {
+             console.error('Upload failed', e);
+             this.errorMessage.set('Failed to upload image. Check console for details.');
+          }
+      }
+      this.submitting.set(false);
+      
+      // Clear input
+      input.value = '';
     }
   }
 
   removeImage(index: number) {
-    this.form.imageFiles.splice(index, 1);
     this.form.imageUrls.splice(index, 1);
   }
 
@@ -691,7 +821,6 @@ export class AdminProductsComponent implements OnInit {
   addColorVariation() {
     this.form.colorVariations.push({
       color: '',
-      imageFiles: [],
       imageUrls: []
     });
   }
@@ -707,28 +836,36 @@ export class AdminProductsComponent implements OnInit {
     }
   }
 
-  onColorVariationImageSelect(event: Event, variationIndex: number) {
+  async onColorVariationImageSelect(event: Event, variationIndex: number) {
+    if (!this.form.id) {
+       this.errorMessage.set('Please enter a Product ID first before uploading images.');
+       return;
+    }
     const input = event.target as HTMLInputElement;
     if (input.files) {
+      this.submitting.set(true);
       const files = Array.from(input.files);
       const variation = this.form.colorVariations[variationIndex];
 
-      variation.imageFiles = [...variation.imageFiles, ...files];
-
-      // Create preview URLs
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          variation.imageUrls.push(e.target?.result as string);
-        };
-        reader.readAsDataURL(file);
-      });
+      for (const file of files) {
+          try {
+             const colorSlug = variation.color.replace(/\s+/g, '-').toLowerCase() || 'unnamed-color';
+             const url = await this.supabaseService.uploadProductImage(file, this.form.id, `color-${colorSlug}`);
+             variation.imageUrls.push(url);
+          } catch(e) {
+             console.error('Upload failed', e);
+             this.errorMessage.set('Failed to upload image. Check console for details.');
+          }
+      }
+      this.submitting.set(false);
+      
+      // Clear input
+      input.value = '';
     }
   }
 
   removeColorVariationImage(variationIndex: number, imageIndex: number) {
     const variation = this.form.colorVariations[variationIndex];
-    variation.imageFiles.splice(imageIndex, 1);
     variation.imageUrls.splice(imageIndex, 1);
   }
 
@@ -751,7 +888,7 @@ export class AdminProductsComponent implements OnInit {
       priceOnRequest: product.priceOnRequest,
       inStock: product.inStock,
       featured: product.featured,
-      imageFiles: [],
+      expoFeatured: (product as any).expoFeatured || false,
       imageUrls: images,
       features: features.length > 0 ? features : [''],
       specifications: Object.keys(specs).length > 0
@@ -759,8 +896,7 @@ export class AdminProductsComponent implements OnInit {
         : [{ key: '', value: '' }],
       colorVariations: colorVars.map(v => ({
         color: v.color,
-        imageFiles: [],
-        imageUrls: v.images
+        imageUrls: v.images ?? []
       }))
     };
 
@@ -823,7 +959,10 @@ export class AdminProductsComponent implements OnInit {
             .filter(v => v.color.trim() !== '' && v.imageUrls.length > 0)
             .map(v => ({ color: v.color, images: v.imageUrls }))
         )
-      };
+      } as any;
+
+      // Add expoFeatured as a custom property
+      productData['expoFeatured'] = this.form.expoFeatured;
 
       if (this.isEditMode()) {
         // Update existing product
@@ -924,7 +1063,7 @@ export class AdminProductsComponent implements OnInit {
       priceOnRequest: true,
       inStock: true,
       featured: false,
-      imageFiles: [],
+      expoFeatured: false,
       imageUrls: [],
       features: [''],
       specifications: [{ key: '', value: '' }],

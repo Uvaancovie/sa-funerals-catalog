@@ -27,6 +27,16 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "/assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/SAFS IMAGES",
+                "output": "/SAFS IMAGES"
+              },
+              {
+                "glob": "wall-chart.html",
+                "input": "./",
+                "output": "/"
               }
             ]
           },

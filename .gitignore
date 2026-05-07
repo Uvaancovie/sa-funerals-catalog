@@ -88,3 +88,12 @@ dotnet-ef.exe
 
 # Docker / temp
 docker-compose.override.yml
+
+# AI assistants / editor configs
+.codex/
+.cursor/
+.gemini/
+.zed/
+.mcp.json
+opencode.json
+tmpclaude-*

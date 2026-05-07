@@ -313,5 +313,305 @@
       "Kiaat"
     ],
     "price": 0
+  },
+  {
+    "id": "ricardo-2-tier-oversize",
+    "name": "2 Tier Oversize Casket",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/2 Tier Oversize Kiaat.jpg",
+    "variants": [
+      "Kiaat",
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-2ft-raised-halfview",
+    "name": "2FT Raised Halfview",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/2FT Raised Halfview White.jpg",
+    "variants": [
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-3ft-raised-halfview",
+    "name": "3FT Raised Halfview",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/3FT Raised Halfview White.jpg",
+    "variants": [
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-4ft-raised-halfview",
+    "name": "4FT Raised Halfview",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/4FT Raised Halfview White.jpg",
+    "variants": [
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-4-corner-woodturning",
+    "name": "4 Corner Woodturning Casket (Ricardo)",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/4 Corner Woodturning Teak.jpg",
+    "variants": [
+      "Teak"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-c-coffin",
+    "name": "C-Coffin",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/C-Coffin Cherry Closed.jpg",
+    "variants": [
+      "Cherry"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-c-corner-coffin",
+    "name": "C-Corner Coffin",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/C-Corner Coffin White.jpg",
+    "variants": [
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-classic-coffin",
+    "name": "Classic Coffin",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Classic Coffin Mahogany.jpg",
+    "variants": [
+      "Mahogany",
+      "Mahogany Rose",
+      "Pecan",
+      "Pecan Rose"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-flatlid-coffin",
+    "name": "Flatlid Coffin",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Flatlid Coffin Kiaat.jpg",
+    "variants": [
+      "Kiaat",
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-harvard-coffin",
+    "name": "Harvard Coffin (Ricardo)",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Harvard Coffin Cherry Closed.jpg",
+    "variants": [
+      "Cherry",
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-lincoln-coffin",
+    "name": "Lincoln Coffin (Ricardo)",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Lincoln Coffin White Closed.jpg",
+    "variants": [
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-oxford",
+    "name": "Oxford Casket (Ricardo)",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Oxford Cherry Closed.jpg",
+    "variants": [
+      "Cherry"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-pongee",
+    "name": "Pongee Casket",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Pongee Kiaat.jpg",
+    "variants": [
+      "Kiaat"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-prestige-coffin",
+    "name": "Prestige Coffin",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Prestige Coffin Mahogany Closed.jpg",
+    "variants": [
+      "Mahogany",
+      "Pecan",
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-redwood-coffin",
+    "name": "Redwood Coffin",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Redwood Coffin.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-repatriation-casket",
+    "name": "Repatriation Casket",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Repatriation Casket Closed.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-senator-coffin",
+    "name": "Senator Coffin (Ricardo)",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Senator Coffin White Closed.jpg",
+    "variants": [
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-solid-teak-casket",
+    "name": "Solid Teak Casket",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Solid Teak Casket Closed.jpg",
+    "variants": [
+      "Teak"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-top-end-coffin",
+    "name": "Top End Coffin",
+    "category": "casket",
+    "image": "assets/Ricardo Caskets/Top End Coffin Cherry.jpg",
+    "variants": [
+      "Cherry",
+      "Kiaat",
+      "White"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-1-man-stretcher",
+    "name": "1 Man Stretcher",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/1 Man Stretcher Red.jpg",
+    "variants": [
+      "Red"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-body-box",
+    "name": "Body Box (Ricardo)",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Body Box.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-casket-racking-system",
+    "name": "Casket Racking System (Ricardo)",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Casket Racking System.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-coffin-stand",
+    "name": "Coffin Stand (Ricardo)",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Coffin Stand.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-executive-church-trolley",
+    "name": "Executive Church Trolley",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Executive Church Trolley Gold.jpg",
+    "variants": [
+      "Gold"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-grassmats",
+    "name": "Grassmats (Ricardo)",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Grassmats.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-green-tent",
+    "name": "Green Tent 3x6",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Green Tent 3x6.jpg",
+    "variants": [
+      "3x6"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-head-block",
+    "name": "Head Block",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Head Block.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-lowering-device-set",
+    "name": "Lowering Device Set (Ricardo)",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Lowering Device Set.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
+  },
+  {
+    "id": "ricardo-tent-grassmat-lowdev-set",
+    "name": "Tent, Grassmat & Lowering Device Set",
+    "category": "accessory",
+    "image": "assets/Ricardo Equipment/Tent,Grassmat & Lowdev Set.jpg",
+    "variants": [
+      "Standard"
+    ],
+    "price": 0
   }
 ]

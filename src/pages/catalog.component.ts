@@ -1,253 +1,338 @@
 import { Component, inject, computed, signal, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { StoreService, Product } from '../services/store.service';
 import { AuthService } from '../services/auth.service';
 import { WishlistService } from '../services/wishlist.service';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="bg-gray-50 min-h-screen py-12">
-      <div class="container mx-auto px-4">
-        
-        <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="font-serif text-4xl font-bold text-safs-dark mb-4">Product Catalogue 2026</h1>
-          <p class="text-gray-600 max-w-2xl mx-auto mb-8">
-            Browse our extensive range of high-quality caskets and funeral accessories.
-          </p>
+    <div class="bg-gray-50 h-screen w-full overflow-hidden flex flex-col sm:flex-row">
+      
+      <!-- Filters Sidebar (Left Split) -->
+      <div class="w-full sm:w-[280px] lg:w-[320px] sm:h-full sm:overflow-y-auto border-r border-gray-200 bg-white p-6 sm:p-8 space-y-8 flex-shrink-0 z-10 shadow-sm relative">
+        <div class="sticky top-0 bg-white z-20 pb-4 mb-4 border-b border-gray-100 hidden sm:block">
+          <h2 class="text-2xl font-bold text-safs-dark">Filters</h2>
+        </div>
 
-          <!-- Search Bar -->
-          <div class="max-w-xl mx-auto relative">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </div>
-            <input 
-              type="text" 
-              placeholder="Search products by name, category, or finish..." 
-              (input)="onSearch($event)"
-              [value]="searchQuery()"
-              class="w-full pl-12 pr-12 py-4 rounded-full shadow-md border border-gray-200 focus:ring-2 focus:ring-safs-gold focus:border-transparent outline-none transition-all text-gray-700 placeholder-gray-400 bg-white" />
-            @if (searchQuery()) {
-              <button (click)="clearSearch()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
+        <!-- Main Category Filter -->
+        <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100">
+          <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+            Categories
+          </h3>
+          <div class="space-y-2">
+            @for (cat of categoryOptions; track cat.value) {
+              <button 
+                (click)="activeFilter.set(cat.value)"
+                [class.bg-safs-dark]="activeFilter() === cat.value"
+                [class.text-white]="activeFilter() === cat.value"
+                [class.text-gray-600]="activeFilter() !== cat.value"
+                [class.hover:bg-gray-200]="activeFilter() !== cat.value"
+                class="w-full text-left px-4 py-3 rounded-xl font-bold transition-all flex justify-between items-center group text-base shadow-sm border border-transparent"
+                [class.border-gray-200]="activeFilter() !== cat.value">
+                <span>{{ cat.label }}</span>
+                <span class="text-xs font-medium opacity-50 group-hover:opacity-100 bg-black/10 px-2.5 py-1 rounded-full">{{ getCategoryCount(cat.value) }}</span>
               </button>
             }
           </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-8">
-          
-          <!-- Filters Sidebar -->
-          <div class="lg:w-1/4 space-y-8">
-            
-            <!-- Main Category Filter -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-                Categories
-              </h3>
-              <div class="space-y-2">
-                @for (cat of ['all', 'casket', 'child', 'accessory']; track cat) {
-                  <button 
-                    (click)="activeFilter.set(cat)"
-                    [class.bg-safs-dark]="activeFilter() === cat"
-                    [class.text-white]="activeFilter() === cat"
-                    [class.text-gray-600]="activeFilter() !== cat"
-                    [class.hover:bg-gray-50]="activeFilter() !== cat"
-                    class="w-full text-left px-4 py-2.5 rounded-lg font-medium transition-all flex justify-between items-center group">
-                    <span class="capitalize">{{ cat === 'all' ? 'All Products' : (cat === 'child' ? 'Child Caskets' : (cat === 'casket' ? 'Caskets' : 'Accessories')) }}</span>
-                    <span class="text-xs opacity-50 group-hover:opacity-100">{{ getCategoryCount(cat) }}</span>
-                  </button>
-                }
-              </div>
-            </div>
+        <!-- SAFS Collection Toggle -->
+        <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100">
+          <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Collections</h3>
+          <button
+            (click)="show2026Only.set(!show2026Only())"
+            [class.bg-safs-dark]="show2026Only()"
+            [class.text-white]="show2026Only()"
+            [class.bg-white]="!show2026Only()"
+            [class.text-gray-600]="!show2026Only()"
+            class="w-full text-left px-5 py-4 rounded-xl font-bold transition-all text-lg flex items-center justify-between shadow-sm border border-gray-200">
+            <span>SAFS 2026</span>
+            <span class="text-xs px-3 py-1 rounded-full font-black uppercase tracking-wider" [class.bg-white]="show2026Only()" [class.text-safs-dark]="show2026Only()" [class.bg-gray-200]="!show2026Only()">NEW</span>
+          </button>
+        </div>
 
-            <!-- Casket Type Filter (Only visible if 'casket' or 'all' is selected) -->
-            @if (activeFilter() === 'all' || activeFilter() === 'casket') {
-              <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 animate-fade-in">
-                <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Casket Styles</h3>
-                <div class="flex flex-wrap gap-2">
-                  @for (style of casketStyles; track style) {
-                    <button 
-                      (click)="toggleStyle(style)"
-                      [class.bg-safs-gold]="selectedStyles().includes(style)"
-                      [class.text-white]="selectedStyles().includes(style)"
-                      [class.bg-gray-100]="!selectedStyles().includes(style)"
-                      [class.text-gray-600]="!selectedStyles().includes(style)"
-                      class="px-3 py-1.5 rounded-md text-xs font-bold transition-all hover:shadow-sm">
-                      {{ style }}
-                    </button>
-                  }
-                </div>
-              </div>
-            }
-
-            <!-- Color/Finish Filter -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Finishes & Colors</h3>
-              <div class="grid grid-cols-2 gap-2">
-                @for (finish of availableFinishes; track finish) {
-                  <button 
-                    (click)="toggleFinish(finish)"
-                    [class.ring-2]="selectedFinishes().includes(finish)"
-                    [class.ring-safs-gold]="selectedFinishes().includes(finish)"
-                    [class.ring-offset-2]="selectedFinishes().includes(finish)"
-                    class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-all text-sm group">
-                    <div [style.background-color]="getFinishColor(finish)" class="w-3 h-3 rounded-full border border-gray-300"></div>
-                    <span class="text-gray-600 group-hover:text-safs-dark truncate">{{ finish }}</span>
-                  </button>
-                }
-              </div>
-            </div>
-
-            <button (click)="resetFilters()" class="w-full py-3 text-safs-gold font-bold text-sm uppercase tracking-widest hover:underline">
-              Clear All Filters
-            </button>
-          </div>
-
-          <!-- Grid Section -->
-          <div class="lg:w-3/4">
-            
-            <!-- Active Filters Display -->
-            @if (hasActiveFilters()) {
-              <div class="flex flex-wrap gap-2 mb-6">
-                @if (searchQuery()) {
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-safs-dark text-white text-xs font-bold">
-                    Search: {{ searchQuery() }}
-                    <button (click)="clearSearch()">×</button>
-                  </span>
-                }
-                @for (s of selectedStyles(); track s) {
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-safs-gold text-white text-xs font-bold">
-                    Style: {{ s }}
-                    <button (click)="toggleStyle(s)">×</button>
-                  </span>
-                }
-                @for (f of selectedFinishes(); track f) {
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-600 text-white text-xs font-bold">
-                    Finish: {{ f }}
-                    <button (click)="toggleFinish(f)">×</button>
-                  </span>
-                }
-              </div>
-            }
-
-            <!-- Results count -->
-            <div class="mb-6 text-sm text-gray-500 flex justify-between items-center">
-              <span>Showing <span class="font-bold text-safs-dark">{{ filteredProducts().length }}</span> product(s)</span>
-            </div>
-
-            <!-- Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              @for (product of filteredProducts(); track product.id) {
-                <div class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col overflow-hidden border border-gray-100 cursor-pointer" [routerLink]="['/product', product.id]">
-                  
-                  <!-- Image Area -->
-                  <div class="relative h-64 overflow-hidden bg-gray-50">
-                    <img [src]="getProductDisplayImage(product)" [alt]="product.name" class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                       <span class="bg-white text-safs-dark font-bold py-2 px-6 rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-lg">
-                         View Details
-                       </span>
-                    </div>
-                    
-                    <!-- Color Variation Swatches -->
-                    @if (getProductColorVariations(product).length > 0) {
-                      <div class="absolute bottom-3 left-3 right-3 flex gap-2 flex-wrap bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-md">
-                        @for (variation of getProductColorVariations(product); track variation.color) {
-                          <button
-                            (click)="selectColor(product, variation.color, $event)"
-                            [class.ring-2]="isColorSelected(product, variation.color)"
-                            [class.ring-safs-gold]="isColorSelected(product, variation.color)"
-                            [class.ring-offset-2]="isColorSelected(product, variation.color)"
-                            class="group/swatch relative flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-gray-100 transition-all"
-                            [title]="variation.color">
-                            <div 
-                              [style.background-color]="getFinishColor(variation.color)" 
-                              class="w-5 h-5 rounded-full border-2 border-gray-300 shadow-sm"></div>
-                            <span class="text-xs font-medium text-gray-700">{{ variation.color }}</span>
-                          </button>
-                        }
-                      </div>
-                    }
-                  </div>
-
-                  <!-- Content -->
-                  <div class="p-6 flex-1 flex flex-col border-t border-gray-50">
-                    <div class="text-[10px] font-bold text-safs-gold uppercase tracking-[0.2em] mb-2">{{ product.category }}</div>
-                    <h3 class="font-serif text-lg font-bold text-safs-dark mb-2 group-hover:text-safs-gold transition-colors leading-tight">{{ product.name }}</h3>
-                    <div class="mt-auto">
-                       <div class="flex flex-wrap gap-1 mb-4">
-                         @for (v of store.parseFeatures(product); track v) {
-                           <span class="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-500 rounded uppercase font-medium">{{ v }}</span>
-                         }
-                       </div>
-                       <div class="flex items-center justify-between">
-                         <!-- Pricing Display Based on Auth Status -->
-                         @if (authService.isApproved() || authService.isAdmin()) {
-                           <span class="text-lg font-bold text-safs-dark">Request Quote</span>
-                         } @else if (authService.isPending()) {
-                           <span class="text-xs text-yellow-600 italic font-medium">Awaiting Approval</span>
-                         } @else {
-                           <a routerLink="/login" (click)="$event.stopPropagation()" class="text-xs text-safs-gold font-bold hover:underline">Login to View Price</a>
-                         }
-                         <div class="flex gap-2">
-                           <!-- Wishlist Button (only for authenticated customers) -->
-                           @if (authService.isAuthenticated() && !authService.isAdmin()) {
-                             <button 
-                               (click)="$event.preventDefault(); $event.stopPropagation(); toggleWishlist(product)" 
-                               [class.bg-red-500]="wishlistService.isInWishlist(product.id)"
-                               [class.text-white]="wishlistService.isInWishlist(product.id)"
-                               [class.bg-gray-50]="!wishlistService.isInWishlist(product.id)"
-                               [class.text-safs-dark]="!wishlistService.isInWishlist(product.id)"
-                               [class.hover:bg-red-600]="wishlistService.isInWishlist(product.id)"
-                               [class.hover:bg-gray-100]="!wishlistService.isInWishlist(product.id)"
-                               class="p-2.5 rounded-full transition-all shadow-sm flex items-center justify-center" 
-                               [title]="wishlistService.isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" [attr.fill]="wishlistService.isInWishlist(product.id) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                               </svg>
-                             </button>
-                           }
-                           <button (click)="$event.preventDefault(); $event.stopPropagation(); addToCart(product)" class="p-2.5 rounded-full bg-gray-50 text-safs-dark hover:bg-safs-gold hover:text-white transition-all shadow-sm flex items-center justify-center" title="Add to Quote">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                           </button>
-                         </div>
-                       </div>
-                    </div>
-                  </div>
-
-                </div>
+        <!-- Product Style Filter -->
+        @if (showStyleFilter()) {
+          <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 animate-fade-in">
+            <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Product Styles</h3>
+            <div class="flex flex-wrap gap-2">
+              @for (style of casketStyles; track style) {
+                <button 
+                  (click)="toggleStyle(style)"
+                  [class.bg-safs-gold]="selectedStyles().includes(style)"
+                  [class.text-black]="selectedStyles().includes(style)"
+                  [class.bg-white]="!selectedStyles().includes(style)"
+                  [class.text-gray-600]="!selectedStyles().includes(style)"
+                  class="px-4 py-3 rounded-xl text-base font-bold transition-all shadow-sm border border-gray-200 border-b-4 hover:brightness-95 active:border-b active:translate-y-1">
+                  {{ style }}
+                </button>
               }
             </div>
+          </div>
+        }
 
-            @if (filteredProducts().length === 0) {
-              <div class="text-center py-24 bg-white rounded-2xl border border-dashed border-gray-200">
-                 <div class="inline-block p-6 rounded-full bg-gray-50 mb-6 text-gray-300">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                     <circle cx="11" cy="11" r="8"></circle>
-                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                   </svg>
-                 </div>
-                 <h3 class="text-2xl font-bold text-safs-dark mb-2 font-serif">Empty Catalog</h3>
-                 <p class="text-gray-500 mb-8 max-w-sm mx-auto">No products match your current selection. Try broadening your scope by removing filters.</p>
-                 <button (click)="resetFilters()" class="bg-safs-gold text-white px-8 py-3 rounded-full font-bold shadow-md hover:bg-opacity-90 transition-all">Reset All Filters</button>
-              </div>
+        <!-- Color/Finish Filter -->
+        <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 mb-12">
+          <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Finishes & Colors</h3>
+          <div class="grid grid-cols-1 gap-3">
+            @for (finish of availableFinishes; track finish) {
+              <button 
+                (click)="toggleFinish(finish)"
+                [class.ring-2]="selectedFinishes().includes(finish)"
+                [class.ring-safs-gold]="selectedFinishes().includes(finish)"
+                [class.ring-offset-2]="selectedFinishes().includes(finish)"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white hover:bg-gray-100 transition-all text-base font-medium shadow-sm border border-gray-200 group">
+                <div [style.background-color]="getFinishColor(finish)" class="w-5 h-5 rounded-full border-2 border-gray-300 shadow-inner"></div>
+                <span class="text-gray-700 group-hover:text-safs-dark text-left whitespace-normal break-words leading-tight">{{ finish }}</span>
+              </button>
             }
           </div>
         </div>
 
+        <button (click)="resetFilters()" class="w-full py-4 text-safs-gold-dark font-bold text-lg uppercase tracking-widest hover:bg-orange-50 rounded-xl transition-colors mb-12">
+          Clear All Filters
+        </button>
       </div>
+
+      <!-- Main Content Area (Right Split) -->
+      <div class="flex-1 h-full overflow-y-auto bg-gray-50 flex flex-col relative w-full">
+        
+        <!-- Header & Search -->
+        <div class="bg-white px-8 py-10 lg:px-16 lg:py-12 border-b border-gray-200 shadow-sm sticky top-0 z-20">
+          <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 items-center justify-between">
+            <div>
+              <h1 class="text-4xl lg:text-5xl font-bold text-safs-dark mb-2">Product Expo</h1>
+              <p class="text-gray-500 text-lg">Tap on any product to view variations and details.</p>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="w-full lg:w-96 relative flex-shrink-0">
+              <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+              <input 
+                type="text" 
+                placeholder="Search catalog..." 
+                (input)="onSearch($event)"
+                [value]="searchQuery()"
+                class="w-full pl-14 pr-12 py-5 rounded-2xl shadow-inner bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-safs-gold/20 focus:border-safs-gold outline-none transition-all text-gray-800 text-lg placeholder-gray-400 font-medium" />
+              @if (searchQuery()) {
+                <button (click)="clearSearch()" class="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-gray-600 active:scale-95">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Grid Area -->
+        <div class="p-8 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32">
+          
+          <!-- Active Filters & Count -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+            <div class="text-lg text-gray-500 bg-white px-5 py-2 rounded-full shadow-sm border border-gray-100">
+              Showing <span class="font-bold text-safs-dark text-xl">{{ filteredProducts().length }}</span> product(s)
+            </div>
+            
+            @if (hasActiveFilters()) {
+              <div class="flex flex-wrap gap-2">
+                @if (searchQuery()) {
+                  <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-safs-dark text-white text-sm font-bold shadow-sm">
+                    Search: {{ searchQuery() }}
+                    <button (click)="clearSearch()" class="hover:text-red-300">×</button>
+                  </span>
+                }
+                @for (s of selectedStyles(); track s) {
+                  <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-safs-gold text-black text-sm font-bold shadow-sm">
+                    Style: {{ s }}
+                    <button (click)="toggleStyle(s)" class="hover:text-red-800">×</button>
+                  </span>
+                }
+                @for (f of selectedFinishes(); track f) {
+                  <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-600 text-white text-sm font-bold shadow-sm">
+                    Finish: {{ f }}
+                    <button (click)="toggleFinish(f)" class="hover:text-red-300">×</button>
+                  </span>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
+            @for (product of filteredProducts(); track product.id) {
+              <div data-testid="catalog-card" class="bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 group flex flex-col border border-gray-100 cursor-pointer overflow-hidden transform hover:-translate-y-1" [routerLink]="['/product', product.id]">
+                
+                <!-- Image Area -->
+                <div class="relative h-80 sm:h-96 overflow-hidden bg-gray-50">
+                  <img [src]="getProductDisplayImage(product)" [alt]="product.name" class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-700 ease-out">
+                  
+                  <div class="absolute inset-0 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100 bg-white/20 backdrop-blur-[2px]">
+                      <span class="bg-safs-dark text-white font-bold py-3 px-8 rounded-full shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 text-lg flex items-center gap-2">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        View Details
+                    </span>
+                  </div>
+                  
+                  @if (getProductColorVariations(product).length > 0) {
+                    <div class="absolute bottom-4 left-4 inline-flex px-3 py-1.5 rounded-xl bg-white/90 backdrop-blur-md shadow-lg items-center gap-2 border border-gray-100">
+                      <div class="flex -space-x-1">
+                        @for (variation of getProductColorVariations(product).slice(0, 3); track variation.color) {
+                          <div [style.background-color]="getFinishColor(variation.color)" class="w-6 h-6 rounded-full border-2 border-white shadow-sm"></div>
+                        }
+                      </div>
+                      <span class="text-xs font-bold text-gray-700 pl-1">{{ getProductColorVariations(product).length }} Colors</span>
+                    </div>
+                  }
+                </div>
+
+                <!-- Content -->
+                <div class="p-6 flex-1 flex flex-col border-t border-gray-100">
+                  <div class="text-xs font-black text-safs-gold-dark uppercase tracking-[0.2em] mb-2">{{ getCategoryDisplayName(product.category) }}</div>
+                  <h2 class="text-xl font-bold text-safs-dark mb-3 group-hover:text-safs-gold-dark transition-colors leading-tight">{{ product.name }}</h2>
+                  
+                  <div class="mt-auto">
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+                      @if (authService.isApproved() || authService.isAdmin()) {
+                        <span class="text-lg font-black text-safs-dark">Request Quote</span>
+                      } @else if (authService.isPending()) {
+                        <span class="text-sm text-yellow-600 italic font-bold">Awaiting Approval</span>
+                      } @else {
+                        <span class="text-sm text-safs-gold-dark font-bold">Login to Price</span>
+                      }
+
+                      <button (click)="$event.stopImmediatePropagation(); addToCart(product)" class="p-3 rounded-2xl bg-gray-50 text-safs-dark hover:bg-safs-gold hover:text-black transition-all shadow-sm group/btn border border-gray-200 hover:border-safs-gold active:scale-95" title="Add default to quote">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover/btn:scale-110 transition-transform"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          @if (filteredProducts().length === 0) {
+            <div class="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-gray-300">
+              <div class="inline-block p-8 rounded-full bg-gray-50 mb-6 text-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+              <h2 class="text-3xl font-bold text-safs-dark mb-4 font-serif">No products found</h2>
+              <p class="text-gray-500 mb-10 max-w-md mx-auto text-lg">Adjust your filters to find what you're looking for.</p>
+              <button (click)="resetFilters()" class="bg-safs-gold text-black px-10 py-4 rounded-xl text-lg font-bold shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all">Clear All Filters</button>
+            </div>
+          }
+        </div>
+      </div>
+      
+      <!-- Quick-View Modal -->
+      @if (selectedProductForModal()) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 animate-fade-in" style="background-color: rgba(0,0,0,0.6);" (click)="closeQuickView()">
+          <div class="w-full max-w-5xl max-h-full bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row relative animate-modal-pop" (click)="$event.stopPropagation()">
+            
+            <!-- Close button absolute top right -->
+            <button (click)="closeQuickView()" class="absolute top-6 right-6 z-20 p-3 bg-white/80 hover:bg-gray-100 backdrop-blur-md rounded-full shadow-sm transition-all active:scale-95">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-700"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+
+            <!-- Left Image Side -->
+            <div
+              class="w-full md:w-1/2 h-[420px] md:h-[680px] bg-gray-50 relative p-4 flex items-center justify-center"
+              (mouseenter)="onModalImageEnter()"
+              (mousemove)="onModalImageMove($event)"
+              (mouseleave)="onModalImageLeave()">
+              <img [src]="getModalDisplayImage()" [alt]="selectedProductForModal()!.name" class="w-full h-full object-contain drop-shadow-xl animate-fade-in">
+
+              @if (magnifierVisible()) {
+                <div
+                  class="pointer-events-none absolute w-40 h-40 rounded-full border-2 border-white shadow-2xl overflow-hidden z-10"
+                  [style.left.%]="magnifierX()"
+                  [style.top.%]="magnifierY()"
+                  style="transform: translate(-50%, -50%);">
+                  <div
+                    class="w-full h-full bg-no-repeat"
+                    [style.background-image]="getMagnifierBackgroundImage()"
+                    [style.background-size]="getMagnifierBackgroundSize()"
+                    [style.background-position]="getMagnifierBackgroundPosition()"></div>
+                </div>
+              }
+            </div>
+
+            <!-- Right Details Side -->
+            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col h-auto max-h-[100%] md:max-h-[80vh] overflow-y-auto">
+              <div class="text-sm font-black text-safs-gold-dark uppercase tracking-[0.2em] mb-4">{{ selectedProductForModal()!.category }}</div>
+              <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark mb-6 leading-tight">{{ selectedProductForModal()!.name }}</h2>
+
+              <div class="flex flex-wrap gap-2 mb-8">
+                 @for (v of store.parseFeatures(selectedProductForModal()!); track v) {
+                   <span class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-lg uppercase font-bold">{{ v }}</span>
+                 }
+              </div>
+              
+              <!-- Interactive Variations -->
+              @if (getProductColorVariations(selectedProductForModal()!).length > 0) {
+                <div class="mb-10 p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                  <h4 class="font-bold text-safs-dark text-sm uppercase tracking-wider mb-4 opacity-70 flex justify-between items-end">
+                    Select Finish
+                    <span class="text-safs-gold-dark opacity-100 font-bold capitalize">{{ modalSelectedColor() || 'Standard' }}</span>
+                  </h4>
+                  <div class="flex flex-wrap gap-4">
+                    @for (variation of getProductColorVariations(selectedProductForModal()!); track variation.color) {
+                      <button 
+                        (click)="selectModalColor(variation.color)"
+                        class="relative group"
+                        [title]="variation.color">
+                        <div class="absolute -inset-1.5 rounded-full transition-all border-2"
+                             [class.border-safs-gold]="modalSelectedColor() === variation.color"
+                             [class.border-transparent]="modalSelectedColor() !== variation.color"
+                             [class.scale-110]="modalSelectedColor() === variation.color"></div>
+                        <div [style.background-color]="getFinishColor(variation.color)" 
+                             class="w-12 h-12 rounded-full border-4 border-white shadow-md transition-transform group-hover:scale-105 active:scale-95 z-10 relative"></div>
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Bottom Actions -->
+              <div class="mt-auto pt-8 border-t border-gray-100 flex gap-4">
+                 @if (authService.isAuthenticated() && !authService.isAdmin()) {
+                    <button 
+                      (click)="toggleWishlist(selectedProductForModal()!)"
+                      class="p-5 rounded-2xl transition-all shadow-sm border border-gray-200 active:scale-95 hover:bg-gray-50"
+                      [class.bg-red-50]="wishlistService.isInWishlist(selectedProductForModal()!.id)"
+                      [class.border-red-200]="wishlistService.isInWishlist(selectedProductForModal()!.id)"
+                      [class.text-red-500]="wishlistService.isInWishlist(selectedProductForModal()!.id)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" [attr.fill]="wishlistService.isInWishlist(selectedProductForModal()!.id) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                      </svg>
+                    </button>
+                 }
+                 
+                 <button 
+                   (click)="addModalItemToCart()"
+                   class="flex-1 bg-safs-dark text-white rounded-2xl font-bold text-xl hover:opacity-95 shadow-xl hover:shadow-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-3">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                   Add to Quote
+                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `,
   styles: [`
@@ -255,8 +340,15 @@ import { CommonModule } from '@angular/common';
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
     .animate-fade-in {
       animation: fadeIn 0.4s ease-out forwards;
+    }
+    .animate-modal-pop {
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
   `]
 })
@@ -277,12 +369,139 @@ export class CatalogComponent implements OnInit {
   selectedStyles = signal<string[]>([]);
   selectedFinishes = signal<string[]>([]);
   selectedColors = signal<Map<string, string>>(new Map()); // Map<productId, selectedColor>
+  
+  // Modal state
+  selectedProductForModal = signal<Product | null>(null);
+  modalSelectedColor = signal<string | null>(null);
+  magnifierVisible = signal(false);
+  magnifierX = signal(50);
+  magnifierY = signal(50);
+  readonly magnifierZoom = 2.3;
+
+  openQuickView(product: Product) {
+    this.selectedProductForModal.set(product);
+    
+    // Set initial modal color based on grid selection or default
+    const variations = this.getProductColorVariations(product);
+    if (variations.length > 0) {
+      const existingSelection = this.selectedColors().get(product.id);
+      if (existingSelection) {
+        this.modalSelectedColor.set(existingSelection);
+      } else {
+        this.modalSelectedColor.set(variations[0].color);
+      }
+    } else {
+      this.modalSelectedColor.set(null);
+    }
+  }
+
+  closeQuickView() {
+    this.selectedProductForModal.set(null);
+    this.modalSelectedColor.set(null);
+    this.magnifierVisible.set(false);
+  }
+
+  onModalImageEnter() {
+    this.magnifierVisible.set(true);
+  }
+
+  onModalImageLeave() {
+    this.magnifierVisible.set(false);
+  }
+
+  onModalImageMove(event: MouseEvent) {
+    const target = event.currentTarget as HTMLElement;
+    if (!target) return;
+
+    const rect = target.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+    this.magnifierX.set(Math.max(0, Math.min(100, x)));
+    this.magnifierY.set(Math.max(0, Math.min(100, y)));
+  }
+
+  getMagnifierBackgroundImage(): string {
+    return `url(${this.getModalDisplayImage()})`;
+  }
+
+  getMagnifierBackgroundSize(): string {
+    const zoomPercent = this.magnifierZoom * 100;
+    return `${zoomPercent}% ${zoomPercent}%`;
+  }
+
+  getMagnifierBackgroundPosition(): string {
+    return `${this.magnifierX()}% ${this.magnifierY()}%`;
+  }
+
+  selectModalColor(color: string) {
+    this.modalSelectedColor.set(color);
+    // Also save it to the main grid's map so selection persists
+    const product = this.selectedProductForModal();
+    if (product) {
+      this.selectedColors.update(map => {
+        const newMap = new Map(map);
+        newMap.set(product.id, color);
+        return newMap;
+      });
+    }
+  }
+
+  getModalDisplayImage(): string {
+    const product = this.selectedProductForModal();
+    if (!product) return '';
+    
+    const colorVariations = this.getProductColorVariations(product);
+    if (colorVariations.length > 0) {
+      const selectedColor = this.modalSelectedColor();
+      if (selectedColor) {
+        const variation = colorVariations.find(v => v.color === selectedColor);
+        if (variation?.images?.length) {
+          return variation.images[0];
+        }
+      }
+    }
+    
+    // Default image
+    const images = this.store.parseImages(product);
+    return images[0] || '';
+  }
+
+  addModalItemToCart() {
+    const product = this.selectedProductForModal();
+    if (!product) return;
+    
+    const features = this.store.parseFeatures(product);
+    this.store.addToCart(product, features[0] || 'Standard');
+    this.closeQuickView();
+  }
+
+  // Category options for new 8-category structure
+  readonly categoryOptions = [
+    { value: 'all', label: 'All Products' },
+    { value: 'baby-caskets', label: 'Baby Caskets' },
+    { value: 'bespoke', label: 'Bespoke' },
+    { value: 'coffins', label: 'Coffins' },
+    { value: 'domes', label: 'Domes' },
+    { value: 'equipment', label: 'Equipment' },
+    { value: 'executive-domes', label: 'Executive Domes' },
+    { value: 'flatlids', label: 'Flatlids' },
+    { value: 'skinz', label: 'Skinz' }
+  ];
 
   // Derived filter options
-  readonly casketStyles = ['Dome', 'Halfview', 'Figurine', 'Woodturning', 'Traditional'];
+  readonly casketStyles = ['Dome', 'Halfview', 'Coffin', 'Figurine', 'Woodturning', 'Glitter', 'Senator', 'Porthole', 'Pongee'];
   readonly availableFinishes = [
-    'Cherry', 'Kiaat', 'Teak', 'Walnut', 'White', 'Ash', 'Black', 'Brown', 'Green', 'Hemlock'
+    'Cherry', 'Kiaat', 'Teak', 'Walnut', 'White', 'Ash', 'Black', 'Brown', 'Green', 'Hemlock',
+    'Mahogany', 'Pecan', 'Rose', 'Gold', 'Red', 'Imbuia', 'Purple', 'Dark Cherry'
   ];
+  show2026Only = signal(false);
+
+  // Show style filter for casket-type categories
+  showStyleFilter = computed(() => {
+    const f = this.activeFilter();
+    return f === 'all' || f === 'coffins' || f === 'domes' || f === 'executive-domes' || f === 'flatlids' || f === 'skinz';
+  });
 
   filteredProducts = computed(() => {
     const filter = this.activeFilter();
@@ -322,6 +541,11 @@ export class CatalogComponent implements OnInit {
       );
     }
 
+    // 5. SAFS 2026 Collection Filter
+    if (this.show2026Only()) {
+      products = products.filter(p => !p.id.startsWith('ricardo-'));
+    }
+
     return products;
   });
 
@@ -349,6 +573,11 @@ export class CatalogComponent implements OnInit {
     );
   }
 
+  getCategoryDisplayName(category: string): string {
+    const found = this.categoryOptions.find(c => c.value === category);
+    return found ? found.label : category;
+  }
+
   hasActiveFilters(): boolean {
     return this.searchQuery().length > 0 || this.selectedStyles().length > 0 || this.selectedFinishes().length > 0;
   }
@@ -367,6 +596,7 @@ export class CatalogComponent implements OnInit {
     this.activeFilter.set('all');
     this.selectedStyles.set([]);
     this.selectedFinishes.set([]);
+    this.show2026Only.set(false);
   }
 
   addToCart(product: Product) {
@@ -376,18 +606,34 @@ export class CatalogComponent implements OnInit {
 
   getFinishColor(finish: string): string {
     const colors: Record<string, string> = {
-      'Cherry': '#7e2d2d',
-      'Kiaat': '#a0522d',
-      'Teak': '#8b4513',
-      'Walnut': '#5d3a1a',
-      'White': '#ffffff',
-      'Ash': '#b8b8b8',
-      'Black': '#000000',
-      'Brown': '#5c4033',
-      'Green': '#2d5a27',
-      'Hemlock': '#d2b48c'
+      'cherry': '#7e2d2d',
+      'cherry gloss': '#8b2020',
+      'dark cherry': '#451a1a',
+      'kiaat': '#a0522d',
+      'kiaat gloss': '#b5642f',
+      'teak': '#8b4513',
+      'walnut': '#5d3a1a',
+      'white': '#ffffff',
+      'ash': '#b8b8b8',
+      'black': '#000000',
+      'brown': '#5c4033',
+      'green': '#2d5a27',
+      'hemlock': '#d2b48c',
+      'mahogany': '#4a1c1c',
+      'pecan': '#b8864e',
+      'rose': '#d4a0a0',
+      'rose gold': '#c9968c',
+      'gold': '#c9a84c',
+      'red': '#8b1a1a',
+      'imbuia': '#6b4226',
+      'purple': '#6b21a8',
+      'redwood': '#a45a52',
+      'redwood gloss': '#b5635a',
+      'uv dotted mahogany': '#5a2020',
+      'pink': '#ec4899'
     };
-    return colors[finish] || '#ccc';
+    const key = finish.toLowerCase();
+    return colors[key] || '#ccc';
   }
 
   getProductColorVariations(product: Product): { color: string; images: string[] }[] {
@@ -401,16 +647,20 @@ export class CatalogComponent implements OnInit {
       const selectedColor = this.selectedColors().get(product.id);
       if (selectedColor) {
         const variation = colorVariations.find(v => v.color === selectedColor);
-        if (variation && variation.images.length > 0) {
+        if (variation?.images?.length) {
           return variation.images[0];
         }
       }
-      // Default to first color variation's first image
-      return colorVariations[0].images[0] || this.store.parseImages(product)[0] || '';
+      // Default to first color variation's first image (guard against empty images array)
+      const firstVariation = colorVariations[0];
+      if (firstVariation?.images?.length) {
+        return firstVariation.images[0];
+      }
     }
 
-    // No color variations, use regular images
-    return this.store.parseImages(product)[0] || '';
+    // No color variations (or all empty), use regular images
+    const images = this.store.parseImages(product);
+    return images[0] || '';
   }
 
   selectColor(product: Product, color: string, event: Event) {
