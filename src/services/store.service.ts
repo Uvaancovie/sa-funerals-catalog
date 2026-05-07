@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { SupabaseService } from './supabase.service';
 
 export interface Product {
   productId: number;
@@ -29,27 +29,35 @@ export interface CartItem {
   providedIn: 'root'
 })
 export class StoreService {
-  private http = inject(HttpClient);
+  private supabaseService = inject(SupabaseService);
 
   // Signals
   readonly products = signal<Product[]>([]);
   readonly cart = signal<CartItem[]>([]);
+  readonly wishlist = signal<Product[]>([]);
 
   constructor() {
     this.loadProducts();
   }
 
-  loadProducts() {
-    this.http.get<Product[]>('/api/products').subscribe({
-      next: (data) => {
-        this.products.set(data);
-      },
-      error: (err) => {
-        console.error('Failed to load products', err);
+  async loadProducts() {
+    try {
+      const { data, error } = await this.supabaseService.client
+        .from('products')
+        .select('*');
+      
+      if (error) {
+        console.error('Supabase error loading products:', error);
+        return;
       }
-    });
+      if (data) {
+        this.products.set(data as Product[]);
+      }
+    } catch (err) {
+      console.error('Failed to load products', err);
+    }
   }
-  
+
   // Toast notification
   readonly toastItem = signal<CartItem | null>(null);
   private toastTimeout: any = null;
@@ -81,7 +89,16 @@ export class StoreService {
 
   parseColorVariations(product: Product): { color: string; images: string[] }[] {
     try {
-      return product.colorVariations ? JSON.parse(product.colorVariations) : [];
+      if (!product.colorVariations) return [];
+      const parsed = JSON.parse(product.colorVariations);
+      if (!Array.isArray(parsed)) return [];
+      // Normalize both PascalCase (Color/Images from seeder) and camelCase
+      return parsed.map((v: any) => ({
+        color: v.color ?? v.Color ?? '',
+        images: Array.isArray(v.images) ? v.images
+          : Array.isArray(v.Images) ? v.Images
+            : []
+      })).filter(v => v.color);
     } catch {
       return [];
     }
@@ -143,5 +160,27 @@ export class StoreService {
 
   clearCart() {
     this.cart.set([]);
+  }
+
+  addToWishlist(product: Product) {
+    this.wishlist.update(items => {
+      // Check if product already in wishlist
+      if (items.some(p => p.id === product.id)) {
+        return items;
+      }
+      return [...items, product];
+    });
+  }
+
+  removeFromWishlist(productId: string) {
+    this.wishlist.update(items => items.filter(p => p.id !== productId));
+  }
+
+  isInWishlist(productId: string): boolean {
+    return this.wishlist().some(p => p.id === productId);
+  }
+
+  clearWishlist() {
+    this.wishlist.set([]);
   }
 }
