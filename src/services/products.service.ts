@@ -108,7 +108,7 @@ export class ProductsService {
         this.loading.set(true);
         this.error.set(null);
 
-        let query = this.supabase.from('Products').select('*');
+        let query = this.supabase.from('products').select('*');
 
         if (filters?.category) {
             query = query.eq('Category', filters.category);
@@ -141,7 +141,7 @@ export class ProductsService {
      * Get a single product by ID
      */
     getProduct(id: string): Observable<Product> {
-        return from(this.supabase.from('Products').select('*').eq('Id', id).single()).pipe(
+        return from(this.supabase.from('products').select('*').eq('Id', id).single()).pipe(
             map(response => {
                 if (response.error) throw new Error(response.error.message);
                 return this.mapDbRowToProduct(response.data);
@@ -154,7 +154,7 @@ export class ProductsService {
      */
     createProduct(product: Partial<Product>): Observable<Product> {
         const dbRow = this.mapProductToDbRow(product);
-        return from(this.supabase.from('Products').insert(dbRow).select().single()).pipe(
+        return from(this.supabase.from('products').insert(dbRow).select().single()).pipe(
             map(response => {
                 if (response.error) throw new Error(response.error.message);
                 return this.mapDbRowToProduct(response.data);
@@ -167,7 +167,7 @@ export class ProductsService {
      */
     updateProduct(id: string, updates: Partial<Product>): Observable<Product> {
         const dbRow = this.mapProductToDbRow(updates);
-        return from(this.supabase.from('Products').update(dbRow).eq('Id', id).select().single()).pipe(
+        return from(this.supabase.from('products').update(dbRow).eq('Id', id).select().single()).pipe(
             map(response => {
                 if (response.error) throw new Error(response.error.message);
                 return this.mapDbRowToProduct(response.data);
@@ -179,7 +179,7 @@ export class ProductsService {
      * Delete a product (Admin only logic built-in to RLS)
      */
     deleteProduct(id: string): Observable<{ success: boolean; message: string }> {
-        return from(this.supabase.from('Products').delete().eq('Id', id)).pipe(
+        return from(this.supabase.from('products').delete().eq('Id', id)).pipe(
             map(response => {
                 if (response.error) throw new Error(response.error.message);
                 return { success: true, message: 'Product deleted successfully' };
@@ -193,7 +193,7 @@ export class ProductsService {
     getProductHistory(id: string): Observable<ProductAuditLog[]> {
         return from(
             this.supabase
-                .from('ProductAuditLogs')
+                .from('product_audit_logs')
                 .select('*')
                 .eq('ProductId', id)
                 .order('Timestamp', { ascending: false })
