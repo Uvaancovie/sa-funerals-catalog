@@ -4,11 +4,13 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { WishlistService } from '../services/wishlist.service';
 import { Product, StoreService } from '../services/store.service';
+import { OptimizedImageComponent } from '../components/optimized-image.component';
+import { ImageOptimizationService } from '../services/image-optimization.service';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, OptimizedImageComponent],
   template: `
     <div class="bg-gray-50 min-h-screen">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
@@ -40,14 +42,17 @@ import { Product, StoreService } from '../services/store.service';
                 </div>
               </div>
 
-              <div class="p-4 sm:p-6">
-                <div class="rounded-2xl bg-gray-50 overflow-hidden">
-                  <img
-                    class="w-full h-[360px] sm:h-[420px] object-contain bg-gray-50"
-                    [src]="mainImage()"
-                    [alt]="product()!.name"
-                  />
-                </div>
+               <div class="p-4 sm:p-6">
+                 <div class="rounded-2xl bg-gray-50 overflow-hidden h-[360px] sm:h-[420px]">
+                   <app-optimized-image
+                     [src]="getOptimizedMainImage()"
+                     [alt]="product()!.name"
+                     [aspectRatio]="getProductDetailAspectRatio()"
+                     loading="eager"
+                     fetchpriority="high"
+                     containerClass="object-contain"
+                   ></app-optimized-image>
+                 </div>
 
                  @if (activeThumbnails().length > 1) {
                    <div class="mt-4 flex gap-2 sm:gap-3 overflow-x-auto pb-2">
@@ -241,6 +246,7 @@ export class ProductDetailsComponent {
   private store = inject(StoreService);
   authService = inject(AuthService);
   wishlistService = inject(WishlistService);
+  private imageOptimization = inject(ImageOptimizationService);
 
   // Selection state
   selectedColor = signal<string | null>(null);
@@ -356,6 +362,17 @@ export class ProductDetailsComponent {
     if (!p) return;
     const variant = this.selectedVariant() || 'Standard';
     this.store.addToCart(p, variant);
+  }
+
+  getOptimizedMainImage(): string {
+    return this.imageOptimization.getOptimizedImagePath(this.mainImage());
+  }
+
+  getProductDetailAspectRatio(): string {
+    const p = this.product();
+    if (!p) return '4/3';
+
+    return this.imageOptimization.getAspectRatioForCategory(p.category);
   }
 }
 

@@ -1,5 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+import { ImageOptimizationService } from './image-optimization.service';
 
 export interface Product {
   // This service is used by the catalog UI. Supabase-backed products and the local
@@ -32,6 +33,7 @@ export interface CartItem {
 })
 export class StoreService {
   private supabaseService = inject(SupabaseService);
+  private imageOptimization = inject(ImageOptimizationService);
 
   // Signals
   readonly products = signal<Product[]>([]);
@@ -163,10 +165,16 @@ export class StoreService {
     try {
       const parsed = typeof product.images === 'string' ? JSON.parse(product.images) : product.images;
       const list = Array.isArray(parsed) ? parsed : [];
-      return list.map((u) => this.normalizeImageUrl(String(u)));
+      return list.map((u) => this.normalizeOptimizedImageUrl(String(u)));
     } catch {
       return [];
     }
+  }
+
+  private normalizeOptimizedImageUrl(url: string): string {
+    // Convert legacy image paths to optimized paths
+    const optimizedPath = this.imageOptimization.getOptimizedImagePath(url);
+    return optimizedPath;
   }
 
   parseFeatures(product: Product): string[] {

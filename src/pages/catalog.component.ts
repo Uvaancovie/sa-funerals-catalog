@@ -4,11 +4,13 @@ import { AuthService } from '../services/auth.service';
 import { WishlistService } from '../services/wishlist.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { OptimizedImageComponent } from '../components/optimized-image.component';
+import { ImageOptimizationService } from '../services/image-optimization.service';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, OptimizedImageComponent],
    template: `
      <div class="bg-gray-50 h-screen w-full overflow-hidden flex flex-col">
 
@@ -319,7 +321,14 @@ import { RouterLink } from '@angular/router';
                 
                  <!-- Image Area -->
                  <div class="relative h-64 sm:h-80 lg:h-96 overflow-hidden bg-gray-50">
-                  <img [src]="getProductDisplayImage(product)" [alt]="product.name" class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-700 ease-out">
+                   <app-optimized-image
+                     [src]="getOptimizedProductImagePath(product)"
+                     [alt]="product.name"
+                     [aspectRatio]="getProductAspectRatio(product)"
+                     [loading]="getImageLoadingStrategy($index, filteredProducts().length, $first)"
+                     [fetchpriority]="getImageFetchPriority($index, $first)"
+                     containerClass="group-hover:scale-105 transition-transform duration-700 ease-out"
+                   ></app-optimized-image>
                   
                   <div class="absolute inset-0 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100 bg-white/20 backdrop-blur-[2px]">
                       <span class="bg-safs-dark text-white font-bold py-3 px-8 rounded-full shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 text-lg flex items-center gap-2">
@@ -397,7 +406,14 @@ import { RouterLink } from '@angular/router';
               (mouseenter)="onModalImageEnter()"
               (mousemove)="onModalImageMove($event)"
               (mouseleave)="onModalImageLeave()">
-              <img [src]="getModalDisplayImage()" [alt]="selectedProductForModal()!.name" class="w-full h-full object-contain drop-shadow-xl animate-fade-in">
+              <app-optimized-image
+                [src]="getOptimizedModalImagePath()"
+                [alt]="selectedProductForModal()!.name"
+                [aspectRatio]="getModalAspectRatio()"
+                loading="eager"
+                fetchpriority="high"
+                containerClass="drop-shadow-xl animate-fade-in"
+              ></app-optimized-image>
 
               @if (magnifierVisible()) {
                 <div
@@ -499,6 +515,7 @@ export class CatalogComponent implements OnInit {
   store = inject(StoreService);
   authService = inject(AuthService);
   wishlistService = inject(WishlistService);
+  imageOptimization = inject(ImageOptimizationService);
 
   ngOnInit() {
     // Load wishlist if user is authenticated
@@ -879,6 +896,52 @@ export class CatalogComponent implements OnInit {
         }
       });
     }
+  }
+
+  getOptimizedProductImagePath(product: Product): string {
+    const images = this.store.parseImages(product);
+    return images[0] || '';
+  }
+
+  getProductAspectRatio(product: Product): string {
+    return this.imageOptimization.getAspectRatioForCategory(product.category);
+  }
+
+  getImageLoadingStrategy(index: number, total: number, isFirst: boolean): 'lazy' | 'eager' {
+    const strategy = this.imageOptimization.getLoadingStrategy(index, total, isFirst);
+    return strategy.loading;
+  }
+
+  getImageFetchPriority(index: number, isFirst: boolean): 'high' | 'low' | 'auto' {
+    const strategy = this.imageOptimization.getLoadingStrategy(index, 10, isFirst);
+    return strategy.fetchpriority;
+  }
+
+  getOptimizedModalImagePath(): string {
+    const product = this.selectedProductForModal();
+    if (!product) return '';
+
+    const images = this.store.parseImages(product);
+    const colorVariations = this.getProductColorVariations(product);
+
+    if (colorVariations.length > 0) {
+      const selectedColor = this.modalSelectedColor();
+      if (selectedColor) {
+        const variation = colorVariations.find(v => v.color === selectedColor);
+        if (variation?.images?.length) {
+          return this.imageOptimization.getOptimizedImagePath(variation.images[0]);
+        }
+      }
+    }
+
+    return images[0] || '';
+  }
+
+  getModalAspectRatio(): string {
+    const product = this.selectedProductForModal();
+    if (!product) return '4/3';
+
+    return this.imageOptimization.getAspectRatioForCategory(product.category);
   }
 }
 

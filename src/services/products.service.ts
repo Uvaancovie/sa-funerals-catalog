@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, tap, catchError, throwError } from 'rxjs';
+import { Observable, map, tap, catchError, throwError, from } from 'rxjs';
+import { SupabaseService } from './supabase.service';
 
 export interface Product {
     productId: number;
@@ -43,6 +44,7 @@ export interface ProductFilters {
 })
 export class ProductsService {
     private http = inject(HttpClient);
+    private supabase = inject(SupabaseService).client;
 
     // Signals
     products = signal<Product[]>([]);
@@ -122,7 +124,7 @@ export class ProductsService {
     updateProduct(id: string, updates: Partial<Product>): Observable<Product> {
         const dbRow = this.mapProductToDbRow(updates);
         return from(this.supabase.from('products').update(dbRow).eq('Id', id).select().single()).pipe(
-            map(response => {
+            map((response: any) => {
                 if (response.error) throw new Error(response.error.message);
                 return this.mapDbRowToProduct(response.data);
             })
@@ -134,7 +136,7 @@ export class ProductsService {
      */
     deleteProduct(id: string): Observable<{ success: boolean; message: string }> {
         return from(this.supabase.from('Products').delete().eq('Id', id)).pipe(
-            map(response => {
+            map((response: any) => {
                 if (response.error) throw new Error(response.error.message);
                 return { success: true, message: 'Product deleted successfully' };
             })
@@ -185,5 +187,48 @@ export class ProductsService {
         }
     }
 
+    /**
+     * Map Product to DB row
+     */
+    private mapProductToDbRow(product: Partial<Product>): any {
+        return {
+            Id: product.id,
+            Name: product.name,
+            Category: product.category,
+            Description: product.description,
+            Price: product.price,
+            PriceOnRequest: product.priceOnRequest,
+            Images: product.images,
+            ColorVariations: product.colorVariations,
+            Specifications: product.specifications,
+            Features: product.features,
+            InStock: product.inStock,
+            Featured: product.featured,
+            UpdatedAt: new Date().toISOString()
+        };
+    }
+
+    /**
+     * Map DB row to Product
+     */
+    private mapDbRowToProduct(row: any): Product {
+        return {
+            productId: row.Id,
+            id: row.Id,
+            name: row.Name,
+            category: row.Category,
+            description: row.Description,
+            price: row.Price,
+            priceOnRequest: row.PriceOnRequest,
+            images: row.Images,
+            colorVariations: row.ColorVariations,
+            specifications: row.Specifications,
+            features: row.Features,
+            inStock: row.InStock,
+            featured: row.Featured,
+            createdAt: row.CreatedAt,
+            updatedAt: row.UpdatedAt
+        };
+    }
 
 }

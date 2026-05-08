@@ -48,7 +48,7 @@
         .content-grid {
             flex: 1;
             display: grid;
-            grid-template-columns: repeat(1, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             padding: 40px 20px 20px 20px;
             z-index: 1;
@@ -94,6 +94,12 @@
             margin-top: auto;
         }
 
+        .qr-code img {
+            width: 100px;
+            height: auto;
+            margin: 10px 0;
+        }
+
         .safs-title {
             font-size: 28px;
             font-weight: 700;
@@ -119,7 +125,7 @@
         /* Responsive Breakpoints for Grid & Print */
         @media (min-width: 640px) {
             .content-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -130,7 +136,7 @@
             }
             .header-section { padding: 3rem 0; }
             .content-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(6, 1fr);
                 grid-template-rows: repeat(6, 1fr);
                 gap: 15mm 15mm;
                 padding: 35mm 20mm 20mm 20mm;
@@ -152,6 +158,9 @@
                 padding: 30mm;
                 font-size: 24px;
                 text-align: left;
+            }
+            .qr-code img {
+                width: 200px;
             }
             .safs-title { font-size: 64px; letter-spacing: 6px; }
             .safs-subtitle { font-size: 32px; letter-spacing: 14px; }
@@ -201,7 +210,41 @@
 
         <!-- GRID -->
         <div class="content-grid" id="productGrid">
-            <!-- Products will be injected by script -->
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
+            <div class="product-card"><img src="https://placehold.co/600x400?text=Product" alt="Product" class="product-image"><div class="product-title"></div></div>
         </div>
 
         <!-- FOOTER -->
@@ -210,7 +253,11 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                 <span>160 Aberdare Drive,<br>Phoenix Industrial Park,<br>Durban</span>
             </div>
-            
+
+            <div class="qr-code">
+                <img src="src/qr-code/QR CODE.png" alt="QR Code for SA Funeral Supplies">
+            </div>
+
             <div class="flex flex-col items-end gap-2">
                 <div class="flex items-center gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
@@ -225,35 +272,6 @@
 
     </div>
 
-    <script>
-        const grid = document.getElementById('productGrid');
 
-        const normalizeImagePath = (imagePath) => {
-            if (!imagePath) return '';
-            if (imagePath.startsWith('./') || imagePath.startsWith('http')) return imagePath;
-            return `./src/${imagePath}`;
-        };
-
-        const renderProducts = (products) => {
-            const items = products.slice(0, 24);
-            items.forEach((product) => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                const imageSrc = normalizeImagePath(product.image);
-                card.innerHTML = `
-                    <img src="${imageSrc}" alt="${product.name}" class="product-image" onerror="this.src='https://placehold.co/600x400?text=Image+Not+Found'">
-                    <div class="product-title">${product.name}</div>
-                `;
-                grid.appendChild(card);
-            });
-        };
-
-        fetch('./products-safs.json')
-            .then((response) => response.json())
-            .then((products) => renderProducts(products))
-            .catch((error) => {
-                console.error('Failed to load products:', error);
-            });
-    </script>
 </body>
 </html>
