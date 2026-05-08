@@ -18,7 +18,10 @@ export class ImageOptimizationService {
    * Generates Vercel Image Optimization URL
    */
   getVercelImageUrl(imagePath: string, width: number, format: string = 'auto', quality: number = 85): string {
-    return `/_vercel/image?url=${encodeURIComponent(imagePath)}&w=${width}&q=${quality}&f=${format}`;
+    // Use absolute URL for Vercel optimizer
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const absoluteUrl = `${origin}${imagePath}`;
+    return `/_vercel/image?url=${encodeURIComponent(absoluteUrl)}&w=${width}&q=${quality}&f=${format}`;
   }
 
   /**
@@ -31,7 +34,8 @@ export class ImageOptimizationService {
   } {
     const sizes = [400, 800, 1200, 1600];
     const cleanPath = originalPath.replace(/^\/?SAFS IMAGES\//, '');
-    const imagePath = `${this.ORIGINAL_BASE_PATH}/${encodeURI(cleanPath)}`;
+    // Don't encode here - let getVercelImageUrl handle it to avoid double encoding
+    const imagePath = `${this.ORIGINAL_BASE_PATH}/${cleanPath}`;
 
     const webpSrcset = sizes
       .map(width => `${this.getVercelImageUrl(imagePath, width, 'webp')} ${width}w`)
@@ -69,8 +73,10 @@ export class ImageOptimizationService {
    */
   getBlurPlaceholderUrl(originalPath: string): string {
     const cleanPath = originalPath.replace(/^\/?SAFS IMAGES\//, '');
-    const imagePath = `${this.ORIGINAL_BASE_PATH}/${encodeURI(cleanPath)}`;
-    return this.getVercelImageUrl(imagePath, 20, 'jpg', 30);
+    const imagePath = `${this.ORIGINAL_BASE_PATH}/${cleanPath}`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const absoluteUrl = `${origin}${imagePath}`;
+    return `/_vercel/image?url=${encodeURIComponent(absoluteUrl)}&w=64&q=30&f=jpg`; // Min width is 64 on Vercel
   }
 
   /**

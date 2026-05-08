@@ -5,11 +5,11 @@ import { CommonModule } from '@angular/common';
   selector: 'app-optimized-image',
   standalone: true,
   imports: [CommonModule],
-  template: `
+template: `
     <div class="image-container" [style.aspect-ratio]="aspectRatio" [class]="containerClass">
       <!-- Blur placeholder (shown while main image loads) -->
       <img
-        *ngIf="!loaded && blurSrc"
+        *ngIf="!loaded && blurSrc && !optimizerFailed"
         [src]="blurSrc"
         class="blur-placeholder"
         [alt]="alt"
@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
       >
 
       <!-- Main responsive image using Vercel Image Optimization -->
-      <picture class="main-image-wrapper">
+      <picture class="main-image-wrapper" *ngIf="!optimizerFailed">
         <source
           [srcset]="getVercelSrcset('avif')"
           [sizes]="sizes"
@@ -43,8 +43,20 @@ import { CommonModule } from '@angular/common';
         >
       </picture>
 
+      <!-- Fallback direct image (when optimizer fails) -->
+      <img
+        *ngIf="optimizerFailed"
+        [src]="getDirectImageUrl()"
+        [alt]="alt"
+        [loading]="loading"
+        [attr.fetchpriority]="fetchpriority"
+        [decoding]="decoding"
+        class="main-image"
+        [class.loaded]="true"
+      >
+
       <!-- Loading indicator (optional) -->
-      <div *ngIf="!loaded && showLoadingIndicator" class="loading-indicator">
+      <div *ngIf="!loaded && showLoadingIndicator && !optimizerFailed" class="loading-indicator">
         <div class="loading-spinner"></div>
       </div>
     </div>
@@ -165,25 +177,32 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
   }
 
 /**
-    * Gets the original image URL from the src path
-    * Uses Vercel's original image storage location
-    */
-  private getOriginalImageUrl(): string {
-    // Clean the path - remove SAFS IMAGES prefix and extension
+   * Gets the original image path from the src (raw path, not encoded)
+   * Used by getVercelImageUrl which handles proper encoding
+   */
+  private getOriginalImagePath(): string {
     let cleanPath = this.src.replace(/^\/?SAFS IMAGES\//i, '');
     cleanPath = cleanPath.replace(/\.(jpg|jpeg|png)$/i, '.jpg');
-
-    // Return path to original image in safs-images directory (deployed to /safs-images)
-    return `/safs-images/${encodeURI(cleanPath)}`;
+    return `/safs-images/${cleanPath}`;
   }
 
   /**
    * Generates Vercel Image Optimization URL
-   * Format: /_vercel/image?url=<encoded-path>&w=<width>&q=<quality>&f=<format>
+   * For Angular on Vercel, uses the origin to create absolute URL for optimizer
+   * Format: /_vercel/image?url=<encoded-absolute-url>&w=<width>&q=<quality>&f=<format>
    */
   getVercelImageUrl(width: number, format: string = 'auto', quality: number = 85): string {
-    const imageUrl = this.getOriginalImageUrl();
-    return `/_vercel/image?url=${encodeURIComponent(imageUrl)}&w=${width}&q=${quality}&f=${format}`;
+    const imagePath = this.getOriginalImagePath();
+    // Use absolute URL for Vercel optimizer to work correctly
+    const absoluteUrl = `${window.location.origin}${imagePath}`;
+    return `/_vercel/image?url=${encodeURIComponent(absoluteUrl)}&w=${width}&q=${quality}&f=${format}`;
+  }
+
+  /**
+   * Gets the direct image URL (fallback when optimizer fails)
+   */
+  getDirectImageUrl(): string {
+    return this.getOriginalImagePath();
   }
 
   /**
@@ -201,14 +220,21 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
    * Uses Vercel's optimization with very low quality and small size
    */
   get blurSrc(): string {
-    return this.getVercelImageUrl(20, 'jpg', 30);
+    const imagePath = this.getOriginalImagePath();
+    const absoluteUrl = `${window.location.origin}${imagePath}`;
+    return `/_vercel/image?url=${encodeURIComponent(absoluteUrl)}&w=64&q=30&f=jpg`; // Min width is 64 on Vercel
   }
+
+  // Template state
+  optimizerFailed = false;
 
   onImageLoad(): void {
     this.loaded = true;
   }
 
   onImageError(): void {
-    console.warn(`Failed to load image: ${this.src}`);
+    console.warn(`Failed to load image via optimizer: ${this.src}`);
+    // Mark optimizer as failed, template should use direct URL fallback
+    this.optimizerFailed = true;
   }
 }
