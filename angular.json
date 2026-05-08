@@ -22,28 +22,28 @@
             "styles": [
               "src/styles.css"
             ],
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "src/assets",
-                "output": "/assets"
-              },
-              {
-                "glob": "**/*",
-                "input": "src/SAFS IMAGES",
-                "output": "/SAFS IMAGES"
-              },
-              {
-                "glob": "products-safs.json",
-                "input": "./",
-                "output": "/"
-              },
-              {
-                "glob": "wall-chart.html",
-                "input": "./",
-                "output": "/"
-              }
-            ]
+"assets": [
+               {
+                 "glob": "**/*",
+                 "input": "src/assets",
+                 "output": "/assets"
+               },
+               {
+                 "glob": "**/*",
+                 "input": "src/SAFS IMAGES",
+                 "output": "/safs-images"
+               },
+               {
+                 "glob": "products-safs.json",
+                 "input": "./",
+                 "output": "/"
+               },
+               {
+                 "glob": "wall-chart.html",
+                 "input": "./",
+                 "output": "/"
+               }
+             ]
           },
           "configurations": {
             "production": {

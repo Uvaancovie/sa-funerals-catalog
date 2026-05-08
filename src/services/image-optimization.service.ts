@@ -4,46 +4,48 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ImageOptimizationService {
-  private readonly OPTIMIZED_BASE_PATH = '/assets/safs-images';
+  private readonly ORIGINAL_BASE_PATH = '/safs-images';
 
   /**
-   * Converts a legacy image path to an optimized responsive image path
+   * Gets the original image path for Vercel optimization
+   * This is used by OptimizedImageComponent which handles Vercel URL construction
    */
   getOptimizedImagePath(originalPath: string): string {
-    // Remove the 'SAFS IMAGES/' prefix if present
-    const cleanPath = originalPath.replace(/^\/?SAFS IMAGES\//, '');
-    // Remove file extension
-    return cleanPath.replace(/\.(jpg|jpeg|png)$/i, '');
+    return originalPath;
   }
 
   /**
-   * Generates responsive image URLs for different formats and sizes
+   * Generates Vercel Image Optimization URL
    */
-  getResponsiveImageUrls(basePath: string): {
+  getVercelImageUrl(imagePath: string, width: number, format: string = 'auto', quality: number = 85): string {
+    return `/_vercel/image?url=${encodeURIComponent(imagePath)}&w=${width}&q=${quality}&f=${format}`;
+  }
+
+  /**
+   * Generates responsive image URLs using Vercel Image Optimization
+   */
+  getResponsiveImageUrls(originalPath: string): {
     webp: { srcset: string, sizes: string },
     avif: { srcset: string, sizes: string },
     fallback: { src: string, srcset: string, sizes: string }
   } {
     const sizes = [400, 800, 1200, 1600];
+    const cleanPath = originalPath.replace(/^\/?SAFS IMAGES\//, '');
+    const imagePath = `${this.ORIGINAL_BASE_PATH}/${encodeURI(cleanPath)}`;
 
     const webpSrcset = sizes
-      .map(width => `${this.OPTIMIZED_BASE_PATH}/${basePath}-${width}w.webp ${width}w`)
+      .map(width => `${this.getVercelImageUrl(imagePath, width, 'webp')} ${width}w`)
       .join(', ');
 
     const avifSrcset = sizes
-      .map(width => `${this.OPTIMIZED_BASE_PATH}/${basePath}-${width}w.avif ${width}w`)
+      .map(width => `${this.getVercelImageUrl(imagePath, width, 'avif')} ${width}w`)
       .join(', ');
 
     const fallbackSrcset = sizes
-      .map(width => `${this.OPTIMIZED_BASE_PATH}/${basePath}-${width}w.jpg ${width}w`)
+      .map(width => `${this.getVercelImageUrl(imagePath, width, 'jpg')} ${width}w`)
       .join(', ');
 
-    const sizesAttr = `
-      (max-width: 640px) 400px,
-      (max-width: 1024px) 800px,
-      (max-width: 1280px) 1200px,
-      1600px
-    `.trim();
+    const sizesAttr = `(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1280px) 1200px, 1600px`;
 
     return {
       webp: {
@@ -55,7 +57,7 @@ export class ImageOptimizationService {
         sizes: sizesAttr
       },
       fallback: {
-        src: `${this.OPTIMIZED_BASE_PATH}/${basePath}-800w.jpg`,
+        src: this.getVercelImageUrl(imagePath, 800, 'jpg'),
         srcset: fallbackSrcset,
         sizes: sizesAttr
       }
@@ -63,10 +65,12 @@ export class ImageOptimizationService {
   }
 
   /**
-   * Gets blur placeholder URL
+   * Gets blur placeholder URL using Vercel's low-quality optimization
    */
-  getBlurPlaceholderUrl(basePath: string): string {
-    return `${this.OPTIMIZED_BASE_PATH}/${basePath}-blur.jpg`;
+  getBlurPlaceholderUrl(originalPath: string): string {
+    const cleanPath = originalPath.replace(/^\/?SAFS IMAGES\//, '');
+    const imagePath = `${this.ORIGINAL_BASE_PATH}/${encodeURI(cleanPath)}`;
+    return this.getVercelImageUrl(imagePath, 20, 'jpg', 30);
   }
 
   /**

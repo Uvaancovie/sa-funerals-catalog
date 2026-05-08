@@ -16,23 +16,21 @@ import { CommonModule } from '@angular/common';
         aria-hidden="true"
       >
 
-      <!-- Main responsive image with modern format fallbacks -->
+      <!-- Main responsive image using Vercel Image Optimization -->
       <picture class="main-image-wrapper">
         <source
-          *ngIf="hasAvif"
-          [srcset]="getResponsiveSrcset('avif')"
+          [srcset]="getVercelSrcset('avif')"
           [sizes]="sizes"
           type="image/avif"
         >
         <source
-          *ngIf="hasWebp"
-          [srcset]="getResponsiveSrcset('webp')"
+          [srcset]="getVercelSrcset('webp')"
           [sizes]="sizes"
           type="image/webp"
         >
         <img
-          [src]="fallbackSrc"
-          [srcset]="getResponsiveSrcset('jpg')"
+          [src]="getVercelImageUrl(800)"
+          [srcset]="getVercelSrcset('jpg')"
           [sizes]="sizes"
           [alt]="alt"
           [loading]="loading"
@@ -128,7 +126,7 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class OptimizedImageComponent implements OnInit, OnDestroy {
-  @Input() src!: string; // Base image path (e.g., "Baby Caskets/2FT Minnie Mouse")
+  @Input() src!: string; // Base image path (e.g., "SAFS IMAGES/Baby Caskets/2FT Minnie Mouse.jpg")
   @Input() alt!: string;
   @Input() aspectRatio = '4/3';
   @Input() loading: 'lazy' | 'eager' = 'lazy';
@@ -139,99 +137,71 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
   @Input() sizes = '(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1280px) 1200px, 1600px';
 
   loaded = false;
-  hasAvif = false;
-  hasWebp = false;
-
-  private intersectionObserver?: IntersectionObserver;
 
   ngOnInit() {
-    this.checkFormatSupport();
     this.setupIntersectionObserver();
   }
 
-  ngOnDestroy() {
-    this.intersectionObserver?.disconnect();
-  }
-
-  private checkFormatSupport(): void {
-    // Check WebP support
-    this.hasWebp = this.checkImageFormatSupport('image/webp');
-
-    // Check AVIF support
-    this.hasAvif = this.checkImageFormatSupport('image/avif');
-  }
-
-  private checkImageFormatSupport(mimeType: string): boolean {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1;
-    canvas.height = 1;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return false;
-
-    const img = new Image();
-    img.src = canvas.toDataURL(mimeType);
-    return img.src.indexOf(mimeType) === 5;
-  }
+  ngOnDestroy() {}
 
   private setupIntersectionObserver(): void {
     if (this.loading === 'lazy' && 'IntersectionObserver' in window) {
-      this.intersectionObserver = new IntersectionObserver(
+      const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              // Image is in viewport, let it load naturally
-              this.intersectionObserver?.unobserve(entry.target);
+              observer.unobserve(entry.target);
             }
           });
         },
-        {
-          rootMargin: '50px' // Start loading 50px before image enters viewport
-        }
+        { rootMargin: '50px' }
       );
 
-      // Observe the image container
       const container = document.querySelector('.image-container') as HTMLElement;
       if (container) {
-        this.intersectionObserver.observe(container);
+        observer.observe(container);
       }
     }
   }
 
-  // 1. Helper to safely format the base path
-  private getResolvedPath(): string {
-    // Remove extensions if they exist
-    let path = this.src.replace(/\.(jpg|jpeg|png)$/i, '');
+/**
+    * Gets the original image URL from the src path
+    * Uses Vercel's original image storage location
+    */
+  private getOriginalImageUrl(): string {
+    // Clean the path - remove SAFS IMAGES prefix and extension
+    let cleanPath = this.src.replace(/^\/?SAFS IMAGES\//i, '');
+    cleanPath = cleanPath.replace(/\.(jpg|jpeg|png)$/i, '.jpg');
 
-    // Clean up any old prefixes from the database
-    path = path.replace(/^\/?SAFS IMAGES\//i, '');
-
-    // 2. Prepend the assets directory if it's a relative path
-    if (!path.startsWith('/assets') && !path.startsWith('http')) {
-      path = `/assets/safs-images/${path}`;
-    }
-
-    return path;
+    // Return path to original image in safs-images directory (deployed to /safs-images)
+    return `/safs-images/${encodeURI(cleanPath)}`;
   }
 
-  getResponsiveSrcset(format: string): string {
-    const basePath = this.getResolvedPath();
-    const sizes = [400, 800, 1200, 1600];
+  /**
+   * Generates Vercel Image Optimization URL
+   * Format: /_vercel/image?url=<encoded-path>&w=<width>&q=<quality>&f=<format>
+   */
+  getVercelImageUrl(width: number, format: string = 'auto', quality: number = 85): string {
+    const imageUrl = this.getOriginalImageUrl();
+    return `/_vercel/image?url=${encodeURIComponent(imageUrl)}&w=${width}&q=${quality}&f=${format}`;
+  }
 
+  /**
+   * Generates srcset using Vercel Image Optimization
+   */
+  getVercelSrcset(format: string): string {
+    const sizes = [400, 800, 1200, 1600];
     return sizes
-      .map(width => {
-        // encodeURI is CRITICAL here to convert spaces ( ) to %20
-        const url = encodeURI(`${basePath}-${width}w.${format}`);
-        return `${url} ${width}w`;
-      })
+      .map(width => `${this.getVercelImageUrl(width, format)} ${width}w`)
       .join(', ');
   }
 
+  /**
+   * Gets blur placeholder URL (low-quality image for blur-up effect)
+   * Uses Vercel's optimization with very low quality and small size
+   */
   get blurSrc(): string {
-    return encodeURI(`${this.getResolvedPath()}-blur.jpg`);
-  }
-
-  get fallbackSrc(): string {
-    return encodeURI(`${this.getResolvedPath()}-800w.jpg`);
+    return this.getVercelImageUrl(20, 'jpg', 30);
   }
 
   onImageLoad(): void {
@@ -239,7 +209,6 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
   }
 
   onImageError(): void {
-    // Fallback to original image if optimized versions fail
-    console.warn(`Failed to load optimized image: ${this.src}`);
+    console.warn(`Failed to load image: ${this.src}`);
   }
 }
