@@ -12,7 +12,7 @@ import { WishlistService } from '../services/wishlist.service';
      <header class="sticky top-0 z-50 bg-safs-dark/95 backdrop-blur border-b-2 border-safs-gold shadow-lg">
        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
          <a routerLink="/" class="flex items-center gap-3">
-           <img src="assets/logo/OIP.webp" alt="South African Funeral Supplies" class="h-16 sm:h-20 w-auto rounded-md" />
+           <img src="/_vercel/image?url=%2Fassets%2Flogo%2FOIP.webp&w=128&q=85&f=webp" alt="South African Funeral Supplies" class="h-16 sm:h-20 w-auto rounded-md" width="80" height="80" />
          </a>
 
          <button

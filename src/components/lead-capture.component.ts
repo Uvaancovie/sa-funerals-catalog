@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   template: `
     <div class="relative bg-safs-dark px-4 py-16 sm:px-6 lg:px-16 overflow-hidden border-b-[3px] border-safs-gold">
       <!-- Background Graphic -->
-      <div class="absolute inset-0 opacity-5 bg-[url('assets/logo/OIP.webp')] bg-no-repeat bg-right-bottom bg-[length:500px]"></div>
+      <div class="absolute inset-0 opacity-5 bg-[url('/_vercel/image?url=%2Fassets%2Flogo%2FOIP.webp&w=640&q=75&f=webp')] bg-no-repeat bg-right-bottom bg-[length:500px]"></div>
       
       <div class="max-w-6xl mx-auto relative z-10">
         <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8 lg:p-12 shadow-2xl flex flex-col lg:flex-row items-center gap-10">

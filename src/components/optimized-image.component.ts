@@ -226,9 +226,8 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
    */
   getVercelImageUrl(width: number, format: string = 'auto', quality: number = 85): string {
     const imagePath = this.getOriginalImagePath();
-    // Use absolute URL for Vercel optimizer to work correctly
-    const absoluteUrl = `${window.location.origin}${imagePath}`;
-    return `/_vercel/image?url=${encodeURIComponent(absoluteUrl)}&w=${width}&q=${quality}&f=${format}`;
+    // Vercel optimizer accepts root-relative paths
+    return `/_vercel/image?url=${encodeURIComponent(imagePath)}&w=${width}&q=${quality}&f=${format}`;
   }
 
   /**
@@ -254,8 +253,7 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
    */
   get blurSrc(): string {
     const imagePath = this.getOriginalImagePath();
-    const absoluteUrl = `${window.location.origin}${imagePath}`;
-    return `/_vercel/image?url=${encodeURIComponent(absoluteUrl)}&w=64&q=30&f=jpg`; // Min width is 64 on Vercel
+    return `/_vercel/image?url=${encodeURIComponent(imagePath)}&w=64&q=30&f=jpg`; // Min width is 64 on Vercel
   }
 
   // Template state
