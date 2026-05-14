@@ -105,7 +105,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                     {{ product()!.category }}
                   </div>
                   <p class="mt-3 text-gray-600 leading-relaxed">
-                    {{ product()!.description || 'Request a quote for this item. Select your finish/variant below.' }}
+                    {{ product()!.description || 'View product details and select your finish/variant below.' }}
                   </p>
                 </div>
 
@@ -202,20 +202,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                 </div>
               }
 
-               <!-- Actions -->
-               <div class="mt-8 lg:mt-10 pt-6 border-t border-gray-100 flex flex-col gap-4">
-                   <button
-                     type="button"
-                     class="py-3 lg:py-4 w-full rounded-xl lg:rounded-2xl bg-safs-dark text-white font-bold text-lg lg:text-xl hover:bg-safs-gold-dark transition-all shadow-xl"
-                     (click)="addToCart()"
-                   >
-                     Add to Quote
-                   </button>
-
-                 <div class="text-xs text-gray-500 text-center lg:text-left">
-                   Selected variant: <span class="font-semibold text-gray-700">{{ selectedVariant() }}</span>
-                 </div>
-               </div>
+               <!-- Actions (Add to Quote Removed) -->
             </div>
           </div>
         }

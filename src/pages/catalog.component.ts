@@ -249,17 +249,17 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
       <div class="flex-1 bg-gray-50 flex flex-col relative w-full">
         
         <!-- Header & Search -->
-        <div class="bg-gradient-to-r from-safs-dark to-[#1A2F5A] px-4 py-8 sm:px-6 sm:py-10 lg:px-16 lg:py-12 border-b-[3px] border-safs-gold shadow-md relative z-20 flex-shrink-0">
-          <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-8 items-center justify-between relative z-10">
+        <div class="bg-gradient-to-r from-safs-dark to-[#1A2F5A] px-4 py-2 sm:px-6 sm:py-3 lg:px-16 lg:py-4 border-b-[3px] border-safs-gold shadow-sm relative z-20 flex-shrink-0">
+          <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-3 lg:gap-4 items-center justify-between relative z-10">
             <div class="text-center lg:text-left">
-              <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 font-serif tracking-wide">Premium Catalog</h1>
-              <p class="text-safs-gold text-sm sm:text-base lg:text-lg font-medium tracking-wider uppercase">Explore our exclusive range of caskets & domes</p>
+              <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-0.5 font-serif tracking-wide">Premium Catalog</h1>
+              <p class="text-safs-gold text-xs sm:text-sm font-medium tracking-wider uppercase">Explore our exclusive range of caskets & domes</p>
             </div>
             
             <!-- Search Bar -->
-            <div class="w-full lg:w-[400px] relative flex-shrink-0">
-              <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-safs-dark/60">
+            <div class="w-full lg:w-[300px] relative flex-shrink-0">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-safs-dark/60">
                   <circle cx="11" cy="11" r="8"></circle>
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
@@ -269,7 +269,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                 placeholder="Search catalog..." 
                 (input)="onSearch($event)"
                 [value]="searchQuery()"
-                class="w-full pl-12 pr-12 py-4 rounded-xl shadow-lg bg-white/95 border-2 border-transparent focus:bg-white focus:border-safs-gold outline-none transition-all text-safs-dark text-base placeholder-safs-dark/40 font-semibold" />
+                class="w-full pl-9 pr-9 py-2 rounded-lg shadow-sm bg-white/95 border border-transparent focus:bg-white focus:border-safs-gold outline-none transition-all text-safs-dark text-sm placeholder-safs-dark/40 font-semibold" />
               @if (searchQuery()) {
                 <button (click)="clearSearch()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-safs-dark/40 hover:text-safs-dark transition-colors">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -359,13 +359,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                    <h2 class="text-lg sm:text-xl font-bold text-safs-dark mb-3 group-hover:text-safs-gold-dark transition-colors leading-tight">{{ product.name }}</h2>
                   
                   <div class="mt-auto">
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-50">
-                      <span class="text-lg font-black text-safs-dark">Request Quote</span>
-
-                      <button (click)="$event.stopImmediatePropagation(); addToCart(product)" class="p-3 rounded-2xl bg-gray-50 text-safs-dark hover:bg-safs-gold hover:text-black transition-all shadow-sm group/btn border border-gray-200 hover:border-safs-gold active:scale-95" title="Add default to quote">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover/btn:scale-110 transition-transform"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                      </button>
-                    </div>
+                    <!-- Actions removed -->
                   </div>
                 </div>
               </div>
@@ -478,13 +472,6 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                       </svg>
                     </button>
                  }
-                 
-                 <button 
-                   (click)="addModalItemToCart()"
-                   class="flex-1 bg-safs-dark text-white rounded-2xl font-bold text-xl hover:opacity-95 shadow-xl hover:shadow-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-3">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                   Add to Quote
-                 </button>
               </div>
             </div>
           </div>
