@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OptimizedImageComponent } from '../components/optimized-image.component';
 import { ImageOptimizationService } from '../services/image-optimization.service';
+import { LeadCaptureComponent } from '../components/lead-capture.component';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, RouterLink, OptimizedImageComponent],
+  imports: [CommonModule, RouterLink, OptimizedImageComponent, LeadCaptureComponent],
    template: `
      <div class="bg-gray-50 h-screen w-full overflow-hidden flex flex-col">
 
@@ -280,6 +281,9 @@ import { ImageOptimizationService } from '../services/image-optimization.service
             </div>
           </div>
         </div>
+        
+        <!-- Lead Capture Popup -->
+        <app-lead-capture></app-lead-capture>
         
          <!-- Product Grid Area -->
          <div class="p-4 sm:p-8 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32">

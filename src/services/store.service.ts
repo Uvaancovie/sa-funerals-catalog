@@ -48,11 +48,16 @@ export class StoreService {
   }
 
   private normalizeImageUrl(url: string): string {
-    // Make image paths absolute so routes like `#/catalog` don't break relative URLs.
+    // Make image paths absolute and handle legacy database formats
     if (!url) return url;
     if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    if (url.startsWith('/')) return url;
-    return `/${url}`;
+    
+    let path = url.replace(/^\/+/, '');
+    if (path.toLowerCase().startsWith('assets/')) return `/${path}`;
+    if (path.toUpperCase().startsWith('SAFS IMAGES/')) return `/safs-images/${path.substring(12)}`;
+    if (path.toLowerCase().startsWith('safs-images/')) return `/${path}`;
+    
+    return `/safs-images/${path}`;
   }
 
   private async loadLocalProducts(): Promise<void> {
@@ -129,25 +134,14 @@ export class StoreService {
         return;
       }
       if (data && Array.isArray(data) && data.length > 0) {
-        // Only override local SAFS dataset when Supabase images appear compatible
-        // (i.e., they reference SAFS IMAGES). Otherwise, keep the local dataset.
-        const first: any = data[0];
-        const imagesRaw = first?.images;
-        let looksLikeSafs = false;
-        try {
-          const parsed = typeof imagesRaw === 'string' ? JSON.parse(imagesRaw) : imagesRaw;
-          if (Array.isArray(parsed)) {
-            looksLikeSafs = parsed.some((u: any) => String(u).includes('SAFS IMAGES'));
-          }
-        } catch {
-          // ignore parse failures; treat as not compatible
-        }
-
-        if (looksLikeSafs) {
-          this.products.set(data as Product[]);
-        } else {
+        const products = data as Product[];
+        if (!products.some(p => p.images && p.images.includes('SAFS IMAGES'))) {
           console.warn('Supabase products loaded, but images are not SAFS IMAGES. Keeping local dataset.');
+          this.loadLocalProducts();
+          return;
         }
+        
+        this.products.set(products);
         return;
       }
     } catch (err) {

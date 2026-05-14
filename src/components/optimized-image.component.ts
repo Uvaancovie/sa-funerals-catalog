@@ -181,11 +181,44 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
    * Used by getVercelImageUrl which handles proper encoding
    */
   private getOriginalImagePath(): string {
-    let cleanPath = this.src.replace(/^\/?SAFS IMAGES\//i, '');
-    cleanPath = cleanPath.replace(/\.(jpg|jpeg|png)$/i, '.jpg');
-    return `/safs-images/${cleanPath}`;
+    return this.getResolvedPath(true);
   }
+  private getResolvedPath(keepExtension = false): string {
+    if (!this.src) return '';
+    
+    let path = this.src;
+    
+    // 1. Remove file extension if we are generating optimized versions
+    if (!keepExtension) {
+      path = path.replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
+    }
+    
+    // 2. If it's already an external HTTP URL, use it as-is
+    if (path.startsWith('http')) {
+      return path;
+    }
 
+    // 3. Clean up any accidental leading slashes
+    path = path.replace(/^\/+/, '');
+
+    // Format A: The NEW dynamic .NET Database format (e.g., "assets/product-id/image.jpg")
+    if (path.toLowerCase().startsWith('assets/')) {
+      return `/${path}`; 
+    }
+
+    // Format B: The OLD legacy JSON format (e.g., "SAFS IMAGES/Category/image.jpg")
+    if (path.toUpperCase().startsWith('SAFS IMAGES/')) {
+      return `/safs-images/${path.substring(12)}`;
+    }
+
+    // Format C: Already correctly formatted for the output folder
+    if (path.toLowerCase().startsWith('safs-images/')) {
+      return `/${path}`;
+    }
+
+    // Format D: Fallback for raw paths
+    return `/safs-images/${path}`;
+  }
   /**
    * Generates Vercel Image Optimization URL
    * For Angular on Vercel, uses the origin to create absolute URL for optimizer

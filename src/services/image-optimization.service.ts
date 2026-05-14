@@ -11,7 +11,13 @@ export class ImageOptimizationService {
    * This is used by OptimizedImageComponent which handles Vercel URL construction
    */
   getOptimizedImagePath(originalPath: string): string {
-    return originalPath;
+    if (!originalPath) return '';
+    let path = originalPath.replace(/^\/+/, '');
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    if (path.toLowerCase().startsWith('assets/')) return `/${path}`;
+    if (path.toUpperCase().startsWith('SAFS IMAGES/')) return `/safs-images/${path.substring(12)}`;
+    if (path.toLowerCase().startsWith('safs-images/')) return `/${path}`;
+    return `/safs-images/${path}`;
   }
 
   /**
