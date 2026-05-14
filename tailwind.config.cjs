@@ -5,15 +5,15 @@ module.exports = {
     extend: {
       colors: {
         safs: {
-          dark: '#1a103c',
-          gold: '#8a7a3b',
-          'gold-light': '#c9b56b',
-          'gold-dark': '#6f5a2a',
-          light: '#f8f9fa'
+          dark: '#0F2040',          /* Heritage Navy */
+          gold: '#C5A059',          /* Brass / Gold */
+          'gold-light': '#D4B06A',  /* Lighter brass for hover/accent */
+          'gold-dark': '#A8873F',   /* Deeper brass for active states */
+          light: '#F8F9FA'          /* Soft off-white backgrounds */
         }
       },
       fontFamily: {
-        serif: ['Cinzel', 'serif'],
+        serif: ['Poppins', 'sans-serif'],
         sans: ['Poppins', 'sans-serif']
       }
     }

@@ -9,15 +9,15 @@ import { WishlistService } from '../services/wishlist.service';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   template: `
-     <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
-       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-         <a routerLink="/" class="font-serif font-bold text-safs-dark text-xl sm:text-2xl tracking-wide">
-           SA Funeral Supplies
+     <header class="sticky top-0 z-50 bg-safs-dark/95 backdrop-blur border-b-2 border-safs-gold shadow-lg">
+       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+         <a routerLink="/" class="flex items-center gap-3">
+           <img src="assets/logo/OIP.webp" alt="South African Funeral Supplies" class="h-16 sm:h-20 w-auto rounded-md" />
          </a>
 
          <button
            type="button"
-           class="lg:hidden p-2 rounded-lg bg-safs-dark text-white hover:bg-safs-gold-dark transition-colors duration-200"
+           class="lg:hidden p-2 rounded-lg bg-safs-gold/20 text-white hover:bg-safs-gold/40 transition-colors duration-200"
            (click)="toggleMenu()"
            aria-label="Toggle menu"
            [class.bg-safs-gold-dark]="isMenuOpen()"
@@ -33,15 +33,15 @@ import { WishlistService } from '../services/wishlist.service';
          <nav class="hidden lg:flex items-center space-x-8">
            <a
              routerLink="/catalog"
-             routerLinkActive="text-safs-gold-dark font-bold"
-             class="text-gray-700 hover:text-safs-dark transition-colors font-medium"
+             routerLinkActive="text-safs-gold font-bold"
+             class="text-white/80 hover:text-safs-gold transition-colors font-medium"
            >
              Full Catalogue
            </a>
            <button
              type="button"
              (click)="logout()"
-             class="bg-safs-dark text-white px-6 py-2 rounded-lg hover:bg-safs-gold-dark transition-colors font-medium"
+             class="bg-safs-gold text-safs-dark px-6 py-2 rounded-lg hover:bg-safs-gold-light transition-colors font-bold"
            >
              Logout
            </button>
@@ -50,13 +50,13 @@ import { WishlistService } from '../services/wishlist.service';
 
        <!-- Mobile menu -->
        @if (isMenuOpen()) {
-         <nav class="lg:hidden animate-in border-t border-gray-100 bg-white shadow-lg">
+         <nav class="lg:hidden animate-in border-t border-safs-gold/30 bg-safs-dark shadow-lg">
            <div class="px-4 py-6 space-y-4">
              <a
                routerLink="/catalog"
-               routerLinkActive="text-safs-gold-dark font-bold"
+               routerLinkActive="text-safs-gold font-bold"
                (click)="closeMenu()"
-               class="block py-3 px-4 text-gray-700 hover:text-safs-dark hover:bg-gray-50 transition-colors rounded-lg font-medium"
+               class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
              >
                Full Catalogue
              </a>
@@ -64,7 +64,7 @@ import { WishlistService } from '../services/wishlist.service';
              <button
                type="button"
                (click)="logout()"
-               class="w-full text-left py-3 px-4 text-gray-700 hover:text-safs-dark hover:bg-gray-50 transition-colors rounded-lg font-medium"
+               class="w-full text-left py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
              >
                Logout
              </button>

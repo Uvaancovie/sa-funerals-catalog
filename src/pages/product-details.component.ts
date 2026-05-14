@@ -204,31 +204,13 @@ import { ImageOptimizationService } from '../services/image-optimization.service
 
                <!-- Actions -->
                <div class="mt-8 lg:mt-10 pt-6 border-t border-gray-100 flex flex-col gap-4">
-                 @if (authService.isApproved() || authService.isAdmin()) {
                    <button
                      type="button"
-                     class="py-3 lg:py-4 w-full rounded-xl lg:rounded-2xl bg-safs-dark text-white font-bold text-lg lg:text-xl hover:opacity-95 transition-all shadow-xl"
+                     class="py-3 lg:py-4 w-full rounded-xl lg:rounded-2xl bg-safs-dark text-white font-bold text-lg lg:text-xl hover:bg-safs-gold-dark transition-all shadow-xl"
                      (click)="addToCart()"
                    >
                      Add to Quote
                    </button>
-                 } @else if (authService.isPending()) {
-                   <button
-                     type="button"
-                     class="py-3 lg:py-4 w-full rounded-xl lg:rounded-2xl bg-white border border-yellow-200 text-yellow-700 font-bold text-lg lg:text-xl hover:bg-yellow-50 transition-all shadow-sm"
-                     disabled
-                   >
-                     Awaiting Approval
-                   </button>
-                 } @else {
-                   <button
-                     type="button"
-                     class="py-3 lg:py-4 w-full rounded-xl lg:rounded-2xl bg-white border border-gray-200 text-safs-dark font-bold text-lg lg:text-xl hover:bg-gray-50 transition-all shadow-sm"
-                     disabled
-                   >
-                     Login to Price
-                   </button>
-                 }
 
                  <div class="text-xs text-gray-500 text-center lg:text-left">
                    Selected variant: <span class="font-semibold text-gray-700">{{ selectedVariant() }}</span>

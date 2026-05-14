@@ -1,9 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Core Brand Colors */
+  --safs-primary: #0F2040;     /* Heritage Navy */
+  --safs-accent: #C5A059;      /* Brass / Gold */
+  
+  /* Text Colors */
+  --safs-text-main: #2C3E50;   /* Charcoal */
+  --safs-text-muted: #7F8C8D;  /* Grey */
+  
+  /* Backgrounds */
+  --safs-bg-light: #F8F9FA;
+  --safs-bg-white: #FFFFFF;
+
+  /* Typography */
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--safs-text-main);
+  background-color: var(--safs-bg-light);
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-heading);
+  color: var(--safs-primary);
+}
+
+/* Brand button styles */
+.btn-primary {
+  background-color: var(--safs-primary);
+  color: var(--safs-bg-white);
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--safs-accent);
+}
+
+/* Accent border utility */
+.border-accent {
+  border-color: var(--safs-accent);
+}
+
+/* Brand link styling */
+a.brand-link {
+  color: var(--safs-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a.brand-link:hover {
+  color: var(--safs-accent);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
 
 @layer base {
 	body {
 		@apply font-sans font-normal;
 	}
 }
+

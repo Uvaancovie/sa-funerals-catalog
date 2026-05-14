@@ -13,7 +13,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
   standalone: true,
   imports: [CommonModule, RouterLink, OptimizedImageComponent, LeadCaptureComponent],
    template: `
-     <div class="bg-gray-50 h-screen w-full overflow-hidden flex flex-col">
+     <div class="bg-gray-50 min-h-screen w-full flex flex-col">
 
        <!-- Mobile Filters Toggle -->
        <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
@@ -34,9 +34,9 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
          </div>
        </div>
 
-       <div class="flex flex-1 overflow-hidden">
+       <div class="flex flex-1">
          <!-- Filters Sidebar (Desktop) -->
-         <div class="hidden lg:block w-[320px] h-full overflow-y-auto border-r border-gray-200 bg-white p-8 space-y-8 flex-shrink-0 shadow-sm relative">
+         <div class="hidden lg:block w-[320px] sticky top-[72px] h-[calc(100vh-72px)] overflow-y-auto border-r border-gray-200 bg-white p-8 space-y-8 flex-shrink-0 shadow-sm">
 
            <!-- Desktop Filters Header -->
            <div class="sticky top-0 bg-white z-20 pb-4 mb-4 border-b border-gray-100">
@@ -97,8 +97,8 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
               @for (style of casketStyles; track style) {
                 <button 
                   (click)="toggleStyle(style)"
-                  [class.bg-safs-gold]="selectedStyles().includes(style)"
-                  [class.text-black]="selectedStyles().includes(style)"
+                  [class.bg-safs-dark]="selectedStyles().includes(style)"
+                  [class.text-white]="selectedStyles().includes(style)"
                   [class.bg-white]="!selectedStyles().includes(style)"
                   [class.text-gray-600]="!selectedStyles().includes(style)"
                   class="px-4 py-3 rounded-xl text-base font-bold transition-all shadow-sm border border-gray-200 border-b-4 hover:brightness-95 active:border-b active:translate-y-1">
@@ -117,7 +117,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
               <button 
                 (click)="toggleFinish(finish)"
                 [class.ring-2]="selectedFinishes().includes(finish)"
-                [class.ring-safs-gold]="selectedFinishes().includes(finish)"
+                [class.ring-safs-dark]="selectedFinishes().includes(finish)"
                 [class.ring-offset-2]="selectedFinishes().includes(finish)"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white hover:bg-gray-100 transition-all text-base font-medium shadow-sm border border-gray-200 group">
                 <div [style.background-color]="getFinishColor(finish)" class="w-5 h-5 rounded-full border-2 border-gray-300 shadow-inner"></div>
@@ -199,8 +199,8 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                        @for (style of casketStyles; track style) {
                          <button
                            (click)="toggleStyle(style)"
-                           [class.bg-safs-gold]="selectedStyles().includes(style)"
-                           [class.text-black]="selectedStyles().includes(style)"
+                           [class.bg-safs-dark]="selectedStyles().includes(style)"
+                           [class.text-white]="selectedStyles().includes(style)"
                            [class.bg-white]="!selectedStyles().includes(style)"
                            [class.text-gray-600]="!selectedStyles().includes(style)"
                            class="px-3 py-2 rounded-lg text-sm font-bold transition-all shadow-sm border border-gray-200 border-b-3 hover:brightness-95 active:border-b active:translate-y-0.5">
@@ -219,7 +219,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                        <button
                          (click)="toggleFinish(finish)"
                          [class.ring-2]="selectedFinishes().includes(finish)"
-                         [class.ring-safs-gold]="selectedFinishes().includes(finish)"
+                         [class.ring-safs-dark]="selectedFinishes().includes(finish)"
                          [class.ring-offset-2]="selectedFinishes().includes(finish)"
                          class="flex items-center gap-3 px-3 py-3 rounded-lg bg-white hover:bg-gray-100 transition-all text-sm font-medium shadow-sm border border-gray-200 group">
                          <div [style.background-color]="getFinishColor(finish)" class="w-4 h-4 rounded-full border border-gray-300 shadow-inner"></div>
@@ -246,20 +246,20 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
          }
 
       <!-- Main Content Area (Right Split) -->
-      <div class="flex-1 h-full overflow-y-auto bg-gray-50 flex flex-col relative w-full">
+      <div class="flex-1 bg-gray-50 flex flex-col relative w-full">
         
         <!-- Header & Search -->
-        <div class="bg-white px-4 py-6 sm:px-6 sm:py-8 lg:px-16 lg:py-12 border-b border-gray-200 shadow-sm sticky top-0 z-20">
-          <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-8 items-center justify-between">
-            <div>
-              <h1 class="text-2xl sm:text-3xl lg:text-5xl font-bold text-safs-dark mb-1 sm:mb-2">Product Expo</h1>
-              <p class="text-gray-500 text-sm sm:text-base lg:text-lg">Tap on any product to view variations and details.</p>
+        <div class="bg-gradient-to-r from-safs-dark to-[#1A2F5A] px-4 py-8 sm:px-6 sm:py-10 lg:px-16 lg:py-12 border-b-[3px] border-safs-gold shadow-md relative z-20 flex-shrink-0">
+          <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-8 items-center justify-between relative z-10">
+            <div class="text-center lg:text-left">
+              <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 font-serif tracking-wide">Premium Catalog</h1>
+              <p class="text-safs-gold text-sm sm:text-base lg:text-lg font-medium tracking-wider uppercase">Explore our exclusive range of caskets & domes</p>
             </div>
             
             <!-- Search Bar -->
-            <div class="w-full lg:w-96 relative flex-shrink-0">
+            <div class="w-full lg:w-[400px] relative flex-shrink-0">
               <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-safs-dark/60">
                   <circle cx="11" cy="11" r="8"></circle>
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
@@ -269,10 +269,10 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                 placeholder="Search catalog..." 
                 (input)="onSearch($event)"
                 [value]="searchQuery()"
-                class="w-full pl-14 pr-12 py-5 rounded-2xl shadow-inner bg-gray-50 border border-gray-200 focus:bg-white focus:ring-4 focus:ring-safs-gold/20 focus:border-safs-gold outline-none transition-all text-gray-800 text-lg placeholder-gray-400 font-medium" />
+                class="w-full pl-12 pr-12 py-4 rounded-xl shadow-lg bg-white/95 border-2 border-transparent focus:bg-white focus:border-safs-gold outline-none transition-all text-safs-dark text-base placeholder-safs-dark/40 font-semibold" />
               @if (searchQuery()) {
-                <button (click)="clearSearch()" class="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-gray-600 active:scale-95">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button (click)="clearSearch()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-safs-dark/40 hover:text-safs-dark transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                   </svg>
@@ -360,13 +360,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                   
                   <div class="mt-auto">
                     <div class="flex items-center justify-between pt-4 border-t border-gray-50">
-                      @if (authService.isApproved() || authService.isAdmin()) {
-                        <span class="text-lg font-black text-safs-dark">Request Quote</span>
-                      } @else if (authService.isPending()) {
-                        <span class="text-sm text-yellow-600 italic font-bold">Awaiting Approval</span>
-                      } @else {
-                        <span class="text-sm text-safs-gold-dark font-bold">Login to Price</span>
-                      }
+                      <span class="text-lg font-black text-safs-dark">Request Quote</span>
 
                       <button (click)="$event.stopImmediatePropagation(); addToCart(product)" class="p-3 rounded-2xl bg-gray-50 text-safs-dark hover:bg-safs-gold hover:text-black transition-all shadow-sm group/btn border border-gray-200 hover:border-safs-gold active:scale-95" title="Add default to quote">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover/btn:scale-110 transition-transform"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
