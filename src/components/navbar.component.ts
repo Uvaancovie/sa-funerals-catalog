@@ -12,7 +12,7 @@ import { WishlistService } from '../services/wishlist.service';
      <header class="sticky top-0 z-50 bg-safs-dark/95 backdrop-blur border-b-2 border-safs-gold shadow-lg">
        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
          <a routerLink="/" class="flex items-center gap-3">
-           <img src="/_vercel/image?url=%2Fassets%2Flogo%2FOIP.webp&w=128&q=85&f=webp" alt="South African Funeral Supplies" class="h-16 sm:h-20 w-auto rounded-md" width="80" height="80" />
+           <img src="assets/logo/OIP.webp" alt="South African Funeral Supplies" class="h-16 sm:h-20 w-auto rounded-md" width="80" height="80" />
          </a>
 
          <button
@@ -38,13 +38,6 @@ import { WishlistService } from '../services/wishlist.service';
            >
              Full Catalogue
            </a>
-           <button
-             type="button"
-             (click)="logout()"
-             class="bg-safs-gold text-safs-dark px-6 py-2 rounded-lg hover:bg-safs-gold-light transition-colors font-bold"
-           >
-             Logout
-           </button>
          </nav>
        </div>
 
@@ -60,14 +53,6 @@ import { WishlistService } from '../services/wishlist.service';
              >
                Full Catalogue
              </a>
-
-             <button
-               type="button"
-               (click)="logout()"
-               class="w-full text-left py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
-             >
-               Logout
-             </button>
            </div>
          </nav>
        }

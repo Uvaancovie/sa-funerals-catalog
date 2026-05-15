@@ -47,10 +47,6 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                </button>
              }
            </div>
-        <div class="sticky top-0 bg-white z-20 pb-4 mb-4 border-b border-gray-100 hidden sm:block">
-          <h2 class="text-2xl font-bold text-safs-dark">Filters</h2>
-        </div>
-
         <!-- Main Category Filter -->
         <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100">
           <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm flex items-center gap-2">
@@ -72,21 +68,6 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
               </button>
             }
           </div>
-        </div>
-
-        <!-- SAFS Collection Toggle -->
-        <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Collections</h3>
-          <button
-            (click)="show2026Only.set(!show2026Only())"
-            [class.bg-safs-dark]="show2026Only()"
-            [class.text-white]="show2026Only()"
-            [class.bg-white]="!show2026Only()"
-            [class.text-gray-600]="!show2026Only()"
-            class="w-full text-left px-5 py-4 rounded-xl font-bold transition-all text-lg flex items-center justify-between shadow-sm border border-gray-200">
-            <span>SAFS 2026</span>
-            <span class="text-xs px-3 py-1 rounded-full font-black uppercase tracking-wider" [class.bg-white]="show2026Only()" [class.text-safs-dark]="show2026Only()" [class.bg-gray-200]="!show2026Only()">NEW</span>
-          </button>
         </div>
 
         <!-- Product Style Filter -->
@@ -174,21 +155,6 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                        </button>
                      }
                    </div>
-                 </div>
-
-                 <!-- SAFS Collection Toggle -->
-                 <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-100">
-                   <h3 class="font-bold text-safs-dark mb-3 uppercase tracking-wider text-sm">Collections</h3>
-                   <button
-                     (click)="show2026Only.set(!show2026Only())"
-                     [class.bg-safs-dark]="show2026Only()"
-                     [class.text-white]="show2026Only()"
-                     [class.bg-white]="!show2026Only()"
-                     [class.text-gray-600]="!show2026Only()"
-                     class="w-full text-left px-4 py-3 rounded-lg font-bold transition-all text-base flex items-center justify-between shadow-sm border border-gray-200">
-                     <span>SAFS 2026</span>
-                     <span class="text-xs px-2 py-1 rounded-full font-black uppercase tracking-wider" [class.bg-white]="show2026Only()" [class.text-safs-dark]="show2026Only()" [class.bg-gray-200]="!show2026Only()">NEW</span>
-                   </button>
                  </div>
 
                  <!-- Product Style Filter -->
@@ -643,7 +609,6 @@ export class CatalogComponent implements OnInit {
     'Cherry', 'Kiaat', 'Teak', 'Walnut', 'White', 'Ash', 'Black', 'Brown', 'Green', 'Hemlock',
     'Mahogany', 'Pecan', 'Rose', 'Gold', 'Red', 'Imbuia', 'Purple', 'Dark Cherry'
   ];
-  show2026Only = signal(false);
 
   // Show style filter for casket-type categories
   showStyleFilter = computed(() => {
@@ -689,11 +654,6 @@ export class CatalogComponent implements OnInit {
       );
     }
 
-    // 5. SAFS 2026 Collection Filter
-    if (this.show2026Only()) {
-      products = products.filter(p => !p.id.startsWith('ricardo-'));
-    }
-
     return products;
   });
 
@@ -736,7 +696,6 @@ export class CatalogComponent implements OnInit {
     if (this.selectedStyles().length > 0) count++;
     if (this.selectedFinishes().length > 0) count++;
     if (this.activeFilter() !== 'all') count++;
-    if (this.show2026Only()) count++;
     return count;
   });
 
@@ -762,7 +721,6 @@ export class CatalogComponent implements OnInit {
     this.activeFilter.set('all');
     this.selectedStyles.set([]);
     this.selectedFinishes.set([]);
-    this.show2026Only.set(false);
   }
 
   addToCart(product: Product) {

@@ -18,10 +18,10 @@ import { GoogleReviewsComponent } from './google-reviews.component';
               Servicing the funeral industry since 1998. Committed to quality, value, service, and innovation.
             </p>
             <div class="flex gap-4 mb-8">
-              <!-- Social Placeholders -->
-                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold transition-colors cursor-pointer">
+              <!-- Social Links -->
+                <a href="https://www.facebook.com/people/South-African-Funeral-Supplies/100069383543820/" target="_blank" rel="noopener noreferrer" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold transition-colors cursor-pointer">
                  <span class="font-bold text-xs">FB</span>
-              </div>
+              </a>
                 <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold transition-colors cursor-pointer">
                  <span class="font-bold text-xs">LI</span>
               </div>
@@ -38,8 +38,6 @@ import { GoogleReviewsComponent } from './google-reviews.component';
             <ul class="space-y-3 text-sm text-gray-300">
               <li><a routerLink="/" class="hover:text-safs-gold transition-colors">Home</a></li>
               <li><a routerLink="/catalog" class="hover:text-safs-gold transition-colors">Full Catalogue</a></li>
-              <li><a routerLink="/about" class="hover:text-safs-gold transition-colors">Corporate Strategy</a></li>
-              <li><a routerLink="/contact" class="hover:text-safs-gold transition-colors">Branch Locations</a></li>
             </ul>
           </div>
 
@@ -68,7 +66,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
               </li>
               <li class="flex items-center gap-3">
                 <svg class="w-5 h-5 text-safs-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                <span>hello&#64;safuneral.co.za</span>
+                <span>sales&#64;safuneral.co.za</span>
               </li>
             </ul>
           </div>
