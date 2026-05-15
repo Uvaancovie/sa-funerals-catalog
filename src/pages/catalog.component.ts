@@ -56,7 +56,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
           <div class="space-y-2">
             @for (cat of categoryOptions; track cat.value) {
               <button 
-                (click)="activeFilter.set(cat.value)"
+                (click)="selectCategory(cat.value)"
                 [class.bg-safs-dark]="activeFilter() === cat.value"
                 [class.text-white]="activeFilter() === cat.value"
                 [class.text-gray-600]="activeFilter() !== cat.value"
@@ -252,7 +252,31 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
         <app-lead-capture></app-lead-capture>
         
          <!-- Product Grid Area -->
-         <div class="p-4 sm:p-8 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32">
+         <div class="p-4 sm:p-8 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32 min-h-[100vh]" id="product-grid">
+
+           <!-- Featured Products Section -->
+           @if (!hasActiveFilters()) {
+             <div class="mb-12 animate-fade-in" aria-label="Featured Products">
+               <h2 class="text-2xl font-bold text-safs-dark mb-6">
+                 Featured Products
+               </h2>
+               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                 @for (product of featuredProducts(); track product.id) {
+                   <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all group border border-gray-100 cursor-pointer overflow-hidden flex flex-row items-center p-3" [routerLink]="['/product', product.id]">
+                     <div class="w-20 h-20 bg-gray-50 rounded-xl overflow-hidden shrink-0">
+                       <app-optimized-image [src]="getOptimizedProductImagePath(product)" [alt]="product.name" aspectRatio="1/1"></app-optimized-image>
+                     </div>
+                     <div class="ml-4 flex-1">
+                       <div class="text-[10px] font-black text-safs-gold-dark uppercase tracking-widest">{{ getCategoryDisplayName(product.category) }}</div>
+                       <h3 class="text-sm font-bold text-safs-dark group-hover:text-safs-gold-dark leading-tight mt-1">{{ product.name }}</h3>
+                     </div>
+                   </div>
+                 }
+               </div>
+             </div>
+             
+             <hr class="border-gray-100 mb-10">
+           }
 
            <!-- Active Filters & Count (Desktop) -->
            <div class="hidden lg:flex justify-between items-center gap-4 mb-8">
@@ -657,6 +681,18 @@ export class CatalogComponent implements OnInit {
     return products;
   });
 
+  featuredProducts = computed(() => {
+    const products = this.store.products();
+    const featured = products.filter(p => p.featured);
+    if (featured.length >= 4) return featured.slice(0, 4);
+    
+    const popularIds = ['top-end-coffin', 'royal-dome', 'senator-coffin', 'casket-racking-system'];
+    const popular = products.filter(p => popularIds.includes(p.id));
+    
+    if (popular.length >= 4) return popular.slice(0, 4);
+    return products.slice(0, 4); 
+  });
+
   private matchesSearch(p: Product, query: string): boolean {
     return p.name.toLowerCase().includes(query)
       || p.category.toLowerCase().includes(query)
@@ -673,12 +709,19 @@ export class CatalogComponent implements OnInit {
     this.selectedStyles.update(curr =>
       curr.includes(style) ? curr.filter(s => s !== style) : [...curr, style]
     );
+    this.scrollToResults();
   }
 
   toggleFinish(finish: string) {
     this.selectedFinishes.update(curr =>
       curr.includes(finish) ? curr.filter(f => f !== finish) : [...curr, finish]
     );
+    this.scrollToResults();
+  }
+
+  selectCategory(cat: string) {
+    this.activeFilter.set(cat);
+    this.scrollToResults();
   }
 
   getCategoryDisplayName(category: string): string {
@@ -714,6 +757,21 @@ export class CatalogComponent implements OnInit {
 
   clearSearch() {
     this.searchQuery.set('');
+  }
+
+  quickSearch(query: string) {
+    this.searchQuery.set(query);
+    this.scrollToResults();
+  }
+
+  scrollToResults() {
+    setTimeout(() => {
+      const grid = document.getElementById('product-grid');
+      if (grid) {
+        const y = grid.getBoundingClientRect().top + window.scrollY - 120;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 50);
   }
 
   resetFilters() {
