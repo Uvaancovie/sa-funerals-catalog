@@ -86,13 +86,42 @@ export class StoreService {
         const variants: string[] = Array.isArray(p.variants) ? p.variants.map(String) : [];
         const featureList = variants;
 
-        const colorVariations = JSON.stringify(
-          (variants.length > 0 ? variants : (imageList.length > 0 ? ['Standard'] : []))
-            .map((color) => ({
-              color,
-              images: imageList.map((u) => this.normalizeImageUrl(String(u))),
-            }))
-        );
+        // Use pre-built colorVariations from JSON if available, otherwise generate from variants
+        let colorVariations: string;
+        if (typeof p.colorVariations === 'string') {
+          // Already a JSON string, use it directly
+          try {
+            const parsed = JSON.parse(p.colorVariations);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              // Normalize image URLs in the color variations
+              const normalized = parsed.map((cv: any) => ({
+                color: cv.color,
+                images: Array.isArray(cv.images) ? cv.images.map((u: string) => this.normalizeImageUrl(u)) : []
+              }));
+              colorVariations = JSON.stringify(normalized);
+            } else {
+              throw new Error('Invalid colorVariations format');
+            }
+          } catch (e) {
+            // Fallback to generating from variants
+            colorVariations = JSON.stringify(
+              (variants.length > 0 ? variants : (imageList.length > 0 ? ['Standard'] : []))
+                .map((color) => ({
+                  color,
+                  images: imageList.map((u) => this.normalizeImageUrl(String(u))),
+                }))
+            );
+          }
+        } else {
+          // Generate from variants as before
+          colorVariations = JSON.stringify(
+            (variants.length > 0 ? variants : (imageList.length > 0 ? ['Standard'] : []))
+              .map((color) => ({
+                color,
+                images: imageList.map((u) => this.normalizeImageUrl(String(u))),
+              }))
+          );
+        }
 
         return {
           productId: 0,

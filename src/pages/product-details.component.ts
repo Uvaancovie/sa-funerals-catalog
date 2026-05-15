@@ -166,7 +166,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                       <button
                         type="button"
                         class="px-4 py-3 rounded-xl font-bold border transition-all shadow-sm"
-                        (click)="selectedVariant.set(v)"
+                        (click)="selectVariant(v)"
                         [class.bg-safs-dark]="selectedVariant() === v"
                         [class.text-white]="selectedVariant() === v"
                         [class.bg-white]="selectedVariant() !== v"
@@ -310,6 +310,16 @@ export class ProductDetailsComponent {
     }
     // Reset image selection; computed `mainImage` will fall back to first image for the color.
     this.selectedImage.set('');
+  }
+
+  selectVariant(variant: string) {
+    this.selectedVariant.set(variant);
+    // If the variant matches a color/finish that has images, sync the color selection
+    // to display the corresponding image gallery.
+    if (this.colors().some(c => c.color === variant)) {
+      this.selectedColor.set(variant);
+      this.selectedImage.set('');
+    }
   }
 
   toggleWishlist(product: Product) {

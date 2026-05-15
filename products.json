@@ -9,7 +9,9 @@
       "Teak",
       "Kiaat"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/4-corner-figurine-casket/1-cherry-teak-kiaat.png\"]},{\"color\":\"Teak\",\"images\":[\"assets/4-corner-figurine-casket/1-cherry-teak-kiaat.png\"]},{\"color\":\"Kiaat\",\"images\":[\"assets/4-corner-figurine-casket/1-cherry-teak-kiaat.png\"]}]",
+    "images": "[\"assets/4-corner-figurine-casket/1-cherry-teak-kiaat.png\"]"
   },
   {
     "id": "4-corner-woodturning-casket",
@@ -21,7 +23,9 @@
       "Teak",
       "Kiaat"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/4-corner-woodturning-casket/1-cherry-teak-kiaat.png\"]},{\"color\":\"Teak\",\"images\":[\"assets/4-corner-woodturning-casket/1-cherry-teak-kiaat.png\"]},{\"color\":\"Kiaat\",\"images\":[\"assets/4-corner-woodturning-casket/1-cherry-teak-kiaat.png\"]}]",
+    "images": "[\"assets/4-corner-woodturning-casket/1-cherry-teak-kiaat.png\"]"
   },
   {
     "id": "4-ft-casket",
@@ -33,7 +37,9 @@
       "Batman",
       "Spiderman"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Minniemouse\",\"images\":[\"assets/4-ft-casket/1-minniemouse-batman-spiderman.png\"]},{\"color\":\"Batman\",\"images\":[\"assets/4-ft-casket/1-minniemouse-batman-spiderman.png\"]},{\"color\":\"Spiderman\",\"images\":[\"assets/4-ft-casket/1-minniemouse-batman-spiderman.png\"]}]",
+    "images": "[\"assets/4-ft-casket/1-minniemouse-batman-spiderman.png\"]"
   },
   {
     "id": "5-ft-casket",
@@ -43,7 +49,9 @@
     "variants": [
       "Walnut"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Walnut\",\"images\":[\"assets/5-ft-casket/1-walnut.png\"]}]",
+    "images": "[\"assets/5-ft-casket/1-walnut.png\"]"
   },
   {
     "id": "alligator-casket",
@@ -54,7 +62,9 @@
       "Dark",
       "Cherry"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Dark\",\"images\":[\"assets/alligator-casket/1-dark-cherry.png\"]},{\"color\":\"Cherry\",\"images\":[\"assets/alligator-casket/1-dark-cherry.png\"]}]",
+    "images": "[\"assets/alligator-casket/1-dark-cherry.png\"]"
   },
   {
     "id": "balmoral-casket",
@@ -64,7 +74,9 @@
     "variants": [
       "Cherry"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/balmoral-casket/1-cherry.png\"]}]",
+    "images": "[\"assets/balmoral-casket/1-cherry.png\"]"
   },
   {
     "id": "body-box",
@@ -74,7 +86,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/body-box/1.png\"]}]",
+    "images": "[\"assets/body-box/1.png\"]"
   },
   {
     "id": "casket-racking-system",
@@ -84,7 +98,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/casket-racking-system/1.png\"]}]",
+    "images": "[\"assets/casket-racking-system/1.png\"]"
   },
   {
     "id": "church-trolley",
@@ -94,7 +110,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/church-trolley/1.png\"]}]",
+    "images": "[\"assets/church-trolley/1.png\"]"
   },
   {
     "id": "coffin-stand",
@@ -104,7 +122,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/coffin-stand/1.png\"]}]",
+    "images": "[\"assets/coffin-stand/1.png\"]"
   },
   {
     "id": "emperor-casket",
@@ -115,7 +135,9 @@
       "Dark",
       "Cherry"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Dark\",\"images\":[\"assets/emperor-casket/1-dark-cherry.png\"]},{\"color\":\"Cherry\",\"images\":[\"assets/emperor-casket/1-dark-cherry.png\"]}]",
+    "images": "[\"assets/emperor-casket/1-dark-cherry.png\"]"
   },
   {
     "id": "fibre-glass-wash-table",
@@ -125,7 +147,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/fibre-glass-wash-table/1.png\"]}]",
+    "images": "[\"assets/fibre-glass-wash-table/1.png\"]"
   },
   {
     "id": "grass-matts",
@@ -135,7 +159,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/grass-matts/1.png\"]}]",
+    "images": "[\"assets/grass-matts/1.png\"]"
   },
   {
     "id": "harvard-casket",
@@ -146,7 +172,9 @@
       "White",
       "Ash"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"White\",\"images\":[\"assets/harvard-casket/1-white-ash.png\"]},{\"color\":\"Ash\",\"images\":[\"assets/harvard-casket/1-white-ash.png\"]}]",
+    "images": "[\"assets/harvard-casket/1-white-ash.png\"]"
   },
   {
     "id": "high-stand",
@@ -156,7 +184,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/high-stand/1.png\"]}]",
+    "images": "[\"assets/high-stand/1.png\"]"
   },
   {
     "id": "lapita-casket",
@@ -166,7 +196,9 @@
     "variants": [
       "Cherry"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/lapita-casket/1-cherry.png\"]}]",
+    "images": "[\"assets/lapita-casket/1-cherry.png\"]"
   },
   {
     "id": "lincoln-dome-casket",
@@ -176,7 +208,9 @@
     "variants": [
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"White\",\"images\":[\"assets/lincoln-dome-casket/1-white.png\"]}]",
+    "images": "[\"assets/lincoln-dome-casket/1-white.png\"]"
   },
   {
     "id": "lowering-device",
@@ -186,7 +220,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/lowering-device/1.png\"]}]",
+    "images": "[\"assets/lowering-device/1.png\"]"
   },
   {
     "id": "maroon-tent",
@@ -196,7 +232,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/maroon-tent/1.png\"]}]",
+    "images": "[\"assets/maroon-tent/1.png\"]"
   },
   {
     "id": "nguni-casket",
@@ -208,7 +246,9 @@
       "Brown",
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Black\",\"images\":[\"assets/nguni-casket/1-black-brown-white.png\"]},{\"color\":\"Brown\",\"images\":[\"assets/nguni-casket/1-black-brown-white.png\"]},{\"color\":\"White\",\"images\":[\"assets/nguni-casket/1-black-brown-white.png\"]}]",
+    "images": "[\"assets/nguni-casket/1-black-brown-white.png\"]"
   },
   {
     "id": "ostrich-casket",
@@ -218,7 +258,9 @@
     "variants": [
       "Brown"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Brown\",\"images\":[\"assets/ostrich-casket/1-brown.png\"]}]",
+    "images": "[\"assets/ostrich-casket/1-brown.png\"]"
   },
   {
     "id": "oxford-casket",
@@ -228,7 +270,9 @@
     "variants": [
       "Cherry"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/oxford-casket/1-cherry.png\"]}]",
+    "images": "[\"assets/oxford-casket/1-cherry.png\"]"
   },
   {
     "id": "porthole-casket",
@@ -240,7 +284,9 @@
       "Cherry",
       "Kiaat"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Walnut\",\"images\":[\"assets/porthole-casket/1-walnut-cherry-kiaat.png\"]},{\"color\":\"Cherry\",\"images\":[\"assets/porthole-casket/1-walnut-cherry-kiaat.png\"]},{\"color\":\"Kiaat\",\"images\":[\"assets/porthole-casket/1-walnut-cherry-kiaat.png\"]}]",
+    "images": "[\"assets/porthole-casket/1-walnut-cherry-kiaat.png\"]"
   },
   {
     "id": "princeton-dome-casket",
@@ -253,7 +299,9 @@
       "Walnut",
       "Kiaat"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/princeton-dome-casket/1-cherry-white-walnut-kiaat.png\"]},{\"color\":\"White\",\"images\":[\"assets/princeton-dome-casket/1-cherry-white-walnut-kiaat.png\"]},{\"color\":\"Walnut\",\"images\":[\"assets/princeton-dome-casket/1-cherry-white-walnut-kiaat.png\"]},{\"color\":\"Kiaat\",\"images\":[\"assets/princeton-dome-casket/1-cherry-white-walnut-kiaat.png\"]}]",
+    "images": "[\"assets/princeton-dome-casket/1-cherry-white-walnut-kiaat.png\"]"
   },
   {
     "id": "raised-halfview-casket",
@@ -266,7 +314,9 @@
       "Walnut",
       "Kiaat"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/raised-halfview-casket/1-cherry-white-walnut-kiaat.png\"]},{\"color\":\"White\",\"images\":[\"assets/raised-halfview-casket/1-cherry-white-walnut-kiaat.png\"]},{\"color\":\"Walnut\",\"images\":[\"assets/raised-halfview-casket/1-cherry-white-walnut-kiaat.png\"]},{\"color\":\"Kiaat\",\"images\":[\"assets/raised-halfview-casket/1-cherry-white-walnut-kiaat.png\"]}]",
+    "images": "[\"assets/raised-halfview-casket/1-cherry-white-walnut-kiaat.png\"]"
   },
   {
     "id": "royal-dome-casket",
@@ -278,7 +328,9 @@
       "Cherry",
       "Hemlock"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Kiaat\",\"images\":[\"assets/royal-dome-casket/1-kiaat-cherry-hemlock.png\"]},{\"color\":\"Cherry\",\"images\":[\"assets/royal-dome-casket/1-kiaat-cherry-hemlock.png\"]},{\"color\":\"Hemlock\",\"images\":[\"assets/royal-dome-casket/1-kiaat-cherry-hemlock.png\"]}]",
+    "images": "[\"assets/royal-dome-casket/1-kiaat-cherry-hemlock.png\"]"
   },
   {
     "id": "senator-casket",
@@ -290,7 +342,9 @@
       "Cherry",
       "Green"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Dark\",\"images\":[\"assets/senator-casket/1-dark-cherry-green.png\"]},{\"color\":\"Cherry\",\"images\":[\"assets/senator-casket/1-dark-cherry-green.png\"]},{\"color\":\"Green\",\"images\":[\"assets/senator-casket/1-dark-cherry-green.png\"]}]",
+    "images": "[\"assets/senator-casket/1-dark-cherry-green.png\"]"
   },
   {
     "id": "south-african-stretcher",
@@ -300,7 +354,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/south-african-stretcher/1.png\"]}]",
+    "images": "[\"assets/south-african-stretcher/1.png\"]"
   },
   {
     "id": "standard-dome-casket",
@@ -312,7 +368,9 @@
       "Cherry",
       "Kiaat"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Hemlock\",\"images\":[\"assets/standard-dome-casket/1-hemlock-cherry-kiaat.png\"]},{\"color\":\"Cherry\",\"images\":[\"assets/standard-dome-casket/1-hemlock-cherry-kiaat.png\"]},{\"color\":\"Kiaat\",\"images\":[\"assets/standard-dome-casket/1-hemlock-cherry-kiaat.png\"]}]",
+    "images": "[\"assets/standard-dome-casket/1-hemlock-cherry-kiaat.png\"]"
   },
   {
     "id": "ricardo-2-tier-oversize",
@@ -323,7 +381,9 @@
       "Kiaat",
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Kiaat\",\"images\":[\"assets/Ricardo Caskets/2 Tier Oversize Kiaat.jpg\"]},{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/2 Tier Oversize Kiaat.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/2 Tier Oversize Kiaat.jpg\"]"
   },
   {
     "id": "ricardo-2ft-raised-halfview",
@@ -333,7 +393,9 @@
     "variants": [
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/2FT Raised Halfview White.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/2FT Raised Halfview White.jpg\"]"
   },
   {
     "id": "ricardo-3ft-raised-halfview",
@@ -343,7 +405,9 @@
     "variants": [
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/3FT Raised Halfview White.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/3FT Raised Halfview White.jpg\"]"
   },
   {
     "id": "ricardo-4ft-raised-halfview",
@@ -353,7 +417,9 @@
     "variants": [
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/4FT Raised Halfview White.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/4FT Raised Halfview White.jpg\"]"
   },
   {
     "id": "ricardo-4-corner-woodturning",
@@ -363,7 +429,9 @@
     "variants": [
       "Teak"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Teak\",\"images\":[\"assets/Ricardo Caskets/4 Corner Woodturning Teak.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/4 Corner Woodturning Teak.jpg\"]"
   },
   {
     "id": "ricardo-c-coffin",
@@ -373,7 +441,9 @@
     "variants": [
       "Cherry"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/Ricardo Caskets/C-Coffin Cherry Closed.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/C-Coffin Cherry Closed.jpg\"]"
   },
   {
     "id": "ricardo-c-corner-coffin",
@@ -383,7 +453,9 @@
     "variants": [
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/C-Corner Coffin White.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/C-Corner Coffin White.jpg\"]"
   },
   {
     "id": "ricardo-classic-coffin",
@@ -396,7 +468,9 @@
       "Pecan",
       "Pecan Rose"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Mahogany\",\"images\":[\"assets/Ricardo Caskets/Classic Coffin Mahogany.jpg\"]},{\"color\":\"Mahogany Rose\",\"images\":[\"assets/Ricardo Caskets/Classic Coffin Mahogany.jpg\"]},{\"color\":\"Pecan\",\"images\":[\"assets/Ricardo Caskets/Classic Coffin Mahogany.jpg\"]},{\"color\":\"Pecan Rose\",\"images\":[\"assets/Ricardo Caskets/Classic Coffin Mahogany.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Classic Coffin Mahogany.jpg\"]"
   },
   {
     "id": "ricardo-flatlid-coffin",
@@ -407,7 +481,9 @@
       "Kiaat",
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Kiaat\",\"images\":[\"assets/Ricardo Caskets/Flatlid Coffin Kiaat.jpg\"]},{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/Flatlid Coffin Kiaat.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Flatlid Coffin Kiaat.jpg\"]"
   },
   {
     "id": "ricardo-harvard-coffin",
@@ -418,7 +494,9 @@
       "Cherry",
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/Ricardo Caskets/Harvard Coffin Cherry Closed.jpg\"]},{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/Harvard Coffin Cherry Closed.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Harvard Coffin Cherry Closed.jpg\"]"
   },
   {
     "id": "ricardo-lincoln-coffin",
@@ -428,7 +506,9 @@
     "variants": [
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/Lincoln Coffin White Closed.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Lincoln Coffin White Closed.jpg\"]"
   },
   {
     "id": "ricardo-oxford",
@@ -438,7 +518,9 @@
     "variants": [
       "Cherry"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/Ricardo Caskets/Oxford Cherry Closed.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Oxford Cherry Closed.jpg\"]"
   },
   {
     "id": "ricardo-pongee",
@@ -448,7 +530,9 @@
     "variants": [
       "Kiaat"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Kiaat\",\"images\":[\"assets/Ricardo Caskets/Pongee Kiaat.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Pongee Kiaat.jpg\"]"
   },
   {
     "id": "ricardo-prestige-coffin",
@@ -460,7 +544,9 @@
       "Pecan",
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Mahogany\",\"images\":[\"assets/Ricardo Caskets/Prestige Coffin Mahogany Closed.jpg\"]},{\"color\":\"Pecan\",\"images\":[\"assets/Ricardo Caskets/Prestige Coffin Mahogany Closed.jpg\"]},{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/Prestige Coffin Mahogany Closed.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Prestige Coffin Mahogany Closed.jpg\"]"
   },
   {
     "id": "ricardo-redwood-coffin",
@@ -470,7 +556,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Caskets/Redwood Coffin.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Redwood Coffin.jpg\"]"
   },
   {
     "id": "ricardo-repatriation-casket",
@@ -480,7 +568,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Caskets/Repatriation Casket Closed.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Repatriation Casket Closed.jpg\"]"
   },
   {
     "id": "ricardo-senator-coffin",
@@ -490,7 +580,9 @@
     "variants": [
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/Senator Coffin White Closed.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Senator Coffin White Closed.jpg\"]"
   },
   {
     "id": "ricardo-solid-teak-casket",
@@ -500,7 +592,9 @@
     "variants": [
       "Teak"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Teak\",\"images\":[\"assets/Ricardo Caskets/Solid Teak Casket Closed.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Solid Teak Casket Closed.jpg\"]"
   },
   {
     "id": "ricardo-top-end-coffin",
@@ -512,7 +606,9 @@
       "Kiaat",
       "White"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"assets/Ricardo Caskets/Top End Coffin Cherry.jpg\"]},{\"color\":\"Kiaat\",\"images\":[\"assets/Ricardo Caskets/Top End Coffin Cherry.jpg\"]},{\"color\":\"White\",\"images\":[\"assets/Ricardo Caskets/Top End Coffin Cherry.jpg\"]}]",
+    "images": "[\"assets/Ricardo Caskets/Top End Coffin Cherry.jpg\"]"
   },
   {
     "id": "ricardo-1-man-stretcher",
@@ -522,7 +618,9 @@
     "variants": [
       "Red"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Red\",\"images\":[\"assets/Ricardo Equipment/1 Man Stretcher Red.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/1 Man Stretcher Red.jpg\"]"
   },
   {
     "id": "ricardo-body-box",
@@ -532,7 +630,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Equipment/Body Box.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Body Box.jpg\"]"
   },
   {
     "id": "ricardo-casket-racking-system",
@@ -542,7 +642,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Equipment/Casket Racking System.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Casket Racking System.jpg\"]"
   },
   {
     "id": "ricardo-coffin-stand",
@@ -552,7 +654,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Equipment/Coffin Stand.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Coffin Stand.jpg\"]"
   },
   {
     "id": "ricardo-executive-church-trolley",
@@ -562,7 +666,9 @@
     "variants": [
       "Gold"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Gold\",\"images\":[\"assets/Ricardo Equipment/Executive Church Trolley Gold.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Executive Church Trolley Gold.jpg\"]"
   },
   {
     "id": "ricardo-grassmats",
@@ -572,7 +678,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Equipment/Grassmats.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Grassmats.jpg\"]"
   },
   {
     "id": "ricardo-green-tent",
@@ -582,7 +690,9 @@
     "variants": [
       "3x6"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"3x6\",\"images\":[\"assets/Ricardo Equipment/Green Tent 3x6.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Green Tent 3x6.jpg\"]"
   },
   {
     "id": "ricardo-head-block",
@@ -592,7 +702,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Equipment/Head Block.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Head Block.jpg\"]"
   },
   {
     "id": "ricardo-lowering-device-set",
@@ -602,7 +714,9 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Equipment/Lowering Device Set.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Lowering Device Set.jpg\"]"
   },
   {
     "id": "ricardo-tent-grassmat-lowdev-set",
@@ -612,6 +726,8 @@
     "variants": [
       "Standard"
     ],
-    "price": 0
+    "price": 0,
+    "colorVariations": "[{\"color\":\"Standard\",\"images\":[\"assets/Ricardo Equipment/Tent,Grassmat & Lowdev Set.jpg\"]}]",
+    "images": "[\"assets/Ricardo Equipment/Tent,Grassmat & Lowdev Set.jpg\"]"
   }
 ]
