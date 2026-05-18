@@ -713,14 +713,14 @@
     "images": [
       "SAFS IMAGES/Executive Domes/Lapita - Cherry (2).jpg",
       "SAFS IMAGES/Executive Domes/Lapita - Cherry.jpg",
-      "SAFS IMAGES/Executive Domes/Lapita Cherry.jpg"
+      "SAFS IMAGES/Executive Domes/Lapita - Cherry.jpg"
     ],
     "image": "SAFS IMAGES/Executive Domes/Lapita - Cherry.jpg",
     "variants": [
       "Cherry"
     ],
     "price": 0,
-    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"SAFS IMAGES/Executive Domes/Lapita - Cherry (2).jpg\",\"SAFS IMAGES/Executive Domes/Lapita - Cherry.jpg\",\"SAFS IMAGES/Executive Domes/Lapita Cherry.jpg\"]}]"
+    "colorVariations": "[{\"color\":\"Cherry\",\"images\":[\"SAFS IMAGES/Executive Domes/Lapita - Cherry (2).jpg\",\"SAFS IMAGES/Executive Domes/Lapita - Cherry.jpg\",\"SAFS IMAGES/Executive Domes/Lapita - Cherry.jpg\"]}]"
   },
   {
     "id": "lincoln-dome",

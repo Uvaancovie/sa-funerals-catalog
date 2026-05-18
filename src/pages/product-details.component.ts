@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { WishlistService } from '../services/wishlist.service';
 import { Product, StoreService } from '../services/store.service';
@@ -43,15 +44,26 @@ import { ImageOptimizationService } from '../services/image-optimization.service
               </div>
 
                <div class="p-4 sm:p-6">
-                 <div class="rounded-2xl bg-gray-50 overflow-hidden h-[360px] sm:h-[420px]">
-                   <app-optimized-image
-                     [src]="getOptimizedMainImage()"
-                     [alt]="product()!.name"
-                     [aspectRatio]="getProductDetailAspectRatio()"
-                     loading="eager"
-                     fetchpriority="high"
-                     containerClass="object-contain"
-                   ></app-optimized-image>
+                 <div
+                   class="relative rounded-2xl bg-gray-50 overflow-hidden h-[360px] sm:h-[420px] cursor-crosshair"
+                   (mousemove)="updateZoomPosition($event)"
+                   (mouseenter)="isZoomed.set(true)"
+                   (mouseleave)="isZoomed.set(false)"
+                 >
+                   <div
+                     class="w-full h-full transition-transform duration-200 ease-out"
+                     [style.transform-origin]="zoomOrigin()"
+                     [class.scale-150]="isZoomed()"
+                   >
+                     <app-optimized-image
+                       [src]="getOptimizedMainImage()"
+                       [alt]="product()!.name"
+                       [aspectRatio]="getProductDetailAspectRatio()"
+                       loading="eager"
+                       fetchpriority="high"
+                       containerClass="object-contain"
+                     ></app-optimized-image>
+                   </div>
                  </div>
 
                  @if (activeThumbnails().length > 1) {
@@ -71,30 +83,6 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                  }
               </div>
 
-               <!-- Mobile Wishlist -->
-               <div class="px-4 sm:px-6 pb-6 lg:hidden">
-                 <button
-                   type="button"
-                   class="w-full py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-all shadow-sm font-semibold text-gray-700 flex items-center justify-center gap-2"
-                   (click)="toggleWishlist(product()!)"
-                   [disabled]="!authService.isAuthenticated()"
-                   [class.opacity-60]="!authService.isAuthenticated()"
-                 >
-                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                     [attr.fill]="wishlistActive() ? 'currentColor' : 'none'"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                     <path
-                       d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                     ></path>
-                   </svg>
-                   {{ wishlistActive() ? 'Remove from wishlist' : 'Add to wishlist' }}
-                 </button>
-                 @if (!authService.isAuthenticated()) {
-                   <div class="text-xs text-gray-500 mt-2 text-center">
-                     Login to save items.
-                   </div>
-                 }
-               </div>
             </div>
 
             <!-- Details / options -->
@@ -109,23 +97,6 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                   </p>
                 </div>
 
-                <!-- Desktop Wishlist -->
-                <button
-                  type="button"
-                  class="hidden lg:inline-flex items-center justify-center w-12 h-12 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
-                  (click)="toggleWishlist(product()!)"
-                  [disabled]="!authService.isAuthenticated()"
-                  [class.opacity-60]="!authService.isAuthenticated()"
-                  aria-label="Toggle wishlist"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
-                    [attr.fill]="wishlistActive() ? 'currentColor' : 'none'"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                    ></path>
-                  </svg>
-                </button>
               </div>
 
               <!-- Color/Finish selector -->
@@ -205,12 +176,74 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                <!-- Actions (Add to Quote Removed) -->
             </div>
           </div>
+
+          @if (relatedProducts().length > 0) {
+            <div
+              class="mt-16 bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8"
+              (mouseenter)="pauseCarousel()"
+              (mouseleave)="resumeCarousel()"
+            >
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-safs-dark">More in {{ product()!.category }}</h2>
+                <div class="flex gap-2">
+                  <button
+                    type="button"
+                    (click)="prevRelated()"
+                    class="p-2 rounded-full border border-gray-200 hover:bg-gray-50 transition-colors"
+                    aria-label="Previous related products"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m15 18-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    (click)="nextRelated()"
+                    class="p-2 rounded-full border border-gray-200 hover:bg-gray-50 transition-colors"
+                    aria-label="Next related products"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m9 18 6-6-6-6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="overflow-hidden relative">
+                <div
+                  class="flex transition-transform duration-500 ease-in-out gap-4"
+                  [style.transform]="'translateX(calc(-' + currentRelatedIndex() + ' * (100% / ' + getVisibleCards() + ')))'"
+                >
+                  @for (rp of relatedProducts(); track rp.id) {
+                    <a
+                      [routerLink]="['/product', rp.id]"
+                      class="shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 group border border-gray-100 rounded-2xl p-4 hover:border-safs-gold hover:shadow-md transition-all"
+                    >
+                      <div class="rounded-xl bg-gray-50 overflow-hidden mb-4">
+                        <app-optimized-image
+                          [src]="getOptimizedRelatedImage(rp)"
+                          [alt]="rp.name"
+                          aspectRatio="4/3"
+                          loading="lazy"
+                          containerClass="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        ></app-optimized-image>
+                      </div>
+                      <h3 class="font-bold text-safs-dark truncate">{{ rp.name }}</h3>
+                      <p class="text-sm text-gray-500 mt-1 line-clamp-2">{{ rp.description || 'View details' }}</p>
+                    </a>
+                  }
+                </div>
+              </div>
+            </div>
+          }
         }
       </div>
     </div>
   `,
 })
-export class ProductDetailsComponent {
+export class ProductDetailsComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private store = inject(StoreService);
   authService = inject(AuthService);
@@ -222,7 +255,16 @@ export class ProductDetailsComponent {
   selectedVariant = signal<string>('Standard');
   selectedImage = signal<string>('');
 
-  productId = computed(() => this.route.snapshot.paramMap.get('id') ?? '');
+  // Zoom state
+  isZoomed = signal(false);
+  zoomOrigin = signal('center center');
+
+  // Carousel state
+  currentRelatedIndex = signal(0);
+  private carouselInterval: ReturnType<typeof setInterval> | null = null;
+
+  productId = signal('');
+  private routeSubscription: Subscription | null = null;
 
   product = computed<Product | null>(() => {
     const id = this.productId();
@@ -277,13 +319,28 @@ export class ProductDetailsComponent {
     return this.wishlistService.isInWishlist(p.id);
   });
 
+  relatedProducts = computed(() => {
+    const currentProduct = this.product();
+    if (!currentProduct) return [];
+
+    return this.store.products()
+      .filter((p) => p.category === currentProduct.category && p.id !== currentProduct.id)
+      .slice(0, 6);
+  });
+
   constructor() {
+    this.routeSubscription = this.route.paramMap.subscribe((params) => {
+      this.productId.set(params.get('id') ?? '');
+    });
+
     effect(() => {
       const p = this.product();
       if (!p) return;
 
       // Reset selections when navigating to a different product.
       this.selectedImage.set('');
+      this.isZoomed.set(false);
+      this.currentRelatedIndex.set(0);
 
       const cs = this.colors();
       if (cs.length > 0) {
@@ -302,23 +359,50 @@ export class ProductDetailsComponent {
     }, { allowSignalWrites: true });
   }
 
+  ngOnInit() {
+    this.startCarousel();
+  }
+
+  ngOnDestroy() {
+    this.stopCarousel();
+    this.routeSubscription?.unsubscribe();
+    this.routeSubscription = null;
+  }
+
+  updateZoomPosition(event: MouseEvent) {
+    const el = event.currentTarget as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    this.zoomOrigin.set(`${x}% ${y}%`);
+  }
+
   selectColor(color: string) {
     this.selectedColor.set(color);
     // In many SAFS products, color maps to a finish/variant too.
     if (this.variantOptions().includes(color)) {
       this.selectedVariant.set(color);
     }
-    // Reset image selection; computed `mainImage` will fall back to first image for the color.
-    this.selectedImage.set('');
+    const c = this.colors().find((x) => x.color === color);
+    if (c?.images?.length) {
+      this.selectedImage.set(c.images[0]);
+    } else {
+      this.selectedImage.set('');
+    }
   }
 
   selectVariant(variant: string) {
     this.selectedVariant.set(variant);
     // If the variant matches a color/finish that has images, sync the color selection
     // to display the corresponding image gallery.
-    if (this.colors().some(c => c.color === variant)) {
+    if (this.colors().some((c) => c.color === variant)) {
       this.selectedColor.set(variant);
-      this.selectedImage.set('');
+      const c = this.colors().find((color) => color.color === variant);
+      if (c?.images?.length) {
+        this.selectedImage.set(c.images[0]);
+      } else {
+        this.selectedImage.set('');
+      }
     }
   }
 
@@ -347,11 +431,66 @@ export class ProductDetailsComponent {
     return this.imageOptimization.getOptimizedImagePath(this.mainImage());
   }
 
+  getOptimizedRelatedImage(product: Product): string {
+    const images = this.store.parseImages(product);
+    return images.length > 0 ? this.imageOptimization.getOptimizedImagePath(images[0]) : '';
+  }
+
   getProductDetailAspectRatio(): string {
     const p = this.product();
     if (!p) return '4/3';
 
     return this.imageOptimization.getAspectRatioForCategory(p.category);
+  }
+
+  getVisibleCards(): number {
+    if (typeof window === 'undefined') return 4;
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 768) return 2;
+    if (window.innerWidth < 1024) return 3;
+    return 4;
+  }
+
+  nextRelated() {
+    const total = this.relatedProducts().length;
+    const maxIndex = Math.max(0, total - this.getVisibleCards());
+    if (this.currentRelatedIndex() < maxIndex) {
+      this.currentRelatedIndex.update((i) => i + 1);
+    } else {
+      this.currentRelatedIndex.set(0);
+    }
+  }
+
+  prevRelated() {
+    const total = this.relatedProducts().length;
+    const maxIndex = Math.max(0, total - this.getVisibleCards());
+    if (this.currentRelatedIndex() > 0) {
+      this.currentRelatedIndex.update((i) => i - 1);
+    } else {
+      this.currentRelatedIndex.set(maxIndex);
+    }
+  }
+
+  startCarousel() {
+    this.stopCarousel();
+    this.carouselInterval = setInterval(() => {
+      this.nextRelated();
+    }, 4000);
+  }
+
+  stopCarousel() {
+    if (this.carouselInterval) {
+      clearInterval(this.carouselInterval);
+      this.carouselInterval = null;
+    }
+  }
+
+  pauseCarousel() {
+    this.stopCarousel();
+  }
+
+  resumeCarousel() {
+    this.startCarousel();
   }
 }
 
