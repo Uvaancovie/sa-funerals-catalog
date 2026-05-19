@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -38,6 +38,7 @@ template: `
           [decoding]="decoding"
           class="main-image"
           [class.loaded]="loaded"
+          [class.instant]="skipTransition"
           (load)="onImageLoad()"
           (error)="onImageError()"
         >
@@ -51,8 +52,7 @@ template: `
         [loading]="loading"
         [attr.fetchpriority]="fetchpriority"
         [decoding]="decoding"
-        class="main-image"
-        [class.loaded]="true"
+        class="main-image loaded"
       >
 
       <!-- Loading indicator (optional) -->
@@ -76,7 +76,7 @@ template: `
       height: 100%;
       filter: blur(10px);
       transform: scale(1.1);
-      transition: opacity 0.3s ease;
+      transition: opacity 0.15s ease;
       object-fit: cover;
     }
 
@@ -90,11 +90,17 @@ template: `
       height: 100%;
       object-fit: cover;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.15s ease;
     }
 
     .main-image.loaded {
       opacity: 1;
+    }
+
+    /* Skip transition entirely for pre-cached images */
+    .main-image.instant {
+      transition: none !important;
+      opacity: 1 !important;
     }
 
     .main-image.loaded ~ .blur-placeholder {
@@ -137,8 +143,8 @@ template: `
     }
   `]
 })
-export class OptimizedImageComponent implements OnInit, OnDestroy {
-  @Input() src!: string; // Base image path (e.g., "SAFS IMAGES/Baby Caskets/2FT Minnie Mouse.jpg")
+export class OptimizedImageComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() src!: string;
   @Input() alt!: string;
   @Input() aspectRatio = '4/3';
   @Input() loading: 'lazy' | 'eager' = 'lazy';
@@ -148,13 +154,62 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
   @Input() showLoadingIndicator = false;
   @Input() sizes = '(max-width: 640px) 400px, (max-width: 1024px) 800px, (max-width: 1280px) 1200px, 1600px';
 
+  /** URLs to prefetch in the background (e.g., other color variant images) */
+  @Input() prefetchUrls: string[] = [];
+
   loaded = false;
+  /** When true, skip the opacity transition (image was already cached) */
+  skipTransition = false;
+  /** When true, the Vercel optimizer has failed and we use direct URLs */
+  optimizerFailed = false;
+
+  /** Cache of resolved image paths that have been fully loaded */
+  private static loadedCache = new Set<string>();
+  /** Prefetch link elements we've added to <head> */
+  private prefetchLinks: HTMLLinkElement[] = [];
 
   ngOnInit() {
     this.setupIntersectionObserver();
   }
 
-  ngOnDestroy() {}
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['src'] && !changes['src'].firstChange) {
+      const newSrc = changes['src'].currentValue;
+      const oldSrc = changes['src'].previousValue;
+
+      // If the resolved path hasn't actually changed, do nothing
+      const newResolved = this.resolvePathForSrc(newSrc);
+      const oldResolved = this.resolvePathForSrc(oldSrc);
+      if (newResolved === oldResolved) return;
+
+      // If optimizer already failed, keep using direct URLs — don't reset and re-try
+      // This prevents the flash caused by destroying/recreating the <picture> element
+      if (this.optimizerFailed) {
+        // The fallback <img [src]="getDirectImageUrl()"> will auto-update
+        // because Angular re-evaluates the binding. No state reset needed.
+        return;
+      }
+
+      // Check if this image was already loaded/cached
+      if (OptimizedImageComponent.loadedCache.has(newResolved)) {
+        // Image is cached — show instantly, no transition
+        this.loaded = true;
+        this.skipTransition = true;
+      } else {
+        // New image — reset for fresh load with fast transition
+        this.loaded = false;
+        this.skipTransition = false;
+      }
+    }
+
+    if (changes['prefetchUrls']) {
+      this.doPrefetch();
+    }
+  }
+
+  ngOnDestroy() {
+    this.cleanupPrefetchLinks();
+  }
 
   private setupIntersectionObserver(): void {
     if (this.loading === 'lazy' && 'IntersectionObserver' in window) {
@@ -176,13 +231,86 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
     }
   }
 
-/**
+  /**
+   * Prefetch alternate images using <link rel="prefetch"> for instant switching.
+   * This tells the browser to fetch images at low priority during idle time.
+   */
+  private doPrefetch(): void {
+    this.cleanupPrefetchLinks();
+
+    if (!this.prefetchUrls?.length) return;
+
+    // Use requestIdleCallback to avoid blocking the main thread
+    const schedule = (window as any).requestIdleCallback || ((cb: Function) => setTimeout(cb, 50));
+
+    schedule(() => {
+      for (const url of this.prefetchUrls) {
+        if (!url) continue;
+
+        const resolvedPath = this.resolvePathForSrc(url);
+
+        // Skip if already loaded/cached
+        if (OptimizedImageComponent.loadedCache.has(resolvedPath)) continue;
+
+        // If optimizer is working, prefetch via Vercel optimization
+        if (!this.optimizerFailed) {
+          // Prefetch the webp version at 800w (the most common display size)
+          const prefetchUrl = this.buildVercelUrl(resolvedPath, 800, 'webp');
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.as = 'image';
+          link.href = prefetchUrl;
+          link.type = 'image/webp';
+          document.head.appendChild(link);
+          this.prefetchLinks.push(link);
+        }
+
+        // Always prefetch the direct image as well (works on both localhost and Vercel)
+        const directLink = document.createElement('link');
+        directLink.rel = 'prefetch';
+        directLink.as = 'image';
+        directLink.href = resolvedPath;
+        document.head.appendChild(directLink);
+        this.prefetchLinks.push(directLink);
+      }
+    });
+  }
+
+  private cleanupPrefetchLinks(): void {
+    for (const link of this.prefetchLinks) {
+      link.remove();
+    }
+    this.prefetchLinks = [];
+  }
+
+  /**
+   * Resolve a src path to the canonical path (for cache key and URL building).
+   */
+  private resolvePathForSrc(src: string): string {
+    if (!src) return '';
+    let path = src;
+    if (path.startsWith('http')) return path;
+    path = path.replace(/^\/+/, '');
+    if (path.toLowerCase().startsWith('assets/')) return `/${path}`;
+    if (path.toUpperCase().startsWith('SAFS IMAGES/')) return `/safs-images/${path.substring(12)}`;
+    if (path.toLowerCase().startsWith('safs-images/')) return `/${path}`;
+    return `/safs-images/${path}`;
+  }
+
+  /**
+   * Build a Vercel Image Optimization URL from a resolved path.
+   */
+  private buildVercelUrl(resolvedPath: string, width: number, format: string = 'auto', quality: number = 85): string {
+    return `/_vercel/image?url=${encodeURIComponent(resolvedPath)}&w=${width}&q=${quality}&f=${format}`;
+  }
+
+  /**
    * Gets the original image path from the src (raw path, not encoded)
-   * Used by getVercelImageUrl which handles proper encoding
    */
   private getOriginalImagePath(): string {
     return this.getResolvedPath(true);
   }
+
   private getResolvedPath(keepExtension = false): string {
     if (!this.src) return '';
     
@@ -219,14 +347,12 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
     // Format D: Fallback for raw paths
     return `/safs-images/${path}`;
   }
+
   /**
    * Generates Vercel Image Optimization URL
-   * For Angular on Vercel, uses the origin to create absolute URL for optimizer
-   * Format: /_vercel/image?url=<encoded-absolute-url>&w=<width>&q=<quality>&f=<format>
    */
   getVercelImageUrl(width: number, format: string = 'auto', quality: number = 85): string {
     const imagePath = this.getOriginalImagePath();
-    // Vercel optimizer accepts root-relative paths
     return `/_vercel/image?url=${encodeURIComponent(imagePath)}&w=${width}&q=${quality}&f=${format}`;
   }
 
@@ -249,23 +375,23 @@ export class OptimizedImageComponent implements OnInit, OnDestroy {
 
   /**
    * Gets blur placeholder URL (low-quality image for blur-up effect)
-   * Uses Vercel's optimization with very low quality and small size
    */
   get blurSrc(): string {
     const imagePath = this.getOriginalImagePath();
-    return `/_vercel/image?url=${encodeURIComponent(imagePath)}&w=64&q=30&f=jpg`; // Min width is 64 on Vercel
+    return `/_vercel/image?url=${encodeURIComponent(imagePath)}&w=64&q=30&f=jpg`;
   }
-
-  // Template state
-  optimizerFailed = false;
 
   onImageLoad(): void {
     this.loaded = true;
+    // Remember this image in the cache for instant future switches
+    const resolvedPath = this.resolvePathForSrc(this.src);
+    OptimizedImageComponent.loadedCache.add(resolvedPath);
   }
 
   onImageError(): void {
     console.warn(`Failed to load image via optimizer: ${this.src}`);
-    // Mark optimizer as failed, template should use direct URL fallback
+    // Mark optimizer as failed — once failed, stay in fallback mode permanently
+    // to avoid flashing on every color/image switch
     this.optimizerFailed = true;
   }
 }

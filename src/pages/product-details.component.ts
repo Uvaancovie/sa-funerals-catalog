@@ -59,8 +59,10 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                        [src]="getOptimizedMainImage()"
                        [alt]="product()!.name"
                        [aspectRatio]="getProductDetailAspectRatio()"
+                       [prefetchUrls]="allColorImageUrls()"
                        loading="eager"
                        fetchpriority="high"
+                       decoding="sync"
                        containerClass="object-contain"
                      ></app-optimized-image>
                    </div>
@@ -311,6 +313,27 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     const p = this.product();
     if (!p) return [];
     return this.store.parseImages(p);
+  });
+
+  /**
+   * Collects ALL image URLs across every color variant for background prefetching.
+   * This ensures switching colors is lightning-fast because images are already cached.
+   */
+  allColorImageUrls = computed(() => {
+    const colorList = this.colors();
+    if (!colorList.length) return [];
+
+    const urls: string[] = [];
+    for (const c of colorList) {
+      if (c.images?.length) {
+        for (const img of c.images) {
+          if (img && !urls.includes(img)) {
+            urls.push(this.imageOptimization.getOptimizedImagePath(img));
+          }
+        }
+      }
+    }
+    return urls;
   });
 
   wishlistActive = computed(() => {
