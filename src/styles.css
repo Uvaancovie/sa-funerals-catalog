@@ -3,6 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure swap display for all loaded fonts to prevent FOIT */
+@font-face {
+  font-family: 'Poppins';
+  font-display: swap;
+}
+
 :root {
   /* Core Brand Colors */
   --safs-primary: #0F2040;     /* Heritage Navy */

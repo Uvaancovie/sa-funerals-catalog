@@ -36,7 +36,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
 
        <div class="flex flex-1">
          <!-- Filters Sidebar (Desktop) -->
-         <div class="hidden lg:block w-[320px] sticky top-[72px] h-[calc(100vh-72px)] overflow-y-auto border-r border-gray-200 bg-white p-8 space-y-8 flex-shrink-0 shadow-sm">
+         <div class="hidden lg:block w-[320px] sticky top-[72px] h-[calc(100vh-72px)] overflow-y-auto border-r border-gray-200 bg-white p-8 space-y-8 flex-shrink-0 shadow-sm" style="contain: layout style;">
 
            <!-- Desktop Filters Header -->
            <div class="sticky top-0 bg-white z-20 pb-4 mb-4 border-b border-gray-100">
@@ -91,7 +91,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
         }
 
         <!-- Color/Finish Filter -->
-        <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 mb-12">
+        <div class="bg-gray-50 p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 mb-12">
           <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Finishes & Colors</h3>
           <div class="grid grid-cols-1 gap-3">
             @for (finish of availableFinishes; track finish) {
@@ -215,15 +215,15 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
       <div class="flex-1 bg-gray-50 flex flex-col relative w-full">
         
         <!-- Header & Search -->
-        <div class="bg-gradient-to-r from-safs-dark to-[#1A2F5A] px-4 py-2 sm:px-6 sm:py-3 lg:px-16 lg:py-4 border-b-[3px] border-safs-gold shadow-sm relative z-20 flex-shrink-0">
-          <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-3 lg:gap-4 items-center justify-between relative z-10">
-            <div class="text-center lg:text-left">
+        <div class="bg-gradient-to-r from-safs-dark to-[#1A2F5A] px-4 py-2 sm:px-6 sm:py-3 md:px-10 md:py-3.5 lg:px-16 lg:py-4 border-b-[3px] border-safs-gold shadow-sm relative z-20 flex-shrink-0">
+          <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-3 md:gap-4 items-center justify-between relative z-10">
+            <div class="text-center md:text-left">
               <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-0.5 font-serif tracking-wide">Premium Catalog</h1>
               <p class="text-safs-gold text-xs sm:text-sm font-medium tracking-wider uppercase">Explore our exclusive range of caskets & domes</p>
             </div>
             
             <!-- Search Bar -->
-            <div class="w-full lg:w-[300px] relative flex-shrink-0">
+            <div class="w-full md:w-[300px] relative flex-shrink-0">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-safs-dark/60">
                   <circle cx="11" cy="11" r="8"></circle>
@@ -252,7 +252,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
         <app-lead-capture></app-lead-capture>
         
          <!-- Product Grid Area -->
-         <div class="p-4 sm:p-8 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32 min-h-[100vh]" id="product-grid">
+         <div class="p-4 sm:p-6 md:p-10 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32 min-h-[100vh]" id="product-grid">
 
            <!-- Featured Products Section -->
            @if (!hasActiveFilters()) {
@@ -260,7 +260,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                <h2 class="text-2xl font-bold text-safs-dark mb-6">
                  Featured Products
                </h2>
-               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
                  @for (product of featuredProducts(); track product.id) {
                    <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all group border border-gray-100 cursor-pointer overflow-hidden flex flex-row items-center p-3" [routerLink]="['/product', product.id]">
                      <div class="w-20 h-20 bg-gray-50 rounded-xl overflow-hidden shrink-0">
@@ -279,7 +279,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
            }
 
            <!-- Active Filters & Count (Desktop) -->
-           <div class="hidden lg:flex justify-between items-center gap-4 mb-8">
+           <div class="hidden md:flex justify-between items-center gap-4 mb-8">
              <div class="text-lg text-gray-500 bg-white px-5 py-2 rounded-full shadow-sm border border-gray-100">
                Showing <span class="font-bold text-safs-dark text-xl">{{ filteredProducts().length }}</span> product(s)
              </div>
@@ -309,12 +309,12 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
           </div>
 
            <!-- Grid -->
-           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
             @for (product of filteredProducts(); track product.id) {
               <div data-testid="catalog-card" class="bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 group flex flex-col border border-gray-100 cursor-pointer overflow-hidden transform hover:-translate-y-1" [routerLink]="['/product', product.id]">
                 
                  <!-- Image Area -->
-                 <div class="relative h-64 sm:h-80 lg:h-96 overflow-hidden bg-gray-50">
+                 <div class="relative h-64 sm:h-72 md:h-80 lg:h-96 overflow-hidden bg-gray-50">
                    <app-optimized-image
                      [src]="getOptimizedProductImagePath(product)"
                      [alt]="product.name"
@@ -344,9 +344,9 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
                 </div>
 
                  <!-- Content -->
-                 <div class="p-4 sm:p-6 flex-1 flex flex-col border-t border-gray-100">
+                 <div class="p-4 sm:p-5 md:p-6 flex-1 flex flex-col border-t border-gray-100">
                    <div class="text-xs font-black text-safs-gold-dark uppercase tracking-[0.2em] mb-2">{{ getCategoryDisplayName(product.category) }}</div>
-                   <h2 class="text-lg sm:text-xl font-bold text-safs-dark mb-3 group-hover:text-safs-gold-dark transition-colors leading-tight">{{ product.name }}</h2>
+                   <h2 class="text-base sm:text-lg md:text-xl font-bold text-safs-dark mb-3 group-hover:text-safs-gold-dark transition-colors leading-tight">{{ product.name }}</h2>
                   
                   <div class="mt-auto">
                     <!-- Actions removed -->
@@ -384,7 +384,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
 
             <!-- Left Image Side -->
             <div
-              class="w-full md:w-1/2 h-[420px] md:h-[680px] bg-gray-50 relative p-4 flex items-center justify-center"
+              class="w-full md:w-1/2 h-[360px] sm:h-[420px] md:h-[680px] bg-gray-50 relative p-4 flex items-center justify-center"
               (mouseenter)="onModalImageEnter()"
               (mousemove)="onModalImageMove($event)"
               (mouseleave)="onModalImageLeave()">
@@ -413,9 +413,9 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
             </div>
 
             <!-- Right Details Side -->
-            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col h-auto max-h-[100%] md:max-h-[80vh] overflow-y-auto">
+            <div class="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col h-auto max-h-[100%] md:max-h-[80vh] overflow-y-auto">
               <div class="text-sm font-black text-safs-gold-dark uppercase tracking-[0.2em] mb-4">{{ selectedProductForModal()!.category }}</div>
-              <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark mb-6 leading-tight">{{ selectedProductForModal()!.name }}</h2>
+              <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-safs-dark mb-4 md:mb-6 leading-tight">{{ selectedProductForModal()!.name }}</h2>
 
               <div class="flex flex-wrap gap-2 mb-8">
                  @for (v of store.parseFeatures(selectedProductForModal()!); track v) {

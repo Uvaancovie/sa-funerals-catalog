@@ -66,6 +66,7 @@ template: `
       position: relative;
       overflow: hidden;
       background-color: #f8f9fa;
+      contain: layout style;
     }
 
     .blur-placeholder {
@@ -76,7 +77,7 @@ template: `
       height: 100%;
       filter: blur(10px);
       transform: scale(1.1);
-      transition: opacity 0.15s ease;
+      transition: opacity 0.1s ease;
       object-fit: cover;
     }
 
@@ -90,7 +91,7 @@ template: `
       height: 100%;
       object-fit: cover;
       opacity: 0;
-      transition: opacity 0.15s ease;
+      transition: opacity 0.08s ease;
     }
 
     .main-image.loaded {
@@ -232,8 +233,10 @@ export class OptimizedImageComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
-   * Prefetch alternate images using <link rel="prefetch"> for instant switching.
-   * This tells the browser to fetch images at low priority during idle time.
+   * Prefetch alternate images using both <link rel="preload"> and Image() for aggressive caching.
+   * - <link rel="preload"> tells the browser to fetch at high priority
+   * - new Image().src warms the browser image cache immediately
+   * This ensures color variant switching is near-instant (<2s total load time).
    */
   private doPrefetch(): void {
     this.cleanupPrefetchLinks();
@@ -252,26 +255,31 @@ export class OptimizedImageComponent implements OnInit, OnDestroy, OnChanges {
         // Skip if already loaded/cached
         if (OptimizedImageComponent.loadedCache.has(resolvedPath)) continue;
 
-        // If optimizer is working, prefetch via Vercel optimization
+        // Strategy 1: Preload via <link rel="preload"> for high-priority fetching
         if (!this.optimizerFailed) {
-          // Prefetch the webp version at 800w (the most common display size)
-          const prefetchUrl = this.buildVercelUrl(resolvedPath, 800, 'webp');
+          // Preload the webp version at 800w (the most common display size)
+          const preloadUrl = this.buildVercelUrl(resolvedPath, 800, 'webp');
           const link = document.createElement('link');
-          link.rel = 'prefetch';
+          link.rel = 'preload';
           link.as = 'image';
-          link.href = prefetchUrl;
+          link.href = preloadUrl;
           link.type = 'image/webp';
           document.head.appendChild(link);
           this.prefetchLinks.push(link);
         }
 
-        // Always prefetch the direct image as well (works on both localhost and Vercel)
-        const directLink = document.createElement('link');
-        directLink.rel = 'prefetch';
-        directLink.as = 'image';
-        directLink.href = resolvedPath;
-        document.head.appendChild(directLink);
-        this.prefetchLinks.push(directLink);
+        // Strategy 2: Warm browser cache with Image() constructor
+        // This forces an immediate fetch regardless of browser prefetch heuristics
+        const imgPreload = new Image();
+        if (!this.optimizerFailed) {
+          imgPreload.src = this.buildVercelUrl(resolvedPath, 800, 'webp');
+        } else {
+          imgPreload.src = resolvedPath;
+        }
+
+        // Also prefetch the direct image as fallback
+        const directPreload = new Image();
+        directPreload.src = resolvedPath;
       }
     });
   }

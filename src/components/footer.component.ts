@@ -13,7 +13,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
           
           <!-- Brand -->
           <div class="col-span-1 md:col-span-1">
-            <img src="assets/logo/OIP.webp" alt="South African Funeral Supplies" class="h-20 w-auto rounded-lg mb-4" />
+            <img src="assets/logo/OIP.webp" alt="South African Funeral Supplies" class="h-20 w-auto rounded-lg mb-4" width="80" height="80" />
             <p class="text-gray-200 text-sm leading-relaxed mb-6">
               Servicing the funeral industry since 1998. Committed to quality, value, service, and innovation.
             </p>

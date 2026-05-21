@@ -14,8 +14,8 @@ import { ImageOptimizationService } from '../services/image-optimization.service
   imports: [CommonModule, RouterLink, OptimizedImageComponent],
   template: `
     <div class="bg-gray-50 min-h-screen">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-        <div class="flex items-center gap-3 mb-6">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
+        <div class="flex items-center gap-3 mb-4 md:mb-6">
           <a routerLink="/catalog" class="text-safs-dark font-bold hover:text-safs-gold-dark transition-colors">
             ← Back to catalog
           </a>
@@ -28,12 +28,12 @@ import { ImageOptimizationService } from '../services/image-optimization.service
             <div class="text-gray-600 font-semibold">Loading product...</div>
           </div>
         } @else {
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             <!-- Gallery -->
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-              <div class="p-4 sm:p-6 border-b border-gray-100">
+              <div class="p-4 sm:p-5 md:p-6 border-b border-gray-100">
                 <div class="flex items-center justify-between gap-4">
-                  <h1 class="text-3xl sm:text-4xl font-bold text-safs-dark leading-tight truncate">
+                  <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-safs-dark leading-tight truncate">
                     {{ product()!.name }}
                   </h1>
                 </div>
@@ -43,9 +43,9 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                 </div>
               </div>
 
-               <div class="p-4 sm:p-6">
+               <div class="p-4 sm:p-5 md:p-6">
                  <div
-                   class="relative rounded-2xl bg-gray-50 overflow-hidden h-[360px] sm:h-[420px] cursor-crosshair"
+                   class="relative rounded-2xl bg-gray-50 overflow-hidden h-[300px] sm:h-[360px] md:h-[400px] lg:h-[420px] cursor-crosshair"
                    (mousemove)="updateZoomPosition($event)"
                    (mouseenter)="isZoomed.set(true)"
                    (mouseleave)="isZoomed.set(false)"
@@ -69,7 +69,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                  </div>
 
                  @if (activeThumbnails().length > 1) {
-                   <div class="mt-4 flex gap-2 sm:gap-3 overflow-x-auto pb-2">
+                   <div class="mt-3 md:mt-4 flex gap-2 sm:gap-3 overflow-x-auto pb-2">
                      @for (img of activeThumbnails(); track img) {
                        <button
                          type="button"
@@ -78,7 +78,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                          [class.ring-2]="img === selectedImage()"
                          [class.ring-safs-gold]="img === selectedImage()"
                        >
-                         <img class="w-14 h-14 sm:w-16 sm:h-16 object-cover" [src]="img" [alt]="product()!.name" />
+                         <img class="w-14 h-14 sm:w-16 sm:h-16 object-cover" [src]="img" [alt]="product()!.name" width="64" height="64" />
                        </button>
                      }
                    </div>
@@ -88,8 +88,8 @@ import { ImageOptimizationService } from '../services/image-optimization.service
             </div>
 
             <!-- Details / options -->
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8">
-              <div class="flex items-start justify-between gap-6">
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 sm:p-6 md:p-8">
+              <div class="flex items-start justify-between gap-4 md:gap-6">
                 <div>
                   <div class="text-xs uppercase tracking-widest font-black text-safs-gold-dark">
                     {{ product()!.category }}
@@ -103,8 +103,8 @@ import { ImageOptimizationService } from '../services/image-optimization.service
 
               <!-- Color/Finish selector -->
               @if (colors().length > 0) {
-                <div class="mt-8">
-                  <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">
+                <div class="mt-6 md:mt-8">
+                  <h3 class="font-bold text-safs-dark mb-3 md:mb-4 uppercase tracking-wider text-sm">
                     Select color
                   </h3>
 
@@ -112,7 +112,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                     @for (c of colors(); track c.color) {
                       <button
                         type="button"
-                        class="px-4 py-3 rounded-xl font-bold border transition-all shadow-sm"
+                        class="px-3 md:px-4 py-2.5 md:py-3 rounded-xl font-bold border transition-all shadow-sm text-sm md:text-base"
                         (click)="selectColor(c.color)"
                         [class.bg-safs-gold]="selectedColor() === c.color"
                         [class.text-black]="selectedColor() === c.color"
@@ -129,8 +129,8 @@ import { ImageOptimizationService } from '../services/image-optimization.service
               }
 
               @if (variantOptions().length > 0) {
-                <div class="mt-6">
-                  <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">
+                <div class="mt-5 md:mt-6">
+                  <h3 class="font-bold text-safs-dark mb-3 md:mb-4 uppercase tracking-wider text-sm">
                     Select finish/variant
                   </h3>
 
@@ -138,7 +138,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                     @for (v of variantOptions(); track v) {
                       <button
                         type="button"
-                        class="px-4 py-3 rounded-xl font-bold border transition-all shadow-sm"
+                        class="px-3 md:px-4 py-2.5 md:py-3 rounded-xl font-bold border transition-all shadow-sm text-sm md:text-base"
                         (click)="selectVariant(v)"
                         [class.bg-safs-dark]="selectedVariant() === v"
                         [class.text-white]="selectedVariant() === v"
@@ -156,8 +156,8 @@ import { ImageOptimizationService } from '../services/image-optimization.service
 
               <!-- Specifications -->
               @if (specificationsKeys().length > 0) {
-                <div class="mt-8">
-                  <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">
+                <div class="mt-6 md:mt-8">
+                  <h3 class="font-bold text-safs-dark mb-3 md:mb-4 uppercase tracking-wider text-sm">
                     Specifications
                   </h3>
                   <div class="overflow-hidden rounded-2xl border border-gray-100">
@@ -165,8 +165,8 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                       <tbody>
                         @for (k of specificationsKeys(); track k) {
                           <tr class="border-t border-gray-100">
-                            <td class="px-4 py-3 font-semibold text-gray-700 w-1/3 align-top">{{ k }}</td>
-                            <td class="px-4 py-3 text-gray-600">{{ specifications()[k] }}</td>
+                            <td class="px-3 md:px-4 py-2.5 md:py-3 font-semibold text-gray-700 w-1/3 align-top">{{ k }}</td>
+                            <td class="px-3 md:px-4 py-2.5 md:py-3 text-gray-600">{{ specifications()[k] }}</td>
                           </tr>
                         }
                       </tbody>
@@ -181,12 +181,12 @@ import { ImageOptimizationService } from '../services/image-optimization.service
 
           @if (relatedProducts().length > 0) {
             <div
-              class="mt-16 bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8"
+              class="mt-10 md:mt-16 bg-white rounded-3xl shadow-sm border border-gray-100 p-5 sm:p-6 md:p-8"
               (mouseenter)="pauseCarousel()"
               (mouseleave)="resumeCarousel()"
             >
-              <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-safs-dark">More in {{ product()!.category }}</h2>
+              <div class="flex items-center justify-between mb-4 md:mb-6">
+                <h2 class="text-xl md:text-2xl font-bold text-safs-dark">More in {{ product()!.category }}</h2>
                 <div class="flex gap-2">
                   <button
                     type="button"
@@ -221,9 +221,9 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                   @for (rp of relatedProducts(); track rp.id) {
                     <a
                       [routerLink]="['/product', rp.id]"
-                      class="shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 group border border-gray-100 rounded-2xl p-4 hover:border-safs-gold hover:shadow-md transition-all"
+                      class="shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 group border border-gray-100 rounded-2xl p-3 md:p-4 hover:border-safs-gold hover:shadow-md transition-all"
                     >
-                      <div class="rounded-xl bg-gray-50 overflow-hidden mb-4">
+                      <div class="rounded-xl bg-gray-50 overflow-hidden mb-3 md:mb-4">
                         <app-optimized-image
                           [src]="getOptimizedRelatedImage(rp)"
                           [alt]="rp.name"
@@ -232,8 +232,8 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                           containerClass="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                         ></app-optimized-image>
                       </div>
-                      <h3 class="font-bold text-safs-dark truncate">{{ rp.name }}</h3>
-                      <p class="text-sm text-gray-500 mt-1 line-clamp-2">{{ rp.description || 'View details' }}</p>
+                      <h3 class="font-bold text-safs-dark truncate text-sm md:text-base">{{ rp.name }}</h3>
+                      <p class="text-xs md:text-sm text-gray-500 mt-1 line-clamp-2">{{ rp.description || 'View details' }}</p>
                     </a>
                   }
                 </div>
@@ -380,6 +380,26 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
         this.selectedVariant.set(variants[0]);
       }
     }, { allowSignalWrites: true });
+
+    // Eagerly preload ALL color variant images using Image() constructor
+    // This ensures all color images are cached within ~1-2s of product page render
+    effect(() => {
+      const urls = this.allColorImageUrls();
+      if (!urls.length) return;
+
+      // Stagger the preloads slightly to avoid saturating the connection
+      urls.forEach((url, index) => {
+        setTimeout(() => {
+          const img = new Image();
+          // Preload both the Vercel-optimized version and the direct version
+          const origin = typeof window !== 'undefined' ? window.location.origin : '';
+          img.src = `/_vercel/image?url=${encodeURIComponent(url)}&w=800&q=85&f=webp`;
+          // Also warm the direct path cache
+          const directImg = new Image();
+          directImg.src = url;
+        }, index * 100); // 100ms stagger between each image
+      });
+    });
   }
 
   ngOnInit() {
@@ -516,4 +536,3 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.startCarousel();
   }
 }
-
