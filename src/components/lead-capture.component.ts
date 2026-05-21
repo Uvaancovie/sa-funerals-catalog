@@ -20,12 +20,12 @@ import { FormsModule } from '@angular/forms';
       />
 
       <div class="max-w-6xl mx-auto relative z-10">
-        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl flex flex-col md:flex-row items-stretch gap-6 md:gap-8 lg:gap-10">
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl flex flex-col lg:flex-row items-center lg:items-stretch gap-6 md:gap-8 lg:gap-10">
 
           <!-- Carousel Side -->
-          <div class="flex-1 flex flex-col gap-6 md:gap-8 min-w-0">
+          <div class="flex-1 flex flex-col gap-6 md:gap-8 min-w-0 w-full">
             <!-- Image Carousel -->
-            <div class="relative bg-safs-dark rounded-2xl overflow-hidden h-56 sm:h-72 md:h-80 lg:h-96 shadow-lg border border-white/10 w-full">
+            <div class="relative bg-safs-dark rounded-2xl overflow-hidden h-56 sm:h-72 md:h-96 shadow-lg border border-white/10 w-full">
               <img
                 [src]="carouselImages()[currentImageIndex()]"
                 [alt]="'Carousel image ' + (currentImageIndex() + 1)"
@@ -50,7 +50,7 @@ import { FormsModule } from '@angular/forms';
           </div>
 
           <!-- Form Side -->
-          <div class="w-full md:w-[420px] lg:w-[480px] bg-white rounded-2xl p-2 shadow-2xl relative flex-shrink-0">
+          <div class="w-full max-w-[420px] lg:max-w-[480px] lg:w-[480px] bg-white rounded-2xl p-2 shadow-2xl relative flex-shrink-0">
              <div class="absolute -top-4 -right-4 w-24 h-24 bg-safs-gold rounded-full opacity-20 blur-2xl"></div>
              <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-safs-dark rounded-full opacity-20 blur-2xl"></div>
             <!-- Lazy-loaded iframe: only injects after idle to reduce TBT -->
