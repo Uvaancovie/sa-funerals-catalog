@@ -23,7 +23,7 @@ import { FormsModule } from '@angular/forms';
         <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl flex flex-col lg:flex-row items-center lg:items-stretch gap-6 md:gap-8 lg:gap-10">
 
           <!-- Carousel Side -->
-          <div class="flex-1 flex flex-col gap-6 md:gap-8 min-w-0 w-full">
+          <div class="hidden lg:flex flex-1 flex-col gap-6 md:gap-8 min-w-0 w-full">
             <!-- Image Carousel -->
             <div class="relative bg-safs-dark rounded-2xl overflow-hidden h-56 sm:h-72 md:h-96 shadow-lg border border-white/10 w-full">
               <img
