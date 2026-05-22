@@ -20,34 +20,7 @@ import { FormsModule } from '@angular/forms';
       />
 
       <div class="max-w-6xl mx-auto relative z-10">
-        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl flex flex-col lg:flex-row items-center lg:items-stretch gap-6 md:gap-8 lg:gap-10">
-
-          <!-- Carousel Side -->
-          <div class="hidden lg:flex flex-1 flex-col gap-6 md:gap-8 min-w-0 w-full">
-            <!-- Image Carousel -->
-            <div class="relative bg-safs-dark rounded-2xl overflow-hidden h-56 sm:h-72 md:h-96 shadow-lg border border-white/10 w-full">
-              <img
-                [src]="carouselImages()[currentImageIndex()]"
-                [alt]="'Carousel image ' + (currentImageIndex() + 1)"
-                class="w-full h-full object-contain transition-opacity duration-500 bg-black/20"
-                [attr.fetchpriority]="currentImageIndex() === 0 ? 'high' : 'auto'"
-              />
-              <!-- Carousel Controls -->
-              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                @for (image of carouselImages(); track $index) {
-                  <button
-                    type="button"
-                    (click)="goToImage($index)"
-                    [ngClass]="{
-                      'bg-safs-gold': currentImageIndex() === $index,
-                      'bg-white/30': currentImageIndex() !== $index
-                    }"
-                    class="w-2 h-2 rounded-full transition-all duration-300"
-                  ></button>
-                }
-              </div>
-            </div>
-          </div>
+        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl flex flex-col items-center gap-6 md:gap-8 lg:gap-10">
 
           <!-- Form Side -->
           <div class="w-full max-w-[420px] lg:max-w-[480px] lg:w-[480px] bg-white rounded-2xl p-2 shadow-2xl relative flex-shrink-0">
@@ -74,6 +47,33 @@ import { FormsModule } from '@angular/forms';
                   <div class="h-3 w-32 bg-gray-200 rounded"></div>
                 </div>
               }
+            </div>
+          </div>
+
+          <!-- Carousel Side -->
+          <div class="flex flex-1 flex-col gap-6 md:gap-8 min-w-0 w-full">
+            <!-- Image Carousel -->
+            <div class="relative bg-safs-dark rounded-2xl overflow-hidden h-56 sm:h-72 md:h-96 shadow-lg border border-white/10 w-full">
+              <img
+                [src]="carouselImages()[currentImageIndex()]"
+                [alt]="'Carousel image ' + (currentImageIndex() + 1)"
+                class="w-full h-full object-contain transition-opacity duration-500 bg-black/20"
+                [attr.fetchpriority]="currentImageIndex() === 0 ? 'high' : 'auto'"
+              />
+              <!-- Carousel Controls -->
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                @for (image of carouselImages(); track $index) {
+                  <button
+                    type="button"
+                    (click)="goToImage($index)"
+                    [ngClass]="{
+                      'bg-safs-gold': currentImageIndex() === $index,
+                      'bg-white/30': currentImageIndex() !== $index
+                    }"
+                    class="w-2 h-2 rounded-full transition-all duration-300"
+                  ></button>
+                }
+              </div>
             </div>
           </div>
 
