@@ -6,12 +6,11 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OptimizedImageComponent } from '../components/optimized-image.component';
 import { ImageOptimizationService } from '../services/image-optimization.service';
-import { LeadCaptureComponent } from '../components/lead-capture.component';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, RouterLink, OptimizedImageComponent, LeadCaptureComponent],
+  imports: [CommonModule, RouterLink, OptimizedImageComponent],
    template: `
      <div class="bg-gray-50 min-h-screen w-full flex flex-col">
 
@@ -215,7 +214,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
       <div class="flex-1 bg-gray-50 flex flex-col relative w-full">
         
         <!-- Header & Search -->
-        <div class="bg-gradient-to-r from-safs-dark to-[#1A2F5A] px-4 py-2 sm:px-6 sm:py-3 md:px-10 md:py-3.5 lg:px-16 lg:py-4 border-b-[3px] border-safs-gold shadow-sm relative z-20 flex-shrink-0">
+        <div class="bg-gradient-to-r from-safs-dark to-[#2A3470] px-4 py-2 sm:px-6 sm:py-3 md:px-10 md:py-3.5 lg:px-16 lg:py-4 border-b-[3px] border-safs-gold shadow-sm relative z-20 flex-shrink-0">
           <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-3 md:gap-4 items-center justify-between relative z-10">
             <div class="text-center md:text-left">
               <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-0.5 font-serif tracking-wide">Premium Catalog</h1>
@@ -248,9 +247,7 @@ import { LeadCaptureComponent } from '../components/lead-capture.component';
           </div>
         </div>
         
-        <!-- Lead Capture Popup -->
-        <app-lead-capture></app-lead-capture>
-        
+
          <!-- Product Grid Area -->
          <div class="p-4 sm:p-6 md:p-10 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32 min-h-[100vh]" id="product-grid">
 

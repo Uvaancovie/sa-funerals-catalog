@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -7,27 +7,18 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="relative bg-safs-dark px-4 py-12 sm:py-16 sm:px-6 lg:px-16 overflow-hidden border-b-[3px] border-safs-gold">
-      <!-- Background Graphic (moved to lazy-loaded img for LCP discoverability) -->
-      <img
-        src="/assets/logo/OIP.webp"
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        class="absolute inset-0 w-full h-full object-right-bottom object-contain opacity-5 pointer-events-none"
-        width="500"
-        height="500"
-      />
+    <div class="relative bg-safs-dark border-b-2 border-safs-gold">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 py-1 sm:py-2">
+        <div class="relative bg-white/5 border border-white/10 rounded-xl px-3 py-2 sm:px-4 sm:py-2 flex flex-col md:flex-row lg:items-center gap-2 md:gap-4 lg:gap-6 justify-between">
+          <div class="text-white flex-1 min-w-0">
+            <p class="text-[9px] uppercase tracking-[0.2em] text-safs-gold/80 mb-0.5">Trade Updates</p>
+            <h3 class="text-sm sm:text-base font-medium leading-snug">Get new launches, pricing, and stock alerts.</h3>
+            <p class="text-[11px] text-white/50 mt-0.5">Short monthly email. Unsubscribe anytime.</p>
+          </div>
 
-      <div class="max-w-6xl mx-auto relative z-10">
-        <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl flex flex-col items-center gap-6 md:gap-8 lg:gap-10">
-
-          <!-- Form Side -->
-          <div class="w-full max-w-[420px] lg:max-w-[480px] lg:w-[480px] bg-white rounded-2xl p-2 shadow-2xl relative flex-shrink-0">
-             <div class="absolute -top-4 -right-4 w-24 h-24 bg-safs-gold rounded-full opacity-20 blur-2xl"></div>
-             <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-safs-dark rounded-full opacity-20 blur-2xl"></div>
+          <div class="w-full md:w-[260px] bg-white rounded-lg p-1 shadow-lg relative flex-shrink-0 origin-right scale-90">
             <!-- Lazy-loaded iframe: only injects after idle to reduce TBT -->
-            <div #iframeContainer class="relative z-10">
+            <div class="relative z-10">
               @if (iframeLoaded()) {
                 <iframe
                   title="Trade Registration Form"
@@ -36,90 +27,32 @@ import { FormsModule } from '@angular/forms';
                   src="https://bbbac5ba.sibforms.com/serve/MUIFADNAXkcZRb7c-OoeuIBzu2ct-avyqNA_6m8P9RNEReQEGfY70EdbMhE8lvXhA4pk7I4kJWzPg-PRuKypLnLhd-4PkKEm3YrSA0nDbxvreu3uQCk9SiDq1GsMwkrvwm6qMgUyySJppVDw3d9a6qfvU4KRbdfjFrR3Pro6-y2r0bg89fF9A89cwXtn42IuuSnznA5LDHtXDVxsew=="
                   frameborder="0"
                   scrolling="auto"
-                  class="block w-full rounded-xl border-0"
+                  class="block w-full rounded-lg border-0"
                   loading="lazy"
                 ></iframe>
               } @else {
                 <!-- Placeholder skeleton while iframe defers -->
-                <div class="flex flex-col items-center justify-center rounded-xl bg-gray-50 animate-pulse" [style.height.px]="iframeHeight">
-                  <div class="w-12 h-12 rounded-full bg-gray-200 mb-4"></div>
-                  <div class="h-4 w-40 bg-gray-200 rounded mb-2"></div>
-                  <div class="h-3 w-32 bg-gray-200 rounded"></div>
+                <div class="flex flex-col items-center justify-center rounded-lg bg-gray-50 animate-pulse" [style.height.px]="iframeHeight">
+                  <div class="w-10 h-10 rounded-full bg-gray-200 mb-3"></div>
+                  <div class="h-3 w-36 bg-gray-200 rounded mb-2"></div>
+                  <div class="h-3 w-28 bg-gray-200 rounded"></div>
                 </div>
               }
             </div>
           </div>
-
-          <!-- Carousel Side -->
-          <div class="flex flex-1 flex-col gap-6 md:gap-8 min-w-0 w-full">
-            <!-- Image Carousel -->
-            <div class="relative bg-safs-dark rounded-2xl overflow-hidden h-56 sm:h-72 md:h-96 shadow-lg border border-white/10 w-full">
-              <img
-                [src]="carouselImages()[currentImageIndex()]"
-                [alt]="'Carousel image ' + (currentImageIndex() + 1)"
-                class="w-full h-full object-contain transition-opacity duration-500 bg-black/20"
-                [attr.fetchpriority]="currentImageIndex() === 0 ? 'high' : 'auto'"
-              />
-              <!-- Carousel Controls -->
-              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                @for (image of carouselImages(); track $index) {
-                  <button
-                    type="button"
-                    (click)="goToImage($index)"
-                    [ngClass]="{
-                      'bg-safs-gold': currentImageIndex() === $index,
-                      'bg-white/30': currentImageIndex() !== $index
-                    }"
-                    class="w-2 h-2 rounded-full transition-all duration-300"
-                  ></button>
-                }
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
   `,
   styles: []
 })
-export class LeadCaptureComponent implements OnInit, OnDestroy {
-  currentImageIndex = signal(0);
+export class LeadCaptureComponent implements OnInit {
   iframeLoaded = signal(false);
-  iframeHeight = 380;
-  carouselImages = signal([
-    'assets/additional/Emperor%20White%20Closed.jpg',
-    'assets/additional/4%20Corner%20Cherry.jpg',
-    'assets/additional/Lapita.jpg',
-    'assets/additional/Nguni%20Black.jpg'
-  ]);
-  private carouselInterval: any;
+  iframeHeight = 220;
 
   ngOnInit() {
-    this.startCarousel();
     this.deferIframeLoad();
     this.updateIframeHeight();
-  }
-
-  ngOnDestroy() {
-    if (this.carouselInterval) {
-      clearInterval(this.carouselInterval);
-    }
-  }
-
-  startCarousel() {
-    this.carouselInterval = setInterval(() => {
-      this.currentImageIndex.update((current) =>
-        (current + 1) % this.carouselImages().length
-      );
-    }, 5000); // Change image every 5 seconds
-  }
-
-  goToImage(index: number) {
-    this.currentImageIndex.set(index);
-    // Reset carousel timer when user clicks
-    clearInterval(this.carouselInterval);
-    this.startCarousel();
   }
 
   /**
@@ -139,11 +72,11 @@ export class LeadCaptureComponent implements OnInit, OnDestroy {
   private updateIframeHeight() {
     if (typeof window === 'undefined') return;
     if (window.innerWidth < 768) {
-      this.iframeHeight = 340;
+      this.iframeHeight = 200;
     } else if (window.innerWidth < 1024) {
-      this.iframeHeight = 360;
+      this.iframeHeight = 210;
     } else {
-      this.iframeHeight = 380;
+      this.iframeHeight = 220;
     }
   }
 }

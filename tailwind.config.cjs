@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       colors: {
         safs: {
-          dark: '#0F2040',          /* Heritage Navy */
+          dark: '#1E2352',          /* Logo Navy / Indigo */
           gold: '#C5A059',          /* Brass / Gold */
           'gold-light': '#D4B06A',  /* Lighter brass for hover/accent */
           'gold-dark': '#A8873F',   /* Deeper brass for active states */

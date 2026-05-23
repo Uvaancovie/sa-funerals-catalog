@@ -5,13 +5,14 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { WishlistService } from '../services/wishlist.service';
 import { Product, StoreService } from '../services/store.service';
+import { FormsModule } from '@angular/forms';
 import { OptimizedImageComponent } from '../components/optimized-image.component';
 import { ImageOptimizationService } from '../services/image-optimization.service';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, OptimizedImageComponent],
+  imports: [CommonModule, RouterLink, OptimizedImageComponent, FormsModule],
   template: `
     <div class="bg-gray-50 min-h-screen">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
@@ -33,7 +34,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
               <div class="p-4 sm:p-5 md:p-6 border-b border-gray-100">
                 <div class="flex items-center justify-between gap-4">
-                  <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-safs-dark leading-tight truncate">
+                  <h1 data-testid="product-title" class="text-2xl sm:text-3xl md:text-4xl font-bold text-safs-dark leading-tight truncate">
                     {{ product()!.name }}
                   </h1>
                 </div>
@@ -128,31 +129,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                 </div>
               }
 
-              @if (variantOptions().length > 0) {
-                <div class="mt-5 md:mt-6">
-                  <h3 class="font-bold text-safs-dark mb-3 md:mb-4 uppercase tracking-wider text-sm">
-                    Select finish/variant
-                  </h3>
-
-                  <div class="flex flex-wrap gap-2">
-                    @for (v of variantOptions(); track v) {
-                      <button
-                        type="button"
-                        class="px-3 md:px-4 py-2.5 md:py-3 rounded-xl font-bold border transition-all shadow-sm text-sm md:text-base"
-                        (click)="selectVariant(v)"
-                        [class.bg-safs-dark]="selectedVariant() === v"
-                        [class.text-white]="selectedVariant() === v"
-                        [class.bg-white]="selectedVariant() !== v"
-                        [class.text-gray-600]="selectedVariant() !== v"
-                        [class.border-gray-200]="selectedVariant() !== v"
-                        [class.border-safs-dark]="selectedVariant() === v"
-                      >
-                        {{ v }}
-                      </button>
-                    }
-                  </div>
-                </div>
-              }
+              <!-- Variant selection removed -->
 
               <!-- Specifications -->
               @if (specificationsKeys().length > 0) {
@@ -175,7 +152,21 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                 </div>
               }
 
-               <!-- Actions (Add to Quote Removed) -->
+              <!-- Actions -->
+              <div class="mt-8 border-t border-gray-100 pt-6">
+                <button
+                  type="button"
+                  (click)="addToCart()"
+                  class="w-full bg-safs-dark text-white px-6 py-4 rounded-xl font-bold hover:bg-safs-gold transition-colors shadow-md text-lg text-center flex items-center justify-center gap-2"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="8" cy="21" r="1"></circle>
+                    <circle cx="19" cy="21" r="1"></circle>
+                    <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                  </svg>
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
 
@@ -251,7 +242,6 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   wishlistService = inject(WishlistService);
   private imageOptimization = inject(ImageOptimizationService);
-
   // Selection state
   selectedColor = signal<string | null>(null);
   selectedVariant = signal<string>('Standard');
@@ -466,7 +456,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   addToCart() {
     const p = this.product();
     if (!p) return;
-    const variant = this.selectedVariant() || 'Standard';
+    const variant = this.selectedColor() || 'Standard';
     this.store.addToCart(p, variant);
   }
 
