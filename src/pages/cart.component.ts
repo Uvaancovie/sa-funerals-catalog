@@ -125,30 +125,21 @@ export class CartComponent {
     this.submitSuccess.set(false);
     this.submitError.set(false);
     
-    // Save enquiry locally for the admin dashboard
+    // Save enquiry to the admin backend
     const cartItems = this.store.cart();
     this.enquiryService.addEnquiry(
       { ...this.enquiryData },
       cartItems.map(i => ({ productName: i.product.name, variant: i.variant, quantity: i.quantity }))
     );
 
-    const success = await this.brevoService.sendCartEnquiry(
-      this.enquiryData, 
-      cartItems
-    );
-    
     this.isSubmitting.set(false);
+    this.submitSuccess.set(true);
     
-    if (success) {
-      this.submitSuccess.set(true);
-      setTimeout(() => {
-        this.store.clearCart();
-        this.submitSuccess.set(false);
-        this.enquiryData = { name: '', email: '', phone: '' };
-        this.router.navigate(['/catalog']);
-      }, 3000);
-    } else {
-      this.submitError.set(true);
-    }
+    setTimeout(() => {
+      this.store.clearCart();
+      this.submitSuccess.set(false);
+      this.enquiryData = { name: '', email: '', phone: '' };
+      this.router.navigate(['/catalog']);
+    }, 3000);
   }
 }
