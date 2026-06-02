@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
     <!-- Hero -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-[#252B5A] to-safs-dark">
+    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark">
       <div class="absolute inset-0">
         <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/10 blur-[120px] -top-32 -left-32"></div>
         <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-gold/5 blur-[100px] -bottom-20 right-10"></div>
@@ -232,7 +232,7 @@ import { RouterLink } from '@angular/router';
             </div>
 
             <!-- Quick Contact Card -->
-            <div class="bg-gradient-to-br from-safs-dark via-[#252B5A] to-safs-dark rounded-2xl p-8 text-white relative overflow-hidden">
+            <div class="bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark rounded-2xl p-8 text-white relative overflow-hidden">
               <div class="absolute w-[200px] h-[200px] rounded-full bg-safs-gold/15 blur-[80px] -top-20 -right-20"></div>
               <div class="relative">
                 <h3 class="text-lg font-bold mb-3">Prefer to Talk?</h3>

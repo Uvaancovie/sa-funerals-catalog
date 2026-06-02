@@ -114,7 +114,7 @@ export class GoogleReviewsComponent implements OnInit, OnDestroy {
       subtitle: '1 review',
       rating: 5,
       comment: '',
-      color: '#1E2352'
+      color: '#151A40'
     },
     {
       initials: 'P',

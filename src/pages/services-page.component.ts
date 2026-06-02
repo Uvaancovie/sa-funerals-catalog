@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   imports: [CommonModule, RouterLink],
   template: `
     <!-- Hero Section with Carousel -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-[#252B5A] to-safs-dark">
+    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark">
       <div class="absolute inset-0">
         <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/10 blur-[120px] -top-32 -left-32"></div>
         <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-gold/5 blur-[100px] -bottom-20 right-10"></div>
@@ -215,7 +215,7 @@ import { RouterLink } from '@angular/router';
     </section>
 
     <!-- CTA Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-[#252B5A] to-safs-dark py-16 sm:py-24">
+    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark py-16 sm:py-24">
       <div class="absolute inset-0">
         <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-gold/10 blur-[120px] -top-32 right-32"></div>
         <div class="absolute w-[600px] h-[600px] rounded-full bg-white/5 blur-[150px] -bottom-40 -left-40"></div>

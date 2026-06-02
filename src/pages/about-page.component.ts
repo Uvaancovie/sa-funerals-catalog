@@ -1,11 +1,12 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { VideoPlayerComponent } from '../components/video-player.component';
 
 @Component({
   selector: 'app-about-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, VideoPlayerComponent],
   template: `
     <!-- Hero Section with Background Carousel -->
     <section class="relative min-h-screen flex items-center overflow-hidden">
@@ -62,6 +63,31 @@ import { RouterLink } from '@angular/router';
           <div class="scroll-indicator w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center pt-2">
             <div class="scroll-dot w-1.5 h-1.5 rounded-full bg-safs-gold"></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brand Film -->
+    <section class="bg-safs-dark py-20 sm:py-28 relative overflow-hidden">
+      <div class="relative max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-10">
+          <div class="flex items-center justify-center gap-3 mb-4 reveal fade-up">
+            <div class="w-8 h-0.5 bg-safs-gold"></div>
+            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Brand Film</span>
+            <div class="w-8 h-0.5 bg-safs-gold"></div>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4 reveal fade-up" style="transition-delay: 0.1s">A Look Inside Our Operation</h2>
+          <p class="text-white/50 text-sm max-w-xl mx-auto leading-relaxed reveal fade-up" style="transition-delay: 0.15s">
+            A cinematic view of our manufacturing facility, craftsmanship, and the team behind South Africa's trusted funeral supply partner.
+          </p>
+        </div>
+
+        <div class="relative reveal fade-up" style="transition-delay: 0.2s">
+          <app-video-player
+            src="/assets/videos/aerial.mp4"
+            [loop]="false"
+            [startMuted]="true"
+          ></app-video-player>
         </div>
       </div>
     </section>
@@ -252,7 +278,7 @@ import { RouterLink } from '@angular/router';
     </section>
 
     <!-- CTA Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-[#252B5A] to-safs-dark py-20">
+    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark py-20">
       <div class="absolute w-[600px] h-[600px] rounded-full bg-safs-gold/10 blur-[150px] -top-40 -right-40"></div>
       <div class="absolute w-[400px] h-[400px] rounded-full bg-white/5 blur-[100px] -bottom-20 left-10"></div>
 
