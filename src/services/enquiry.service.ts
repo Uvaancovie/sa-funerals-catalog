@@ -1,71 +1,65 @@
 import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
+import { lastValueFrom } from 'rxjs';
 
 export interface EnquiryRecord {
-  id: string;
-  date: string;
-  customer: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  items: {
-    productName: string;
-    variant: string;
-    quantity: number;
-  }[];
+  id: number;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  items: { name: string; quantity: number; price?: number }[];
   status: 'new' | 'contacted' | 'closed';
+  notes?: string;
+  created_at: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class EnquiryService {
-  private readonly storageKey = 'safs_enquiries';
+  private readonly apiUrl = environment.apiUrl;
+  readonly enquiries = signal<EnquiryRecord[]>([]);
+  private token: string | null = null;
 
-  readonly enquiries = signal<EnquiryRecord[]>(this.loadFromStorage());
-
-  private loadFromStorage(): EnquiryRecord[] {
-    try {
-      const raw = localStorage.getItem(this.storageKey);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
+  constructor(private http: HttpClient) {
+    this.token = localStorage.getItem('auth_token');
   }
 
-  private saveToStorage(records: EnquiryRecord[]) {
-    localStorage.setItem(this.storageKey, JSON.stringify(records));
-    this.enquiries.set(records);
+  async fetchEnquiries(): Promise<void> {
+    if (!this.token) return;
+    const res = await lastValueFrom(
+      this.http.get<EnquiryRecord[]>(`${this.apiUrl}/api/enquiries`, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    this.enquiries.set(res);
   }
 
-  addEnquiry(customer: { name: string; email: string; phone: string }, items: { productName: string; variant: string; quantity: number }[]) {
-    const record: EnquiryRecord = {
-      id: crypto.randomUUID(),
-      date: new Date().toISOString(),
-      customer,
-      items,
-      status: 'new'
-    };
-    const current = this.loadFromStorage();
-    current.unshift(record);
-    this.saveToStorage(current);
+  async addEnquiry(data: {
+    customer_name: string;
+    customer_email: string;
+    customer_phone: string;
+    items: { name: string; quantity: number }[];
+  }): Promise<void> {
+    await lastValueFrom(
+      this.http.post(`${this.apiUrl}/api/enquiries`, data)
+    );
   }
 
-  updateStatus(id: string, status: 'new' | 'contacted' | 'closed') {
-    const current = this.loadFromStorage();
-    const idx = current.findIndex(e => e.id === id);
-    if (idx !== -1) {
-      current[idx].status = status;
-      this.saveToStorage(current);
-    }
+  async updateStatus(id: number, status: 'new' | 'contacted' | 'closed'): Promise<void> {
+    await lastValueFrom(
+      this.http.patch(`${this.apiUrl}/api/enquiries/${id}`, { status }, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    await this.fetchEnquiries();
   }
 
-  deleteEnquiry(id: string) {
-    const current = this.loadFromStorage().filter(e => e.id !== id);
-    this.saveToStorage(current);
-  }
-
-  refresh() {
-    this.enquiries.set(this.loadFromStorage());
+  async deleteEnquiry(id: number): Promise<void> {
+    await lastValueFrom(
+      this.http.delete(`${this.apiUrl}/api/enquiries/${id}`, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    await this.fetchEnquiries();
   }
 }

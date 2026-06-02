@@ -1,4 +1,7 @@
 import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
+import { lastValueFrom } from 'rxjs';
 import jsPDF from 'jspdf';
 
 export interface OrderItem {
@@ -10,56 +13,77 @@ export interface OrderItem {
 }
 
 export interface Order {
-  id: string;
+  id: number;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
   items: OrderItem[];
   total: number;
-  date: string;
-  customerName?: string;
+  status: string;
+  notes?: string;
+  created_at: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class OrdersService {
+  private readonly apiUrl = environment.apiUrl;
   private ordersSignal = signal<Order[]>([]);
   orders = this.ordersSignal.asReadonly();
+  private token: string | null = null;
 
-  addOrder(order: Order) {
-    const current = this.ordersSignal();
-    this.ordersSignal.set([...current, order]);
-    // Persist to localStorage
-    localStorage.setItem('orders', JSON.stringify([...current, order]));
+  constructor(private http: HttpClient) {
+    this.token = localStorage.getItem('auth_token');
   }
 
-  removeOrder(orderId: string) {
-    const current = this.ordersSignal();
-    const updated = current.filter(o => o.id !== orderId);
-    this.ordersSignal.set(updated);
-    localStorage.setItem('orders', JSON.stringify(updated));
+  async fetchOrders(): Promise<void> {
+    const res = await lastValueFrom(
+      this.http.get<Order[]>(`${this.apiUrl}/api/orders`, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    this.ordersSignal.set(res);
   }
 
-  loadOrders() {
-    const stored = localStorage.getItem('orders');
-    if (stored) {
-      this.ordersSignal.set(JSON.parse(stored));
-    }
+  async createOrder(order: {
+    customer_name: string;
+    customer_email: string;
+    customer_phone: string;
+    items: { name: string; quantity: number; price: number }[];
+    total: number;
+  }): Promise<Order> {
+    const res = await lastValueFrom(
+      this.http.post<Order>(`${this.apiUrl}/api/orders`, order)
+    );
+    return res;
+  }
+
+  async updateStatus(id: number, status: string): Promise<void> {
+    await lastValueFrom(
+      this.http.patch(`${this.apiUrl}/api/orders/${id}`, { status }, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    await this.fetchOrders();
+  }
+
+  async deleteOrder(id: number): Promise<void> {
+    await lastValueFrom(
+      this.http.delete(`${this.apiUrl}/api/orders/${id}`, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    await this.fetchOrders();
   }
 
   generatePDF(order: Order) {
     const doc = new jsPDF();
-
-    // Header
     doc.setFontSize(20);
     doc.text('Order Receipt', 20, 20);
-
     doc.setFontSize(12);
-    doc.text(`Order ID: ${order.id}`, 20, 35);
-    doc.text(`Date: ${new Date(order.date).toLocaleDateString()}`, 20, 45);
-    if (order.customerName) {
-      doc.text(`Customer: ${order.customerName}`, 20, 55);
-    }
+    doc.text(`Order ID: #${order.id}`, 20, 35);
+    doc.text(`Date: ${new Date(order.created_at).toLocaleDateString()}`, 20, 45);
+    doc.text(`Customer: ${order.customer_name}`, 20, 55);
 
-    // Items
     let y = 70;
     doc.setFontSize(10);
     doc.text('Product', 20, y);
@@ -76,21 +100,9 @@ export class OrdersService {
       y += 10;
     });
 
-    // Total
     y += 10;
     doc.setFontSize(12);
-    doc.text(`Total: R${order.total.toFixed(2)}`, 20, y);
-
-    // Footer
-    y += 20;
-    doc.setFontSize(8);
-    doc.text('Thank you for your business!', 20, y);
-
-    // Download
+    doc.text(`Total: R${Number(order.total).toFixed(2)}`, 20, y);
     doc.save(`order-${order.id}.pdf`);
-  }
-
-  constructor() {
-    this.loadOrders();
   }
 }

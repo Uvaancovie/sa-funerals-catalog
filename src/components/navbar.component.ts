@@ -17,16 +17,46 @@ import { WishlistService } from '../services/wishlist.service';
          </a>
 
          <div class="flex items-center gap-2 sm:gap-4">
-           <!-- Desktop menu items -->
-           <nav class="hidden lg:flex items-center space-x-8 mr-2">
-             <a
-               routerLink="/catalog"
-               routerLinkActive="text-safs-gold font-bold"
-               class="text-white/80 hover:text-safs-gold transition-colors font-medium"
-             >
-               Full Catalogue
-             </a>
-           </nav>
+            <!-- Desktop menu items -->
+            <nav class="hidden lg:flex items-center space-x-8 mr-2">
+              <a
+                routerLink="/catalog"
+                routerLinkActive="text-safs-gold font-bold"
+                class="text-white/80 hover:text-safs-gold transition-colors font-medium"
+              >
+                Products
+              </a>
+              <a
+                routerLink="/services"
+                routerLinkActive="text-safs-gold font-bold"
+                class="text-white/80 hover:text-safs-gold transition-colors font-medium"
+              >
+                Services
+              </a>
+              <a
+                routerLink="/about"
+                routerLinkActive="text-safs-gold font-bold"
+                class="text-white/80 hover:text-safs-gold transition-colors font-medium"
+              >
+                About Us
+              </a>
+              <a
+                routerLink="/contact"
+                routerLinkActive="text-safs-gold font-bold"
+                class="text-white/80 hover:text-safs-gold transition-colors font-medium"
+              >
+                Contact
+              </a>
+              @if (authService.isAdmin()) {
+                <a
+                  routerLink="/admin/export"
+                  routerLinkActive="text-safs-gold font-bold"
+                  class="text-white/80 hover:text-safs-gold transition-colors font-medium"
+                >
+                  Export
+                </a>
+              }
+            </nav>
 
            <!-- Cart Icon -->
            <a
@@ -65,15 +95,49 @@ import { WishlistService } from '../services/wishlist.service';
        @if (isMenuOpen()) {
          <nav class="lg:hidden animate-in border-t border-safs-gold/30 bg-safs-dark shadow-lg">
            <div class="px-4 py-6 space-y-4">
-             <a
-               routerLink="/catalog"
-               routerLinkActive="text-safs-gold font-bold"
-               (click)="closeMenu()"
-               class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
-             >
-               Full Catalogue
-             </a>
-           </div>
+              <a
+                routerLink="/catalog"
+                routerLinkActive="text-safs-gold font-bold"
+                (click)="closeMenu()"
+                class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
+              >
+                Products
+              </a>
+              <a
+                routerLink="/services"
+                routerLinkActive="text-safs-gold font-bold"
+                (click)="closeMenu()"
+                class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
+              >
+                Services
+              </a>
+              <a
+                routerLink="/about"
+                routerLinkActive="text-safs-gold font-bold"
+                (click)="closeMenu()"
+                class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
+              >
+                About Us
+              </a>
+              <a
+                routerLink="/contact"
+                routerLinkActive="text-safs-gold font-bold"
+                (click)="closeMenu()"
+                class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
+              >
+                Contact
+              </a>
+              @if (authService.isAdmin()) {
+                <a
+                  routerLink="/admin/export"
+                  routerLinkActive="text-safs-gold font-bold"
+                  (click)="closeMenu()"
+                  class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
+                >
+                  Export Data
+                </a>
+              }
+            </div>
          </nav>
        }
     </header>

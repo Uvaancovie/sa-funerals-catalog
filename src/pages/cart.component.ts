@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { StoreService } from '../services/store.service';
-import { BrevoService } from '../services/brevo.service';
 import { EnquiryService } from '../services/enquiry.service';
 
 @Component({
@@ -13,7 +12,7 @@ import { EnquiryService } from '../services/enquiry.service';
   template: `
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <h1 class="text-3xl font-bold font-serif text-safs-dark mb-8">Your Cart</h1>
-      
+
       @if (store.cartCount() === 0) {
         <div class="flex flex-col items-center justify-center py-16 text-gray-500 bg-white rounded-2xl shadow-sm border border-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mb-4 opacity-50">
@@ -26,7 +25,6 @@ import { EnquiryService } from '../services/enquiry.service';
         </div>
       } @else {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <!-- Cart Items -->
           <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 class="text-xl font-bold text-safs-dark mb-6 border-b border-gray-100 pb-4">Order Items</h2>
             <div class="flex flex-col gap-6">
@@ -51,12 +49,11 @@ import { EnquiryService } from '../services/enquiry.service';
             </div>
           </div>
 
-          <!-- Enquiry Form -->
           <div class="lg:col-span-1">
             <div class="bg-gray-50 rounded-2xl p-6 border border-gray-200 sticky top-28">
               <h2 class="text-xl font-bold text-safs-dark mb-4 border-b border-gray-200 pb-4">Request a Quote</h2>
               <p class="text-sm text-gray-600 mb-6">Submit your details below and our team will get back to you with pricing and availability.</p>
-              
+
               <form (ngSubmit)="submitEnquiry()" #cartForm="ngForm" class="flex flex-col gap-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
@@ -70,11 +67,11 @@ import { EnquiryService } from '../services/enquiry.service';
                   <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                   <input type="tel" [(ngModel)]="enquiryData.phone" name="phone" required class="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-safs-gold w-full text-sm bg-white">
                 </div>
-                
+
                 <button type="submit" [disabled]="cartForm.invalid || isSubmitting()" class="w-full bg-safs-dark text-white px-6 py-4 rounded-xl font-bold hover:bg-safs-gold transition-colors disabled:opacity-50 mt-4 shadow-md text-lg">
                   {{ isSubmitting() ? 'Processing...' : 'Submit Enquiry' }}
                 </button>
-                
+
                 @if (submitSuccess()) {
                   <div class="text-green-600 text-sm font-semibold mt-4 text-center bg-green-50 p-3 rounded-lg border border-green-200">Enquiry sent successfully! We will contact you soon.</div>
                 }
@@ -91,19 +88,14 @@ import { EnquiryService } from '../services/enquiry.service';
 })
 export class CartComponent {
   store = inject(StoreService);
-  private brevoService = inject(BrevoService);
   private enquiryService = inject(EnquiryService);
   private router = inject(Router);
 
   isSubmitting = signal(false);
   submitSuccess = signal(false);
   submitError = signal(false);
-  
-  enquiryData = {
-    name: '',
-    email: '',
-    phone: ''
-  };
+
+  enquiryData = { name: '', email: '', phone: '' };
 
   updateQuantity(item: any, change: number) {
     const newQty = item.quantity + change;
@@ -120,26 +112,35 @@ export class CartComponent {
 
   async submitEnquiry() {
     if (this.store.cart().length === 0) return;
-    
+
     this.isSubmitting.set(true);
     this.submitSuccess.set(false);
     this.submitError.set(false);
-    
-    // Save enquiry to the admin backend
-    const cartItems = this.store.cart();
-    this.enquiryService.addEnquiry(
-      { ...this.enquiryData },
-      cartItems.map(i => ({ productName: i.product.name, variant: i.variant, quantity: i.quantity }))
-    );
 
-    this.isSubmitting.set(false);
-    this.submitSuccess.set(true);
-    
-    setTimeout(() => {
-      this.store.clearCart();
-      this.submitSuccess.set(false);
-      this.enquiryData = { name: '', email: '', phone: '' };
-      this.router.navigate(['/catalog']);
-    }, 3000);
+    try {
+      const cartItems = this.store.cart();
+      await this.enquiryService.addEnquiry({
+        customer_name: this.enquiryData.name,
+        customer_email: this.enquiryData.email,
+        customer_phone: this.enquiryData.phone,
+        items: cartItems.map(i => ({
+          name: i.product.name,
+          quantity: i.quantity
+        }))
+      });
+
+      this.isSubmitting.set(false);
+      this.submitSuccess.set(true);
+
+      setTimeout(() => {
+        this.store.clearCart();
+        this.submitSuccess.set(false);
+        this.enquiryData = { name: '', email: '', phone: '' };
+        this.router.navigate(['/catalog']);
+      }, 3000);
+    } catch {
+      this.isSubmitting.set(false);
+      this.submitError.set(true);
+    }
   }
 }

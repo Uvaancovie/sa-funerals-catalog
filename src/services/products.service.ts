@@ -1,234 +1,96 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, tap, catchError, throwError, from } from 'rxjs';
-import { SupabaseService } from './supabase.service';
+import { environment } from '../environments/environment';
+import { lastValueFrom } from 'rxjs';
 
 export interface Product {
-    productId: number;
-    id: string; // slug
-    name: string;
-    category: string;
-    description: string | null;
-    price: number | null;
-    priceOnRequest: boolean;
-    images: string; // JSON string array
-    colorVariations: string | null; // JSON string array of color variation objects
-    specifications: string | null; // JSON string
-    features: string | null; // JSON string array
-    inStock: boolean;
-    featured: boolean;
-    createdAt: string;
-    updatedAt: string | null;
+  id: number;
+  slug: string;
+  name: string;
+  category: string;
+  description: string | null;
+  price: number | null;
+  price_on_request: boolean;
+  images: string[] | null;
+  color_variations: any[] | null;
+  specifications: any | null;
+  features: string[] | null;
+  in_stock: boolean;
+  featured: boolean;
+  created_at: string;
+  updated_at: string | null;
 }
 
-export interface ExpoProduct {
-    id: string;
-    name: string;
-    category: string;
-    description: string | null;
-    price: number | null;
-    priceOnRequest: boolean;
-    images: string[];
-    colorVariations: { color: string; images: string[] }[] | null;
-}
-
-export interface ProductFilters {
-    category?: string;
-    search?: string;
-}
-
-
-
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ProductsService {
-    private http = inject(HttpClient);
-    private supabase = inject(SupabaseService).client;
+  private readonly apiUrl = environment.apiUrl;
+  readonly products = signal<Product[]>([]);
+  readonly categories = signal<string[]>([]);
+  readonly loading = signal(false);
+  private token: string | null = null;
 
-    // Signals
-    products = signal<Product[]>([]);
-    loading = signal<boolean>(false);
-    error = signal<string | null>(null);
+  constructor(private http: HttpClient) {
+    this.token = localStorage.getItem('auth_token');
+  }
 
+  async fetchProducts(params?: { category?: string; search?: string; featured?: boolean; in_stock?: boolean }): Promise<void> {
+    this.loading.set(true);
+    try {
+      let url = `${this.apiUrl}/api/products`;
+      const query = new URLSearchParams();
+      if (params?.category) query.set('category', params.category);
+      if (params?.search) query.set('search', params.search);
+      if (params?.featured !== undefined) query.set('featured', String(params.featured));
+      if (params?.in_stock !== undefined) query.set('in_stock', String(params.in_stock));
+      const qs = query.toString();
+      if (qs) url += '?' + qs;
 
-
-    /**
-     * Get all products with optional filters
-     */
-    getProducts(filters?: ProductFilters): Observable<Product[]> {
-        this.loading.set(true);
-        this.error.set(null);
-
-        return this.http.get<any[]>('assets/products.json').pipe(
-            map(data => {
-                let products = data.map(item => ({
-                    productId: item.id,
-                    id: item.id,
-                    name: item.name,
-                    category: item.category,
-                    description: null,
-                    price: item.price,
-                    priceOnRequest: false,
-                    images: JSON.stringify([item.image]),
-                    colorVariations: item.variants ? JSON.stringify(item.variants.map((v: string) => ({ color: v, images: [item.image] }))) : null,
-                    specifications: null,
-                    features: null,
-                    inStock: true,
-                    featured: false,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: null
-                } as Product));
-
-                if (filters?.category) {
-                    products = products.filter(p => p.category === filters.category);
-                }
-                if (filters?.search) {
-                    products = products.filter(p => p.name.toLowerCase().includes(filters.search!.toLowerCase()));
-                }
-
-                return products;
-            }),
-            tap({
-                next: (data) => {
-                    this.products.set(data);
-                    this.loading.set(false);
-                },
-                error: (err) => {
-                    this.error.set(err.message || 'Failed to load products');
-                    this.loading.set(false);
-                }
-            }),
-            catchError(err => throwError(() => err))
-        );
+      const res = await lastValueFrom(this.http.get<Product[]>(url));
+      this.products.set(res);
+    } finally {
+      this.loading.set(false);
     }
+  }
 
-    /**
-     * Get a single product by ID
-     */
-    getProduct(id: string): Observable<Product> {
-        return this.getProducts().pipe(
-            map(products => {
-                const product = products.find(p => p.id === id);
-                if (!product) throw new Error('Product not found');
-                return product;
-            })
-        );
-    }
+  async fetchProduct(slug: string): Promise<Product> {
+    return await lastValueFrom(
+      this.http.get<Product>(`${this.apiUrl}/api/products/${slug}`)
+    );
+  }
 
+  async fetchCategories(): Promise<void> {
+    const res = await lastValueFrom(
+      this.http.get<string[]>(`${this.apiUrl}/api/categories`)
+    );
+    this.categories.set(res);
+  }
 
+  async createProduct(data: Partial<Product>): Promise<Product> {
+    const res = await lastValueFrom(
+      this.http.post<Product>(`${this.apiUrl}/api/products`, data, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    await this.fetchProducts();
+    return res;
+  }
 
-    /**
-     * Update an existing product (Admin only logic built-in to RLS)
-     */
-    updateProduct(id: string, updates: Partial<Product>): Observable<Product> {
-        const dbRow = this.mapProductToDbRow(updates);
-        return from(this.supabase.from('products').update(dbRow).eq('Id', id).select().single()).pipe(
-            map((response: any) => {
-                if (response.error) throw new Error(response.error.message);
-                return this.mapDbRowToProduct(response.data);
-            })
-        );
-    }
+  async updateProduct(id: number, data: Partial<Product>): Promise<Product> {
+    const res = await lastValueFrom(
+      this.http.put<Product>(`${this.apiUrl}/api/products/${id}`, data, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    await this.fetchProducts();
+    return res;
+  }
 
-    /**
-     * Delete a product (Admin only logic built-in to RLS)
-     */
-    deleteProduct(id: string): Observable<{ success: boolean; message: string }> {
-        return from(this.supabase.from('Products').delete().eq('Id', id)).pipe(
-            map((response: any) => {
-                if (response.error) throw new Error(response.error.message);
-                return { success: true, message: 'Product deleted successfully' };
-            })
-        );
-    }
-
-
-
-    /**
-     * Helper methods to parse JSON fields
-     */
-    parseImages(product: Product): string[] {
-        if (!product.images) return [];
-        try {
-            const parsed = JSON.parse(product.images);
-            return Array.isArray(parsed) ? parsed : [product.images];
-        } catch {
-            return [product.images];
-        }
-    }
-
-    parseFeatures(product: Product): string[] {
-        if (!product.features) return [];
-        try {
-            const parsed = JSON.parse(product.features);
-            return Array.isArray(parsed) ? parsed : [];
-        } catch {
-            return [];
-        }
-    }
-
-    parseSpecifications(product: Product): Record<string, string> {
-        if (!product.specifications) return {};
-        try {
-            return JSON.parse(product.specifications);
-        } catch {
-            return {};
-        }
-    }
-
-    parseColorVariations(product: Product): { color: string; images: string[] }[] {
-        if (!product.colorVariations) return [];
-        try {
-            const parsed = JSON.parse(product.colorVariations);
-            return Array.isArray(parsed) ? parsed : [];
-        } catch {
-            return [];
-        }
-    }
-
-    /**
-     * Map Product to DB row
-     */
-    private mapProductToDbRow(product: Partial<Product>): any {
-        return {
-            Id: product.id,
-            Name: product.name,
-            Category: product.category,
-            Description: product.description,
-            Price: product.price,
-            PriceOnRequest: product.priceOnRequest,
-            Images: product.images,
-            ColorVariations: product.colorVariations,
-            Specifications: product.specifications,
-            Features: product.features,
-            InStock: product.inStock,
-            Featured: product.featured,
-            UpdatedAt: new Date().toISOString()
-        };
-    }
-
-    /**
-     * Map DB row to Product
-     */
-    private mapDbRowToProduct(row: any): Product {
-        return {
-            productId: row.Id,
-            id: row.Id,
-            name: row.Name,
-            category: row.Category,
-            description: row.Description,
-            price: row.Price,
-            priceOnRequest: row.PriceOnRequest,
-            images: row.Images,
-            colorVariations: row.ColorVariations,
-            specifications: row.Specifications,
-            features: row.Features,
-            inStock: row.InStock,
-            featured: row.Featured,
-            createdAt: row.CreatedAt,
-            updatedAt: row.UpdatedAt
-        };
-    }
-
+  async deleteProduct(id: number): Promise<void> {
+    await lastValueFrom(
+      this.http.delete(`${this.apiUrl}/api/products/${id}`, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      })
+    );
+    await this.fetchProducts();
+  }
 }
