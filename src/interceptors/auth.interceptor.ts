@@ -11,6 +11,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (!token) return next(req);
 
+  // Don't clone FormData requests — breaks multipart boundary
+  if (req.body instanceof FormData) return next(req);
+
   return next(
     req.clone({
       setHeaders: {

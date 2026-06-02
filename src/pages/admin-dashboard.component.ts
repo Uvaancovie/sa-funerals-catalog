@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+﻿import { Component, inject, OnInit, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,8 +10,11 @@ import { BannerService, Banner } from '../services/banner.service';
 import { AuditLogService, AuditLog, AuditLogSummary } from '../services/audit-log.service';
 import { UserService, User } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
+import { ExportEnquiryService, ExportEnquiryRecord } from '../services/export-enquiry.service';
+import { CacheService } from '../services/cache.service';
+import { environment } from '../environments/environment';
 
-type TabId = 'stats' | 'enquiries' | 'orders' | 'products' | 'users' | 'cms' | 'banners' | 'audit';
+type TabId = 'stats' | 'enquiries' | 'export-enquiries' | 'orders' | 'products' | 'users' | 'cms' | 'banners' | 'audit';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -36,81 +39,99 @@ type TabId = 'stats' | 'enquiries' | 'orders' | 'products' | 'users' | 'cms' | '
         </div>
 
         <!-- Tab Navigation -->
-        <div class="glass-panel mt-4 mx-4 rounded-2xl px-2 sm:px-4 overflow-x-auto">
+        <div class="glass-panel mt-4 mx-4 px-2 sm:px-4 overflow-x-auto">
           <div class="flex gap-1 min-w-max py-2">
             <button *ngFor="let tab of tabs" (click)="activeTab.set(tab.id)" [class]="getTabClass(tab.id)">
-              <span [innerHTML]="tab.icon"></span>
-              {{ tab.label }}
+              <span [innerHTML]="tab.icon" class="text-[10px]"></span>
+              <span class="hidden sm:inline">{{ tab.label }}</span>
             </button>
           </div>
         </div>
+
+        <!-- Loading indicator -->
+        @if (tabLoading()) {
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+            <div class="flex items-center gap-2 text-xs text-safs-text-muted/60">
+              <span class="inline-block w-3 h-3 rounded-full border-2 border-safs-accent border-t-transparent animate-spin"></span>
+              Loading {{ getTabLabel(tabLoading()) }}...
+            </div>
+          </div>
+        }
 
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
 
         <!-- ===== DASHBOARD STATS ===== -->
         @if (activeTab() === 'stats') {
-          <div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              <div class="glass-card rounded-xl p-5 border border-white/40">
-                <p class="text-3xl font-bold text-safs-dark">{{ enquiryService.enquiries().length }}</p>
-                <p class="text-xs text-gray-500 mt-1">Total Enquiries</p>
+          <div class="tab-content">
+            @if (tabLoading() === 'stats') {
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                @for (i of [1,2,3,4]; track i) {
+                  <div class="stat-card"><div class="skeleton-line" style="width:40%"></div><div class="skeleton-line" style="width:60%"></div></div>
+                }
               </div>
-              <div class="glass-card rounded-xl p-5 border border-white/40">
-                <p class="text-3xl font-bold text-safs-dark">{{ ordersService.orders().length }}</p>
-                <p class="text-xs text-gray-500 mt-1">Total Orders</p>
+            } @else {
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="stat-card">
+                  <p class="stat-card-value">{{ enquiryService.enquiries().length }}</p>
+                  <p class="stat-card-label">Total Enquiries</p>
+                </div>
+                <div class="stat-card">
+                  <p class="stat-card-value">{{ ordersService.orders().length }}</p>
+                  <p class="stat-card-label">Total Orders</p>
+                </div>
+                <div class="stat-card">
+                  <p class="stat-card-value">{{ productsService.products().length }}</p>
+                  <p class="stat-card-label">Products</p>
+                </div>
+                <div class="stat-card">
+                  <p class="stat-card-value">{{ userService.users().length }}</p>
+                  <p class="stat-card-label">Users</p>
+                </div>
               </div>
-              <div class="glass-card rounded-xl p-5 border border-white/40">
-                <p class="text-3xl font-bold text-safs-dark">{{ productsService.products().length }}</p>
-                <p class="text-xs text-gray-500 mt-1">Products</p>
-              </div>
-              <div class="glass-card rounded-xl p-5 border border-white/40">
-                <p class="text-3xl font-bold text-safs-dark">{{ userService.users().length }}</p>
-                <p class="text-xs text-gray-500 mt-1">Users</p>
-              </div>
-            </div>
 
-            @if (auditSummary(); as summary) {
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <div class="glass-card rounded-xl p-5 border border-white/40">
-                  <p class="text-2xl font-bold text-safs-dark">{{ summary.total_logins }}</p>
-                  <p class="text-xs text-gray-500 mt-1">Total Logins</p>
-                </div>
-                <div class="glass-card rounded-xl p-5 border border-white/40">
-                  <p class="text-2xl font-bold text-red-600">{{ summary.failed_logins }}</p>
-                  <p class="text-xs text-gray-500 mt-1">Failed Logins</p>
-                </div>
-                <div class="glass-card rounded-xl p-5 border border-white/40">
-                  <p class="text-2xl font-bold text-safs-dark">{{ summary.today_actions }}</p>
-                  <p class="text-xs text-gray-500 mt-1">Today's Actions</p>
-                </div>
-              </div>
-            }
-
-            <div class="glass-panel rounded-xl border border-white/40 p-6">
-              <h3 class="font-bold text-safs-dark mb-4">Recent Activity</h3>
-              @if (auditLogService.summary()?.recent_actions; as recent) {
-                <div class="space-y-2">
-                  @for (log of recent; track log.id) {
-                    <div class="flex items-center gap-3 text-sm py-1.5 border-b border-gray-50 last:border-0">
-                      <span [class]="getActionBadge(log.action)">{{ log.action }}</span>
-                      <span class="text-gray-700">{{ log.description }}</span>
-                      <span class="text-gray-400 ml-auto text-xs">{{ formatDate(log.created_at) }}</span>
-                    </div>
-                  }
+              @if (auditSummary(); as summary) {
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                  <div class="stat-card">
+                    <p class="stat-card-value">{{ summary.total_logins }}</p>
+                    <p class="stat-card-label">Total Logins</p>
+                  </div>
+                  <div class="stat-card">
+                    <p class="stat-card-value" style="color:#DC2626">{{ summary.failed_logins }}</p>
+                    <p class="stat-card-label">Failed Logins</p>
+                  </div>
+                  <div class="stat-card">
+                    <p class="stat-card-value">{{ summary.today_actions }}</p>
+                    <p class="stat-card-label">Today's Actions</p>
+                  </div>
                 </div>
               }
-            </div>
+
+              <div class="glass-panel p-6" style="border-radius:1.25rem">
+                <h3 class="font-bold text-safs-dark mb-4">Recent Activity</h3>
+                @if (auditLogService.summary()?.recent_actions; as recent) {
+                  <div class="space-y-1">
+                    @for (log of recent; track log.id) {
+                      <div class="flex items-center gap-3 text-sm py-2 border-b border-white/20 last:border-0">
+                        <span [class]="getActionBadge(log.action)">{{ log.action }}</span>
+                        <span class="text-safs-text-main">{{ log.description }}</span>
+                        <span class="text-safs-text-muted ml-auto text-xs">{{ formatDate(log.created_at) }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
           </div>
         }
 
         <!-- ===== ENQUIRIES ===== -->
         @if (activeTab() === 'enquiries') {
-          <div>
+          <div class="tab-content">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-bold text-safs-dark">Enquiries ({{ enquiryService.enquiries().length }})</h2>
               <div class="flex gap-2">
-                <select (change)="enquiryFilter.set($any($event.target).value)" class="text-xs px-3 py-1.5 rounded-lg border border-gray-200 bg-white">
+                <select (change)="enquiryFilter.set($any($event.target).value)" class="form-select" style="width:auto">
                   <option value="">All Status</option>
                   <option value="new">New</option>
                   <option value="contacted">Contacted</option>
@@ -119,36 +140,121 @@ type TabId = 'stats' | 'enquiries' | 'orders' | 'products' | 'users' | 'cms' | '
               </div>
             </div>
 
-            @if (filteredEnquiries().length === 0) {
-              <div class="glass-panel rounded-2xl border border-white/40 p-16 text-center text-gray-400">
-                <p class="text-lg">No enquiries found.</p>
+            @if (tabLoading() === 'enquiries') {
+              <div class="flex flex-col gap-4">
+                @for (i of [1,2,3]; track i) {
+                  <div class="data-card p-5"><div class="skeleton-line" style="width:50%"></div><div class="skeleton-line" style="width:80%"></div><div class="skeleton-line" style="width:30%"></div></div>
+                }
+              </div>
+            } @else if (filteredEnquiries().length === 0) {
+              <div class="empty-state">
+                <div class="empty-state-icon">&#9993;</div>
+                <p class="empty-state-title">No enquiries found</p>
+                <p class="empty-state-desc">Enquiries from customers will appear here once submitted.</p>
               </div>
             } @else {
-              <div class="flex flex-col gap-4">
+              <div class="flex flex-col gap-3">
                 @for (enquiry of filteredEnquiries(); track enquiry.id) {
-                  <div class="glass-card rounded-2xl border border-white/40 overflow-hidden">
-                    <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100">
+                  <div class="data-card">
+                    <div class="data-card-header">
                       <div class="flex items-center gap-3">
-                        <span [class]="getStatusBadge(enquiry.status)">{{ enquiry.status }}</span>
+                        <span [class]="'status-badge ' + 'status-badge--' + enquiry.status">{{ enquiry.status }}</span>
                         <div>
-                          <h3 class="font-bold text-safs-dark">{{ enquiry.customer_name }}</h3>
-                          <p class="text-xs text-gray-500">{{ formatDate(enquiry.created_at) }}</p>
+                          <h3 class="font-bold text-safs-dark text-sm">{{ enquiry.customer_name }}</h3>
+                          <p class="text-xs text-safs-text-muted">{{ formatDate(enquiry.created_at) }}</p>
                         </div>
                       </div>
                       <div class="flex items-center gap-2">
-                        <select [value]="enquiry.status" (change)="updateEnquiryStatus(enquiry.id, $any($event.target).value)" class="text-xs px-3 py-1.5 rounded-lg border border-gray-200 bg-white">
+                        <select [value]="enquiry.status" (change)="updateEnquiryStatus(enquiry.id, $any($event.target).value)" class="form-select" style="width:auto;padding:0.375rem 0.625rem">
                           <option value="new">New</option>
                           <option value="contacted">Contacted</option>
                           <option value="closed">Closed</option>
                         </select>
-                        <button (click)="deleteEnquiry(enquiry.id)" class="text-xs px-3 py-1.5 rounded-lg text-red-600 bg-red-50 hover:bg-red-100 border border-red-200">Delete</button>
+                        <button (click)="deleteEnquiry(enquiry.id)" class="btn-ghost">Delete</button>
                       </div>
                     </div>
-                    <div class="px-5 py-3 bg-white/50 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                      <div><span class="text-gray-500 text-xs uppercase">Email</span><p class="font-medium">{{ enquiry.customer_email }}</p></div>
-                      <div><span class="text-gray-500 text-xs uppercase">Phone</span><p class="font-medium">{{ enquiry.customer_phone }}</p></div>
-                      <div><span class="text-gray-500 text-xs uppercase">Items</span><p class="font-medium">{{ enquiry.items?.length || 0 }} product(s)</p></div>
+                    <div class="data-card-body">
+                      <div><span class="data-card-field-label">Email</span><p class="font-medium text-safs-text-main">{{ enquiry.customer_email }}</p></div>
+                      <div><span class="data-card-field-label">Phone</span><p class="font-medium text-safs-text-main">{{ enquiry.customer_phone }}</p></div>
+                      <div><span class="data-card-field-label">Items</span><p class="font-medium text-safs-text-main">{{ enquiry.items?.length || 0 }} product(s)</p></div>
                     </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- ===== EXPORT ENQUIRIES ===== -->
+        @if (activeTab() === 'export-enquiries') {
+          <div class="tab-content">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-bold text-safs-dark">Export Enquiries ({{ exportEnquiryService.enquiries().length }})</h2>
+              <div class="flex gap-2">
+                <select (change)="exportEnquiryFilter.set($any($event.target).value)" class="form-select" style="width:auto">
+                  <option value="">All Status</option>
+                  <option value="new">New</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+            </div>
+
+            @if (tabLoading() === 'export-enquiries') {
+              <div class="flex flex-col gap-4">
+                @for (i of [1,2,3]; track i) {
+                  <div class="data-card p-5"><div class="skeleton-line" style="width:50%"></div><div class="skeleton-line" style="width:80%"></div><div class="skeleton-line" style="width:30%"></div></div>
+                }
+              </div>
+            } @else if (filteredExportEnquiries().length === 0) {
+              <div class="empty-state">
+                <div class="empty-state-icon">&#10144;</div>
+                <p class="empty-state-title">No export enquiries found</p>
+                <p class="empty-state-desc">Export enquiries submitted through the public form will appear here.</p>
+              </div>
+            } @else {
+              <div class="flex flex-col gap-3">
+                @for (enquiry of filteredExportEnquiries(); track enquiry.id) {
+                  <div class="data-card">
+                    <div class="data-card-header">
+                      <div class="flex items-center gap-3">
+                        <span [class]="'status-badge ' + 'status-badge--' + enquiry.status">{{ enquiry.status }}</span>
+                        <div>
+                          <h3 class="font-bold text-safs-dark text-sm">{{ enquiry.name }}</h3>
+                          <p class="text-xs text-safs-text-muted">{{ formatDate(enquiry.created_at) }}</p>
+                        </div>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <select [value]="enquiry.status" (change)="updateExportEnquiryStatus(enquiry.id, $any($event.target).value)" class="form-select" style="width:auto;padding:0.375rem 0.625rem">
+                          <option value="new">New</option>
+                          <option value="contacted">Contacted</option>
+                          <option value="closed">Closed</option>
+                        </select>
+                        <button (click)="deleteExportEnquiry(enquiry.id)" class="btn-ghost">Delete</button>
+                      </div>
+                    </div>
+                    <div class="data-card-body">
+                      <div><span class="data-card-field-label">Email</span><p class="font-medium text-safs-text-main">{{ enquiry.email }}</p></div>
+                      <div><span class="data-card-field-label">Phone</span><p class="font-medium text-safs-text-main">{{ enquiry.phone }}</p></div>
+                      <div><span class="data-card-field-label">Country</span><p class="font-medium text-safs-text-main">{{ enquiry.country || 'N/A' }}</p></div>
+                    </div>
+                    @if (enquiry.company_details) {
+                      <div class="data-card-section">
+                        <span class="data-card-field-label">Company</span>
+                        <p class="text-sm font-medium text-safs-text-main">{{ enquiry.company_details }}</p>
+                      </div>
+                    }
+                    @if (enquiry.message) {
+                      <div class="data-card-section">
+                        <span class="data-card-field-label">Message</span>
+                        <p class="text-sm text-safs-text-main">{{ enquiry.message }}</p>
+                      </div>
+                    }
+                    @if (enquiry.registration_document) {
+                      <div class="data-card-section">
+                        <a [href]="getStorageUrl(enquiry.registration_document)" target="_blank" class="text-sm font-bold text-safs-accent hover:underline">View Registration Document</a>
+                      </div>
+                    }
                   </div>
                 }
               </div>
@@ -158,11 +264,11 @@ type TabId = 'stats' | 'enquiries' | 'orders' | 'products' | 'users' | 'cms' | '
 
         <!-- ===== ORDERS ===== -->
         @if (activeTab() === 'orders') {
-          <div>
+          <div class="tab-content">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-bold text-safs-dark">Orders ({{ ordersService.orders().length }})</h2>
               <div class="flex gap-2">
-                <select (change)="orderFilter.set($any($event.target).value)" class="text-xs px-3 py-1.5 rounded-lg border border-gray-200 bg-white">
+                <select (change)="orderFilter.set($any($event.target).value)" class="form-select" style="width:auto">
                   <option value="">All Status</option>
                   <option value="pending">Pending</option>
                   <option value="contacted">Contacted</option>
@@ -173,38 +279,46 @@ type TabId = 'stats' | 'enquiries' | 'orders' | 'products' | 'users' | 'cms' | '
               </div>
             </div>
 
-            @if (filteredOrders().length === 0) {
-              <div class="glass-panel rounded-2xl border border-white/40 p-16 text-center text-gray-400">
-                <p class="text-lg">No orders found.</p>
+            @if (tabLoading() === 'orders') {
+              <div class="flex flex-col gap-4">
+                @for (i of [1,2,3]; track i) {
+                  <div class="data-card p-5"><div class="skeleton-line" style="width:50%"></div><div class="skeleton-line" style="width:80%"></div><div class="skeleton-line" style="width:30%"></div></div>
+                }
+              </div>
+            } @else if (filteredOrders().length === 0) {
+              <div class="empty-state">
+                <div class="empty-state-icon">&#9776;</div>
+                <p class="empty-state-title">No orders found</p>
+                <p class="empty-state-desc">Customer orders will appear here once placed.</p>
               </div>
             } @else {
-              <div class="flex flex-col gap-4">
+              <div class="flex flex-col gap-3">
                 @for (order of filteredOrders(); track order.id) {
-                  <div class="glass-card rounded-2xl border border-white/40 overflow-hidden">
-                    <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100">
+                  <div class="data-card">
+                    <div class="data-card-header">
                       <div class="flex items-center gap-3">
-                        <span [class]="getStatusBadge(order.status)">{{ order.status }}</span>
+                        <span [class]="'status-badge ' + 'status-badge--' + order.status">{{ order.status }}</span>
                         <div>
-                          <h3 class="font-bold text-safs-dark">{{ order.customer_name }}</h3>
-                          <p class="text-xs text-gray-500">#{{ order.id }} - {{ formatDate(order.created_at) }}</p>
+                          <h3 class="font-bold text-safs-dark text-sm">{{ order.customer_name }}</h3>
+                          <p class="text-xs text-safs-text-muted">#{{ order.id }} — {{ formatDate(order.created_at) }}</p>
                         </div>
                       </div>
                       <div class="flex items-center gap-2">
                         <span class="font-bold text-safs-dark">R{{ order.total }}</span>
-                        <select [value]="order.status" (change)="updateOrderStatus(order.id, $any($event.target).value)" class="text-xs px-3 py-1.5 rounded-lg border border-gray-200 bg-white">
+                        <select [value]="order.status" (change)="updateOrderStatus(order.id, $any($event.target).value)" class="form-select" style="width:auto;padding:0.375rem 0.625rem">
                           <option value="pending">Pending</option>
                           <option value="contacted">Contacted</option>
                           <option value="confirmed">Confirmed</option>
                           <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
                         </select>
-                        <button (click)="deleteOrder(order.id)" class="text-xs px-3 py-1.5 rounded-lg text-red-600 bg-red-50 hover:bg-red-100 border border-red-200">Delete</button>
+                        <button (click)="deleteOrder(order.id)" class="btn-ghost">Delete</button>
                       </div>
                     </div>
-                    <div class="px-5 py-3 bg-white/50 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                      <div><span class="text-gray-500 text-xs uppercase">Email</span><p class="font-medium">{{ order.customer_email }}</p></div>
-                      <div><span class="text-gray-500 text-xs uppercase">Phone</span><p class="font-medium">{{ order.customer_phone }}</p></div>
-                      <div><span class="text-gray-500 text-xs uppercase">Items</span><p class="font-medium">{{ order.items?.length || 0 }} item(s)</p></div>
+                    <div class="data-card-body">
+                      <div><span class="data-card-field-label">Email</span><p class="font-medium text-safs-text-main">{{ order.customer_email }}</p></div>
+                      <div><span class="data-card-field-label">Phone</span><p class="font-medium text-safs-text-main">{{ order.customer_phone }}</p></div>
+                      <div><span class="data-card-field-label">Items</span><p class="font-medium text-safs-text-main">{{ order.items?.length || 0 }} item(s)</p></div>
                     </div>
                   </div>
                 }
@@ -215,451 +329,404 @@ type TabId = 'stats' | 'enquiries' | 'orders' | 'products' | 'users' | 'cms' | '
 
         <!-- ===== PRODUCTS (CMS) ===== -->
         @if (activeTab() === 'products') {
-          <div>
-            <div class="glass-panel rounded-2xl p-4 sm:p-5 mb-5 border border-white/40">
-              <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                <div>
-                  <h2 class="text-lg font-bold text-safs-dark">Products Inventory</h2>
-                  <p class="text-xs text-safs-dark/60">Track stock, featured items, and price-on-request products.</p>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <button (click)="openProductForm()" class="text-xs px-4 py-2 rounded-lg bg-safs-dark text-white hover:bg-safs-gold transition-colors font-medium">+ Add Product</button>
-                  <button (click)="applyProductFilters()" class="text-xs px-4 py-2 rounded-lg bg-white/70 text-safs-dark hover:bg-white border border-white/60">Refresh</button>
-                </div>
+          <div class="tab-content">
+            @if (tabLoading() === 'products') {
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                @for (i of [1,2,3,4,5,6]; track i) {
+                  <div class="data-card p-4"><div class="skeleton-block mb-3"></div><div class="skeleton-line" style="width:40%"></div><div class="skeleton-line" style="width:70%"></div><div class="skeleton-line" style="width:50%"></div></div>
+                }
               </div>
-              <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-                <input
-                  [(ngModel)]="productSearch"
-                  (input)="applyProductFilters()"
-                  placeholder="Search name or description..."
-                  class="w-full px-4 py-2 rounded-lg border border-white/60 bg-white/70 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold"
-                >
-                <select
-                  [(ngModel)]="productCategoryFilter"
-                  (change)="applyProductFilters()"
-                  class="w-full px-3 py-2 rounded-lg border border-white/60 bg-white/70 text-sm"
-                >
-                  <option value="">All Categories</option>
-                  @for (category of productsService.categories(); track category) {
-                    <option [value]="category">{{ category }}</option>
-                  }
-                </select>
-                <select
-                  [(ngModel)]="productStockFilter"
-                  (change)="applyProductFilters()"
-                  class="w-full px-3 py-2 rounded-lg border border-white/60 bg-white/70 text-sm"
-                >
-                  <option value="all">All Stock</option>
-                  <option value="in">In Stock</option>
-                  <option value="out">Out of Stock</option>
-                </select>
-                <label class="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/60 bg-white/70 text-sm">
-                  <input type="checkbox" [(ngModel)]="productFeaturedOnly" (change)="applyProductFilters()">
-                  Featured only
-                </label>
-                <button (click)="clearProductFilters()" class="w-full px-3 py-2 rounded-lg border border-white/60 bg-white/70 text-sm text-safs-dark hover:bg-white">Clear Filters</button>
-              </div>
-            </div>
-
-            @if (inventoryCounts(); as counts) {
-              <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
-                <div class="glass-card rounded-xl p-4 border border-white/40">
-                  <p class="text-xs text-gray-500">Total</p>
-                  <p class="text-xl font-bold text-safs-dark">{{ counts.total }}</p>
-                </div>
-                <div class="glass-card rounded-xl p-4 border border-white/40">
-                  <p class="text-xs text-gray-500">In Stock</p>
-                  <p class="text-xl font-bold text-green-700">{{ counts.inStock }}</p>
-                </div>
-                <div class="glass-card rounded-xl p-4 border border-white/40">
-                  <p class="text-xs text-gray-500">Out of Stock</p>
-                  <p class="text-xl font-bold text-red-500">{{ counts.outOfStock }}</p>
-                </div>
-                <div class="glass-card rounded-xl p-4 border border-white/40">
-                  <p class="text-xs text-gray-500">Featured</p>
-                  <p class="text-xl font-bold text-amber-700">{{ counts.featured }}</p>
-                </div>
-                <div class="glass-card rounded-xl p-4 border border-white/40">
-                  <p class="text-xs text-gray-500">Price on Request</p>
-                  <p class="text-xl font-bold text-safs-dark">{{ counts.priceOnRequest }}</p>
-                </div>
-              </div>
-            }
-
-            @if (productFormOpen()) {
-              <div class="glass-panel rounded-2xl border border-white/40 p-6 mb-6">
-                <h3 class="font-bold text-safs-dark mb-4">{{ editingProduct() ? 'Edit Product' : 'New Product' }}</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            } @else {
+              <div class="glass-panel p-4 sm:p-5 mb-5" style="border-radius:1.25rem">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Name</label>
-                    <input [(ngModel)]="productForm.name" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
+                    <h2 class="text-lg font-bold text-safs-dark">Products Inventory</h2>
+                    <p class="text-xs text-safs-text-muted">Track stock, featured items, and price-on-request products.</p>
                   </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Slug</label>
-                    <input [(ngModel)]="productForm.slug" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Category</label>
-                    <input [(ngModel)]="productForm.category" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Price</label>
-                    <input type="number" [(ngModel)]="productForm.price" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Images (JSON array)</label>
-                    <input [(ngModel)]="productForm.images" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div class="flex items-center gap-4">
-                    <label class="flex items-center gap-2 text-sm">
-                      <input type="checkbox" [(ngModel)]="productForm.in_stock"> In Stock
-                    </label>
-                    <label class="flex items-center gap-2 text-sm">
-                      <input type="checkbox" [(ngModel)]="productForm.featured"> Featured
-                    </label>
-                    <label class="flex items-center gap-2 text-sm">
-                      <input type="checkbox" [(ngModel)]="productForm.price_on_request"> Price on Request
-                    </label>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <button (click)="openProductForm()" class="btn-primary">+ Add Product</button>
+                    <button (click)="applyProductFilters()" class="btn-outline" style="color:var(--safs-text-muted);border-color:rgba(127,140,141,0.2);background:rgba(255,255,255,0.6)">Refresh</button>
                   </div>
                 </div>
-                <div class="mt-4">
-                  <label class="block text-xs font-medium text-gray-600 mb-1">Description</label>
-                  <textarea [(ngModel)]="productForm.description" rows="3" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold"></textarea>
-                </div>
-                <div class="flex gap-2 mt-4">
-                  <button (click)="saveProduct()" class="px-4 py-2 text-sm font-medium rounded-lg bg-safs-dark text-white hover:bg-safs-gold transition-colors">Save</button>
-                  <button (click)="productFormOpen.set(false)" class="px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Cancel</button>
-                </div>
-              </div>
-            }
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-              @for (product of productsService.products(); track product.id) {
-                <div class="glass-card rounded-2xl border border-white/40 overflow-hidden">
-                  <div class="h-28 bg-gradient-to-br from-white/60 to-white/10 flex items-center justify-center text-xs text-gray-400">
-                    @if (resolveImageUrl(product.images?.[0])) {
-                      <img [src]="resolveImageUrl(product.images?.[0])" [alt]="product.name" class="h-full w-full object-cover">
-                    } @else {
-                      No image
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+                  <input [(ngModel)]="productSearch" (input)="applyProductFilters()" placeholder="Search name or description..." class="form-input">
+                  <select [(ngModel)]="productCategoryFilter" (change)="applyProductFilters()" class="form-select">
+                    <option value="">All Categories</option>
+                    @for (category of productsService.categories(); track category) {
+                      <option [value]="category">{{ category }}</option>
                     }
+                  </select>
+                  <select [(ngModel)]="productStockFilter" (change)="applyProductFilters()" class="form-select">
+                    <option value="all">All Stock</option>
+                    <option value="in">In Stock</option>
+                    <option value="out">Out of Stock</option>
+                  </select>
+                  <label class="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/40 bg-white/60 text-sm cursor-pointer hover:bg-white/80 transition-colors">
+                    <input type="checkbox" [(ngModel)]="productFeaturedOnly" (change)="applyProductFilters()">
+                    Featured only
+                  </label>
+                  <button (click)="clearProductFilters()" class="form-select text-safs-text-main hover:bg-white/80">Clear Filters</button>
+                </div>
+              </div>
+
+              @if (inventoryCounts(); as counts) {
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+                  <div class="stat-card"><p class="stat-card-value">{{ counts.total }}</p><p class="stat-card-label">Total</p></div>
+                  <div class="stat-card"><p class="stat-card-value" style="color:#15803D">{{ counts.inStock }}</p><p class="stat-card-label">In Stock</p></div>
+                  <div class="stat-card"><p class="stat-card-value" style="color:#DC2626">{{ counts.outOfStock }}</p><p class="stat-card-label">Out of Stock</p></div>
+                  <div class="stat-card"><p class="stat-card-value" style="color:#B45309">{{ counts.featured }}</p><p class="stat-card-label">Featured</p></div>
+                  <div class="stat-card"><p class="stat-card-value">{{ counts.priceOnRequest }}</p><p class="stat-card-label">Price on Request</p></div>
+                </div>
+              }
+
+              @if (productFormOpen()) {
+                <div class="glass-panel p-6 mb-6" style="border-radius:1.25rem">
+                  <h3 class="font-bold text-safs-dark mb-4">{{ editingProduct() ? 'Edit Product' : 'New Product' }}</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="data-card-field-label mb-1">Name</label><input [(ngModel)]="productForm.name" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Slug</label><input [(ngModel)]="productForm.slug" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Category</label><input [(ngModel)]="productForm.category" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Price</label><input type="number" [(ngModel)]="productForm.price" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Images (JSON array)</label><input [(ngModel)]="productForm.images" class="form-input"></div>
+                    <div class="flex items-center gap-4">
+                      <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.in_stock"> In Stock</label>
+                      <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.featured"> Featured</label>
+                      <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.price_on_request"> Price on Request</label>
+                    </div>
                   </div>
-                  <div class="p-4">
-                    <div class="flex items-start justify-between mb-2">
-                      <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-white/70 text-gray-600 border border-white/70">{{ product.category }}</span>
-                      @if (product.featured) { <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Featured</span> }
-                    </div>
-                    <h3 class="font-bold text-safs-dark text-sm">{{ product.name }}</h3>
-                    <p class="text-xs text-gray-500 mt-1 truncate">{{ product.description || 'No description yet.' }}</p>
-                    <div class="flex items-center justify-between mt-3">
-                      <span class="font-bold text-safs-dark">{{ product.price ? 'R' + product.price : 'Request Price' }}</span>
-                      <span class="text-xs" [class.text-green-600]="product.in_stock" [class.text-red-500]="!product.in_stock">{{ product.in_stock ? 'In Stock' : 'Out of Stock' }}</span>
-                    </div>
-                    <div class="flex items-center justify-between text-[10px] text-gray-500 mt-2">
-                      <span>Last updated</span>
-                      <span>{{ formatDate(product.updated_at || product.created_at) }}</span>
-                    </div>
-                    <div class="flex gap-2 mt-3 pt-3 border-t border-white/40">
-                      <button (click)="editProduct(product)" class="text-xs px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200">Edit</button>
-                      <button (click)="deleteProduct(product.id)" class="text-xs px-3 py-1.5 rounded-lg text-red-600 bg-red-50 hover:bg-red-100 border border-red-200">Delete</button>
-                    </div>
+                  <div class="mt-4">
+                    <label class="data-card-field-label mb-1">Description</label>
+                    <textarea [(ngModel)]="productForm.description" rows="3" class="form-input"></textarea>
+                  </div>
+                  <div class="flex gap-2 mt-4">
+                    <button (click)="saveProduct()" class="btn-primary">Save</button>
+                    <button (click)="productFormOpen.set(false)" class="px-4 py-2 rounded-xl text-sm font-medium bg-white/60 text-safs-text-muted hover:bg-white/80 transition-colors border border-white/40">Cancel</button>
                   </div>
                 </div>
               }
-            </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                @for (product of productsService.products(); track product.id) {
+                  <div class="data-card">
+                    <div class="h-28 bg-gradient-to-br from-white/60 to-white/10 flex items-center justify-center text-xs text-safs-text-muted overflow-hidden">
+                      @if (resolveImageUrl(product.images?.[0])) {
+                        <img [src]="resolveImageUrl(product.images?.[0])" [alt]="product.name" class="h-full w-full object-cover">
+                      } @else {
+                        <span class="opacity-40">No image</span>
+                      }
+                    </div>
+                    <div class="p-4">
+                      <div class="flex items-start justify-between mb-2 gap-2">
+                        <span class="status-badge status-badge--new" style="font-size:0.625rem;padding:0.0625rem 0.5rem">{{ product.category }}</span>
+                        @if (product.featured) { <span class="status-badge" style="background:rgba(180,83,9,0.1);color:#B45309;border-color:rgba(180,83,9,0.15);font-size:0.625rem;padding:0.0625rem 0.5rem">Featured</span> }
+                      </div>
+                      <h3 class="font-bold text-safs-dark text-sm">{{ product.name }}</h3>
+                      <p class="text-xs text-safs-text-muted mt-1 truncate">{{ product.description || 'No description yet.' }}</p>
+                      <div class="flex items-center justify-between mt-3">
+                        <span class="font-bold text-safs-dark">{{ product.price ? 'R' + product.price : 'Request Price' }}</span>
+                        <span class="text-xs font-medium" [style.color]="product.in_stock ? '#15803D' : '#DC2626'">{{ product.in_stock ? 'In Stock' : 'Out of Stock' }}</span>
+                      </div>
+                      <div class="flex items-center justify-between text-[0.625rem] text-safs-text-muted mt-2">
+                        <span>Last updated</span>
+                        <span>{{ formatDate(product.updated_at || product.created_at) }}</span>
+                      </div>
+                      <div class="flex gap-2 mt-3 pt-3 border-t border-white/30">
+                        <button (click)="editProduct(product)" class="btn-outline">Edit</button>
+                        <button (click)="deleteProduct(product.id)" class="btn-ghost">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
           </div>
         }
 
         <!-- ===== USERS ===== -->
         @if (activeTab() === 'users') {
-          <div>
+          <div class="tab-content">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-bold text-safs-dark">Users ({{ userService.users().length }})</h2>
-              <button (click)="openUserForm()" class="text-xs px-4 py-2 rounded-lg bg-safs-dark text-white hover:bg-safs-gold transition-colors font-medium">+ Add User</button>
+              <button (click)="openUserForm()" class="btn-primary">+ Add User</button>
             </div>
 
-            @if (userFormOpen()) {
-              <div class="glass-panel rounded-2xl border border-white/40 p-6 mb-6">
-                <h3 class="font-bold text-safs-dark mb-4">{{ editingUser() ? 'Edit User' : 'New User' }}</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Name</label>
-                    <input [(ngModel)]="userForm.name" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Email</label>
-                    <input type="email" [(ngModel)]="userForm.email" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Password{{ editingUser() ? ' (leave blank to keep)' : '' }}</label>
-                    <input type="password" [(ngModel)]="userForm.password" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Role</label>
-                    <select [(ngModel)]="userForm.role" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                      <option value="customer">Customer</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="flex items-center gap-2 text-sm">
-                      <input type="checkbox" [(ngModel)]="userForm.is_active"> Active
-                    </label>
-                  </div>
-                </div>
-                <div class="flex gap-2 mt-4">
-                  <button (click)="saveUser()" class="px-4 py-2 text-sm font-medium rounded-lg bg-safs-dark text-white hover:bg-safs-gold transition-colors">Save</button>
-                  <button (click)="userFormOpen.set(false)" class="px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Cancel</button>
+            @if (tabLoading() === 'users') {
+              <div class="glass-panel overflow-hidden" style="border-radius:1rem">
+                <div class="p-4 space-y-3">
+                  @for (i of [1,2,3,4,5]; track i) {
+                    <div class="flex items-center gap-4"><div class="skeleton" style="width:2rem;height:2rem;border-radius:9999px"></div><div style="flex:1"><div class="skeleton-line" style="width:40%"></div><div class="skeleton-line" style="width:60%"></div></div></div>
+                  }
                 </div>
               </div>
-            }
+            } @else {
+              @if (userFormOpen()) {
+                <div class="glass-panel p-6 mb-6" style="border-radius:1.25rem">
+                  <h3 class="font-bold text-safs-dark mb-4">{{ editingUser() ? 'Edit User' : 'New User' }}</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="data-card-field-label mb-1">Name</label><input [(ngModel)]="userForm.name" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Email</label><input type="email" [(ngModel)]="userForm.email" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Password{{ editingUser() ? ' (leave blank to keep)' : '' }}</label><input type="password" [(ngModel)]="userForm.password" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Role</label>
+                      <select [(ngModel)]="userForm.role" class="form-select">
+                        <option value="customer">Customer</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </div>
+                    <div><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="userForm.is_active"> Active</label></div>
+                  </div>
+                  <div class="flex gap-2 mt-4">
+                    <button (click)="saveUser()" class="btn-primary">Save</button>
+                    <button (click)="userFormOpen.set(false)" class="px-4 py-2 rounded-xl text-sm font-medium bg-white/60 text-safs-text-muted hover:bg-white/80 transition-colors border border-white/40">Cancel</button>
+                  </div>
+                </div>
+              }
 
-            <div class="glass-panel rounded-xl border border-white/40 overflow-hidden">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="bg-gray-50 text-left text-xs uppercase text-gray-500">
-                    <th class="px-4 py-3">Name</th>
-                    <th class="px-4 py-3">Email</th>
-                    <th class="px-4 py-3">Role</th>
-                    <th class="px-4 py-3">Status</th>
-                    <th class="px-4 py-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (user of userService.users(); track user.id) {
-                    <tr class="border-t border-gray-100 hover:bg-gray-50">
-                      <td class="px-4 py-3 font-medium text-safs-dark">{{ user.name }}</td>
-                      <td class="px-4 py-3 text-gray-600">{{ user.email }}</td>
-                      <td class="px-4 py-3">
-                        <span [class]="user.role === 'admin' ? 'text-xs font-bold px-2 py-0.5 rounded-full bg-safs-dark/10 text-safs-dark' : 'text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600'">{{ user.role }}</span>
-                      </td>
-                      <td class="px-4 py-3">
-                        <span [class]="user.is_active ? 'text-green-600' : 'text-red-500'">{{ user.is_active ? 'Active' : 'Inactive' }}</span>
-                      </td>
-                      <td class="px-4 py-3">
-                        <button (click)="editUser(user)" class="text-xs px-2 py-1 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 mr-1">Edit</button>
-                        <button (click)="deleteUser(user.id)" class="text-xs px-2 py-1 rounded text-red-600 bg-red-50 hover:bg-red-100">Delete</button>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
+              <div class="glass-panel overflow-hidden" style="border-radius:1rem">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    @for (user of userService.users(); track user.id) {
+                      <tr>
+                        <td class="font-medium text-safs-dark">{{ user.name }}</td>
+                        <td class="text-safs-text-muted">{{ user.email }}</td>
+                        <td>
+                          <span [class]="user.role === 'admin' ? 'status-badge status-badge--new' : 'status-badge'"
+                                [style]="user.role === 'admin' ? '' : 'background:rgba(100,116,139,0.08);color:#475569;border-color:rgba(100,116,139,0.12)'">{{ user.role }}</span>
+                        </td>
+                        <td>
+                          <span class="text-xs font-medium" [style.color]="user.is_active ? '#15803D' : '#DC2626'">{{ user.is_active ? 'Active' : 'Inactive' }}</span>
+                        </td>
+                        <td>
+                          <button (click)="editUser(user)" class="btn-outline mr-1">Edit</button>
+                          <button (click)="deleteUser(user.id)" class="btn-ghost">Delete</button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                @if (userService.users().length === 0) {
+                  <div class="empty-state">
+                    <div class="empty-state-icon">&#9787;</div>
+                    <p class="empty-state-title">No users found</p>
+                    <p class="empty-state-desc">Add your first user to get started.</p>
+                  </div>
+                }
+              </div>
+            }
           </div>
         }
 
         <!-- ===== CMS PAGES ===== -->
         @if (activeTab() === 'cms') {
-          <div>
+          <div class="tab-content">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-bold text-safs-dark">CMS Pages ({{ cmsService.pages().length }})</h2>
-              <button (click)="openCmsForm()" class="text-xs px-4 py-2 rounded-lg bg-safs-dark text-white hover:bg-safs-gold transition-colors font-medium">+ Add Page</button>
+              <button (click)="openCmsForm()" class="btn-primary">+ Add Page</button>
             </div>
 
-            @if (cmsFormOpen()) {
-              <div class="glass-panel rounded-2xl border border-white/40 p-6 mb-6">
-                <h3 class="font-bold text-safs-dark mb-4">{{ editingCmsPage() ? 'Edit Page' : 'New Page' }}</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
-                    <input [(ngModel)]="cmsForm.title" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Slug</label>
-                    <input [(ngModel)]="cmsForm.slug" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Meta Title</label>
-                    <input [(ngModel)]="cmsForm.meta_title" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Meta Description</label>
-                    <input [(ngModel)]="cmsForm.meta_description" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <label class="flex items-center gap-2 text-sm">
-                    <input type="checkbox" [(ngModel)]="cmsForm.published"> Published
-                  </label>
-                </div>
-                <div class="mt-4">
-                  <label class="block text-xs font-medium text-gray-600 mb-1">Content</label>
-                  <textarea [(ngModel)]="cmsForm.content" rows="6" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-safs-gold"></textarea>
-                </div>
-                <div class="flex gap-2 mt-4">
-                  <button (click)="saveCmsPage()" class="px-4 py-2 text-sm font-medium rounded-lg bg-safs-dark text-white hover:bg-safs-gold transition-colors">Save</button>
-                  <button (click)="cmsFormOpen.set(false)" class="px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Cancel</button>
+            @if (tabLoading() === 'cms') {
+              <div class="glass-panel overflow-hidden" style="border-radius:1rem">
+                <div class="p-4 space-y-3">
+                  @for (i of [1,2,3,4]; track i) {
+                    <div class="flex items-center gap-4"><div style="flex:1"><div class="skeleton-line" style="width:40%"></div><div class="skeleton-line" style="width:25%"></div></div></div>
+                  }
                 </div>
               </div>
-            }
+            } @else {
+              @if (cmsFormOpen()) {
+                <div class="glass-panel p-6 mb-6" style="border-radius:1.25rem">
+                  <h3 class="font-bold text-safs-dark mb-4">{{ editingCmsPage() ? 'Edit Page' : 'New Page' }}</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="data-card-field-label mb-1">Title</label><input [(ngModel)]="cmsForm.title" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Slug</label><input [(ngModel)]="cmsForm.slug" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Meta Title</label><input [(ngModel)]="cmsForm.meta_title" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Meta Description</label><input [(ngModel)]="cmsForm.meta_description" class="form-input"></div>
+                    <div><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="cmsForm.published"> Published</label></div>
+                  </div>
+                  <div class="mt-4">
+                    <label class="data-card-field-label mb-1">Content</label>
+                    <textarea [(ngModel)]="cmsForm.content" rows="6" class="form-input font-mono"></textarea>
+                  </div>
+                  <div class="flex gap-2 mt-4">
+                    <button (click)="saveCmsPage()" class="btn-primary">Save</button>
+                    <button (click)="cmsFormOpen.set(false)" class="px-4 py-2 rounded-xl text-sm font-medium bg-white/60 text-safs-text-muted hover:bg-white/80 transition-colors border border-white/40">Cancel</button>
+                  </div>
+                </div>
+              }
 
-            <div class="glass-panel rounded-xl border border-white/40 overflow-hidden">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="bg-gray-50 text-left text-xs uppercase text-gray-500">
-                    <th class="px-4 py-3">Title</th>
-                    <th class="px-4 py-3">Slug</th>
-                    <th class="px-4 py-3">Status</th>
-                    <th class="px-4 py-3">Updated</th>
-                    <th class="px-4 py-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (page of cmsService.pages(); track page.id) {
-                    <tr class="border-t border-gray-100 hover:bg-gray-50">
-                      <td class="px-4 py-3 font-medium text-safs-dark">{{ page.title }}</td>
-                      <td class="px-4 py-3 text-gray-500 text-xs">{{ page.slug }}</td>
-                      <td class="px-4 py-3">
-                        <span [class]="page.published ? 'text-xs font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700' : 'text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600'">{{ page.published ? 'Published' : 'Draft' }}</span>
-                      </td>
-                      <td class="px-4 py-3 text-xs text-gray-500">{{ formatDate(page.updated_at) }}</td>
-                      <td class="px-4 py-3">
-                        <button (click)="editCmsPage(page)" class="text-xs px-2 py-1 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 mr-1">Edit</button>
-                        <button (click)="deleteCmsPage(page.id)" class="text-xs px-2 py-1 rounded text-red-600 bg-red-50 hover:bg-red-100">Delete</button>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
+              <div class="glass-panel overflow-hidden" style="border-radius:1rem">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>Title</th><th>Slug</th><th>Status</th><th>Updated</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody>
+                    @for (page of cmsService.pages(); track page.id) {
+                      <tr>
+                        <td class="font-medium text-safs-dark">{{ page.title }}</td>
+                        <td class="text-safs-text-muted text-xs">{{ page.slug }}</td>
+                        <td>
+                          <span [class]="page.published ? 'status-badge' : 'status-badge'"
+                                [style]="page.published ? 'background:rgba(22,163,74,0.1);color:#15803D;border-color:rgba(22,163,74,0.15);font-size:0.625rem;padding:0.0625rem 0.5rem' : 'background:rgba(100,116,139,0.08);color:#475569;border-color:rgba(100,116,139,0.12);font-size:0.625rem;padding:0.0625rem 0.5rem'">{{ page.published ? 'Published' : 'Draft' }}</span>
+                        </td>
+                        <td class="text-xs text-safs-text-muted">{{ formatDate(page.updated_at) }}</td>
+                        <td>
+                          <button (click)="editCmsPage(page)" class="btn-outline mr-1">Edit</button>
+                          <button (click)="deleteCmsPage(page.id)" class="btn-ghost">Delete</button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                @if (cmsService.pages().length === 0) {
+                  <div class="empty-state">
+                    <div class="empty-state-icon">&#9998;</div>
+                    <p class="empty-state-title">No pages found</p>
+                    <p class="empty-state-desc">Create your first CMS page to populate your site.</p>
+                  </div>
+                }
+              </div>
+            }
           </div>
         }
 
         <!-- ===== BANNERS ===== -->
         @if (activeTab() === 'banners') {
-          <div>
+          <div class="tab-content">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-bold text-safs-dark">Banners ({{ bannerService.banners().length }})</h2>
-              <button (click)="openBannerForm()" class="text-xs px-4 py-2 rounded-lg bg-safs-dark text-white hover:bg-safs-gold transition-colors font-medium">+ Add Banner</button>
+              <button (click)="openBannerForm()" class="btn-primary">+ Add Banner</button>
             </div>
 
-            @if (bannerFormOpen()) {
-              <div class="glass-panel rounded-2xl border border-white/40 p-6 mb-6">
-                <h3 class="font-bold text-safs-dark mb-4">{{ editingBanner() ? 'Edit Banner' : 'New Banner' }}</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Title</label>
-                    <input [(ngModel)]="bannerForm.title" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Subtitle</label>
-                    <input [(ngModel)]="bannerForm.subtitle" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Image URL</label>
-                    <input [(ngModel)]="bannerForm.image_url" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Link URL</label>
-                    <input [(ngModel)]="bannerForm.link_url" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Sort Order</label>
-                    <input type="number" [(ngModel)]="bannerForm.sort_order" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-safs-gold">
-                  </div>
-                  <label class="flex items-center gap-2 text-sm">
-                    <input type="checkbox" [(ngModel)]="bannerForm.active"> Active
-                  </label>
-                </div>
-                <div class="flex gap-2 mt-4">
-                  <button (click)="saveBanner()" class="px-4 py-2 text-sm font-medium rounded-lg bg-safs-dark text-white hover:bg-safs-gold transition-colors">Save</button>
-                  <button (click)="bannerFormOpen.set(false)" class="px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Cancel</button>
-                </div>
+            @if (tabLoading() === 'banners') {
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                @for (i of [1,2,3]; track i) {
+                  <div class="data-card p-4"><div class="skeleton-block mb-3"></div><div class="skeleton-line" style="width:50%"></div><div class="skeleton-line" style="width:30%"></div></div>
+                }
               </div>
-            }
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              @for (banner of bannerService.banners(); track banner.id) {
-                <div class="glass-card rounded-xl border border-white/40 overflow-hidden">
-                  <div class="h-32 bg-gray-100 flex items-center justify-center text-xs text-gray-400 overflow-hidden">
-                    @if (banner.image_url) {
-                      <span class="px-2 text-center">{{ banner.image_url.length > 50 ? banner.image_url.substring(0, 50) + '...' : banner.image_url }}</span>
-                    } @else { No Image }
+            } @else {
+              @if (bannerFormOpen()) {
+                <div class="glass-panel p-6 mb-6" style="border-radius:1.25rem">
+                  <h3 class="font-bold text-safs-dark mb-4">{{ editingBanner() ? 'Edit Banner' : 'New Banner' }}</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label class="data-card-field-label mb-1">Title</label><input [(ngModel)]="bannerForm.title" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Subtitle</label><input [(ngModel)]="bannerForm.subtitle" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Image URL</label><input [(ngModel)]="bannerForm.image_url" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Link URL</label><input [(ngModel)]="bannerForm.link_url" class="form-input"></div>
+                    <div><label class="data-card-field-label mb-1">Sort Order</label><input type="number" [(ngModel)]="bannerForm.sort_order" class="form-input"></div>
+                    <div><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="bannerForm.active"> Active</label></div>
                   </div>
-                  <div class="p-4">
-                    <div class="flex items-center justify-between mb-1">
-                      <h3 class="font-bold text-safs-dark text-sm">{{ banner.title }}</h3>
-                      <span [class]="banner.active ? 'text-xs text-green-600 font-medium' : 'text-xs text-gray-400'">{{ banner.active ? 'Active' : 'Inactive' }}</span>
-                    </div>
-                    @if (banner.subtitle) { <p class="text-xs text-gray-500">{{ banner.subtitle }}</p> }
-                    <p class="text-xs text-gray-400 mt-1">Order: {{ banner.sort_order }}</p>
-                    <div class="flex gap-2 mt-3 pt-3 border-t border-gray-100">
-                      <button (click)="editBanner(banner)" class="text-xs px-2 py-1 rounded bg-blue-50 text-blue-600 hover:bg-blue-100">Edit</button>
-                      <button (click)="deleteBanner(banner.id)" class="text-xs px-2 py-1 rounded text-red-600 bg-red-50 hover:bg-red-100">Delete</button>
-                    </div>
+                  <div class="flex gap-2 mt-4">
+                    <button (click)="saveBanner()" class="btn-primary">Save</button>
+                    <button (click)="bannerFormOpen.set(false)" class="px-4 py-2 rounded-xl text-sm font-medium bg-white/60 text-safs-text-muted hover:bg-white/80 transition-colors border border-white/40">Cancel</button>
                   </div>
                 </div>
               }
-            </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                @for (banner of bannerService.banners(); track banner.id) {
+                  <div class="data-card">
+                    <div class="h-32 bg-gradient-to-br from-white/50 to-white/5 flex items-center justify-center text-xs text-safs-text-muted overflow-hidden">
+                      @if (banner.image_url) {
+                        <span class="px-2 text-center opacity-60">{{ banner.image_url.length > 50 ? banner.image_url.substring(0, 50) + '...' : banner.image_url }}</span>
+                      } @else { <span class="opacity-40">No Image</span> }
+                    </div>
+                    <div class="p-4">
+                      <div class="flex items-center justify-between mb-1">
+                        <h3 class="font-bold text-safs-dark text-sm">{{ banner.title }}</h3>
+                        <span class="text-xs font-medium" [style.color]="banner.active ? '#15803D' : '#94A3B8'">{{ banner.active ? 'Active' : 'Inactive' }}</span>
+                      </div>
+                      @if (banner.subtitle) { <p class="text-xs text-safs-text-muted">{{ banner.subtitle }}</p> }
+                      <p class="text-xs text-safs-text-muted mt-1 opacity-60">Order: {{ banner.sort_order }}</p>
+                      <div class="flex gap-2 mt-3 pt-3 border-t border-white/30">
+                        <button (click)="editBanner(banner)" class="btn-outline">Edit</button>
+                        <button (click)="deleteBanner(banner.id)" class="btn-ghost">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
           </div>
         }
 
         <!-- ===== AUDIT LOGS ===== -->
         @if (activeTab() === 'audit') {
-          <div>
+          <div class="tab-content">
             <h2 class="text-lg font-bold text-safs-dark mb-4">Audit Logs</h2>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-              <div class="glass-card rounded-lg p-4 border border-white/40">
-                <input [(ngModel)]="auditFilters.search" (input)="loadAuditLogs()" placeholder="Search..." class="w-full px-3 py-1.5 rounded border border-gray-200 text-xs">
-              </div>
-              <div class="glass-card rounded-lg p-4 border border-white/40">
-                <select [(ngModel)]="auditFilters.action" (change)="loadAuditLogs()" class="w-full px-3 py-1.5 rounded border border-gray-200 text-xs">
-                  <option value="">All Actions</option>
-                  <option value="login">Login</option>
-                  <option value="login_failed">Failed Login</option>
-                  <option value="logout">Logout</option>
-                  <option value="created">Created</option>
-                  <option value="updated">Updated</option>
-                  <option value="deleted">Deleted</option>
-                </select>
-              </div>
-              <div class="glass-card rounded-lg p-4 border border-white/40">
-                <select [(ngModel)]="auditFilters.resource_type" (change)="loadAuditLogs()" class="w-full px-3 py-1.5 rounded border border-gray-200 text-xs">
-                  <option value="">All Resources</option>
-                  <option value="auth">Auth</option>
-                  <option value="enquiry">Enquiry</option>
-                  <option value="order">Order</option>
-                  <option value="product">Product</option>
-                  <option value="user">User</option>
-                  <option value="cms_page">CMS Page</option>
-                  <option value="banner">Banner</option>
-                </select>
-              </div>
-              <div class="glass-card rounded-lg p-4 border border-white/40">
-                <button (click)="refreshAuditLogs()" class="w-full px-3 py-1.5 rounded bg-safs-dark text-white text-xs font-medium">Refresh</button>
-              </div>
-            </div>
-
-            <div class="glass-panel rounded-xl border border-white/40 overflow-hidden">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="bg-gray-50 text-left text-xs uppercase text-gray-500">
-                    <th class="px-4 py-3">Time</th>
-                    <th class="px-4 py-3">User</th>
-                    <th class="px-4 py-3">Action</th>
-                    <th class="px-4 py-3">Resource</th>
-                    <th class="px-4 py-3">Description</th>
-                    <th class="px-4 py-3">IP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (log of auditLogService.logs(); track log.id) {
-                    <tr class="border-t border-gray-100 hover:bg-gray-50 text-xs">
-                      <td class="px-4 py-3 text-gray-500 whitespace-nowrap">{{ formatDate(log.created_at) }}</td>
-                      <td class="px-4 py-3">
-                        <span class="font-medium text-safs-dark">{{ log.user_name || 'System' }}</span>
-                        <span class="text-gray-400 block">{{ log.user_email }}</span>
-                      </td>
-                      <td class="px-4 py-3"><span [class]="getActionBadge(log.action)">{{ log.action }}</span></td>
-                      <td class="px-4 py-3 text-gray-600">{{ log.resource_type }} {{ log.resource_id ? '#' + log.resource_id : '' }}</td>
-                      <td class="px-4 py-3 text-gray-700 max-w-xs truncate">{{ log.description }}</td>
-                      <td class="px-4 py-3 text-gray-400 font-mono">{{ log.ip_address }}</td>
-                    </tr>
+            @if (tabLoading() === 'audit') {
+              <div class="glass-panel overflow-hidden" style="border-radius:1rem">
+                <div class="p-4 space-y-3">
+                  @for (i of [1,2,3,4,5]; track i) {
+                    <div style="flex:1"><div class="skeleton-line" style="width:100%"></div><div class="skeleton-line" style="width:60%"></div></div>
                   }
-                </tbody>
-              </table>
-              @if (auditLogService.logs().length === 0) {
-                <div class="p-8 text-center text-gray-400">No audit logs found.</div>
-              }
-            </div>
+                </div>
+              </div>
+            } @else {
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                <div class="glass-card-inner p-3" style="border-radius:0.75rem">
+                  <input [(ngModel)]="auditFilters.search" (input)="loadAuditLogs()" placeholder="Search..." class="form-input" style="font-size:0.75rem">
+                </div>
+                <div class="glass-card-inner p-3" style="border-radius:0.75rem">
+                  <select [(ngModel)]="auditFilters.action" (change)="loadAuditLogs()" class="form-select" style="font-size:0.75rem">
+                    <option value="">All Actions</option>
+                    <option value="login">Login</option>
+                    <option value="login_failed">Failed Login</option>
+                    <option value="logout">Logout</option>
+                    <option value="created">Created</option>
+                    <option value="updated">Updated</option>
+                    <option value="deleted">Deleted</option>
+                  </select>
+                </div>
+                <div class="glass-card-inner p-3" style="border-radius:0.75rem">
+                  <select [(ngModel)]="auditFilters.resource_type" (change)="loadAuditLogs()" class="form-select" style="font-size:0.75rem">
+                    <option value="">All Resources</option>
+                    <option value="auth">Auth</option>
+                    <option value="enquiry">Enquiry</option>
+                    <option value="order">Order</option>
+                    <option value="product">Product</option>
+                    <option value="user">User</option>
+                    <option value="cms_page">CMS Page</option>
+                    <option value="banner">Banner</option>
+                  </select>
+                </div>
+                <div class="glass-card-inner p-3" style="border-radius:0.75rem">
+                  <button (click)="refreshAuditLogs()" class="btn-primary w-full justify-center" style="font-size:0.75rem">Refresh</button>
+                </div>
+              </div>
+
+              <div class="glass-panel overflow-hidden" style="border-radius:1rem">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>Time</th><th>User</th><th>Action</th><th>Resource</th><th>Description</th><th>IP</th></tr>
+                  </thead>
+                  <tbody>
+                    @for (log of auditLogService.logs(); track log.id) {
+                      <tr class="text-xs">
+                        <td class="text-safs-text-muted whitespace-nowrap">{{ formatDate(log.created_at) }}</td>
+                        <td>
+                          <span class="font-medium text-safs-dark">{{ log.user_name || 'System' }}</span>
+                          @if (log.user_email) { <span class="text-safs-text-muted block text-[0.625rem]">{{ log.user_email }}</span> }
+                        </td>
+                        <td><span [class]="getActionBadge(log.action)">{{ log.action }}</span></td>
+                        <td class="text-safs-text-muted">{{ log.resource_type }} {{ log.resource_id ? '#' + log.resource_id : '' }}</td>
+                        <td class="text-safs-text-main max-w-xs truncate">{{ log.description }}</td>
+                        <td class="text-safs-text-muted font-mono text-[0.625rem]">{{ log.ip_address }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                @if (auditLogService.logs().length === 0) {
+                  <div class="empty-state">
+                    <div class="empty-state-icon">&#9881;</div>
+                    <p class="empty-state-title">No audit logs found</p>
+                    <p class="empty-state-desc">System events will appear here as they occur.</p>
+                  </div>
+                }
+              </div>
+            }
           </div>
         }
 
@@ -671,15 +738,20 @@ type TabId = 'stats' | 'enquiries' | 'orders' | 'products' | 'users' | 'cms' | '
 export class AdminDashboardComponent implements OnInit {
   private enquiryService = inject(EnquiryService);
   private ordersService = inject(OrdersService);
+  private exportEnquiryService = inject(ExportEnquiryService);
   private productsService = inject(ProductsService);
   private cmsService = inject(CmsService);
   private bannerService = inject(BannerService);
   private auditLogService = inject(AuditLogService);
   private userService = inject(UserService);
   private auth = inject(AuthService);
+  private cache = inject(CacheService);
   private router = inject(Router);
 
   activeTab = signal<TabId>('stats');
+  loadedTabs = new Set<TabId>();
+  tabLoading = signal<TabId | null>(null);
+
   enquiryFilter = signal('');
   orderFilter = signal('');
   productSearch = signal('');
@@ -708,6 +780,7 @@ export class AdminDashboardComponent implements OnInit {
     { id: 'users' as TabId, label: 'Users', icon: '&#9787;' },
     { id: 'cms' as TabId, label: 'CMS Pages', icon: '&#9998;' },
     { id: 'banners' as TabId, label: 'Banners', icon: '&#9638;' },
+    { id: 'export-enquiries' as TabId, label: 'Export Enquiries', icon: '&#10144;' },
     { id: 'audit' as TabId, label: 'Audit Logs', icon: '&#9881;' },
   ];
 
@@ -716,64 +789,104 @@ export class AdminDashboardComponent implements OnInit {
   cmsForm: any = {};
   bannerForm: any = {};
 
+  constructor() {
+    effect(() => {
+      const tab = this.activeTab();
+      if (!this.loadedTabs.has(tab)) {
+        this.loadTab(tab);
+      }
+    }, { allowSignalWrites: true });
+  }
+
   ngOnInit() {
     if (!this.auth.isAdmin()) {
       this.router.navigate(['/admin']);
       return;
     }
-    this.loadAll();
   }
 
-  async loadAll() {
-    await Promise.all([
-      this.enquiryService.fetchEnquiries(),
-      this.ordersService.fetchOrders(),
-      this.productsService.fetchProducts(),
-      this.productsService.fetchCategories(),
-      this.userService.fetchUsers(),
-      this.cmsService.fetchPages(),
-      this.bannerService.fetchBanners(),
-      this.loadAuditLogs(),
-    ]);
-    await this.auditLogService.fetchSummary();
+  async loadTab(tab: TabId) {
+    this.tabLoading.set(tab);
+    try {
+      switch (tab) {
+        case 'stats':
+          await Promise.all([
+            this.cache.get('audit-summary', () => this.auditLogService.fetchSummary()),
+            this.cache.get('enquiries', () => this.enquiryService.fetchEnquiries()),
+            this.cache.get('orders', () => this.ordersService.fetchOrders()),
+            this.cache.get('products', () => this.productsService.fetchProducts()),
+            this.cache.get('users', () => this.userService.fetchUsers()),
+          ]);
+          this.loadedTabs.add('stats');
+          break;
+        case 'enquiries':
+          await this.cache.get('enquiries', () => this.enquiryService.fetchEnquiries());
+          this.loadedTabs.add('enquiries');
+          break;
+        case 'export-enquiries':
+          await this.cache.get('export-enquiries', () => this.exportEnquiryService.fetchEnquiries());
+          this.loadedTabs.add('export-enquiries');
+          break;
+        case 'orders':
+          await this.cache.get('orders', () => this.ordersService.fetchOrders());
+          this.loadedTabs.add('orders');
+          break;
+        case 'products':
+          await Promise.all([
+            this.cache.get('products', () => this.productsService.fetchProducts()),
+            this.cache.get('categories', () => this.productsService.fetchCategories()),
+          ]);
+          this.loadedTabs.add('products');
+          break;
+        case 'users':
+          await this.cache.get('users', () => this.userService.fetchUsers());
+          this.loadedTabs.add('users');
+          break;
+        case 'cms':
+          await this.cache.get('cms-pages', () => this.cmsService.fetchPages());
+          this.loadedTabs.add('cms');
+          break;
+        case 'banners':
+          await this.cache.get('banners', () => this.bannerService.fetchBanners());
+          this.loadedTabs.add('banners');
+          break;
+        case 'audit':
+          await Promise.all([
+            this.cache.get('audit-logs', () => this.auditLogService.fetchLogs()),
+            this.cache.get('audit-summary', () => this.auditLogService.fetchSummary()),
+          ]);
+          this.loadedTabs.add('audit');
+          break;
+      }
+    } finally {
+      this.tabLoading.set(null);
+    }
   }
 
   get activeTabLabel(): () => string {
     return () => this.tabs.find(t => t.id === this.activeTab())?.label || '';
   }
 
+  getTabLabel(tab: TabId | null): string {
+    return this.tabs.find(t => t.id === tab)?.label || '';
+  }
+
   getTabClass(tab: TabId): string {
-    const base = 'px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap';
     return this.activeTab() === tab
-      ? `${base} bg-safs-dark text-white shadow-sm`
-      : `${base} text-safs-dark/70 hover:text-safs-dark hover:bg-white/70`;
+      ? 'tab-pill tab-pill--active'
+      : 'tab-pill';
   }
 
   getActionBadge(action: string): string {
-    const base = 'text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full';
-    switch (action) {
-      case 'login': return `${base} bg-green-100 text-green-700`;
-      case 'login_failed': return `${base} bg-red-100 text-red-700`;
-      case 'logout': return `${base} bg-gray-100 text-gray-700`;
-      case 'created': return `${base} bg-blue-100 text-blue-700`;
-      case 'updated': return `${base} bg-amber-100 text-amber-700`;
-      case 'deleted': return `${base} bg-red-100 text-red-700`;
-      default: return `${base} bg-gray-100 text-gray-700`;
-    }
-  }
-
-  getStatusBadge(status: string): string {
-    const base = 'text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full';
     const map: Record<string, string> = {
-      new: 'bg-safs-dark/10 text-safs-dark',
-      contacted: 'bg-amber-100 text-amber-700',
-      closed: 'bg-green-100 text-green-700',
-      pending: 'bg-gray-100 text-gray-700',
-      confirmed: 'bg-blue-100 text-blue-700',
-      completed: 'bg-green-100 text-green-700',
-      cancelled: 'bg-red-100 text-red-700',
+      login: 'action-badge action-badge--login',
+      login_failed: 'action-badge action-badge--login_failed',
+      logout: 'action-badge action-badge--logout',
+      created: 'action-badge action-badge--created',
+      updated: 'action-badge action-badge--updated',
+      deleted: 'action-badge action-badge--deleted',
     };
-    return `${base} ${map[status] || 'bg-gray-100 text-gray-700'}`;
+    return map[action] || 'action-badge';
   }
 
   formatDate(iso: string): string {
@@ -816,6 +929,7 @@ export class AdminDashboardComponent implements OnInit {
 
   async applyProductFilters() {
     const stock = this.productStockFilter();
+    this.cache.invalidate('products');
     await this.productsService.fetchProducts({
       search: this.productSearch() || undefined,
       category: this.productCategoryFilter() || undefined,
@@ -849,6 +963,16 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   // === Enquiries ===
+  get filteredExportEnquiries() {
+    return () => {
+      const all = this.exportEnquiryService.enquiries();
+      const filter = this.exportEnquiryFilter();
+      return filter ? all.filter(e => e.status === filter) : all;
+    };
+  }
+
+  exportEnquiryFilter = signal('');
+
   get filteredEnquiries() {
     return () => {
       const all = this.enquiryService.enquiries();
@@ -859,11 +983,13 @@ export class AdminDashboardComponent implements OnInit {
 
   async updateEnquiryStatus(id: number, status: string) {
     await this.enquiryService.updateStatus(id, status as any);
+    this.cache.invalidate('enquiries');
   }
 
   async deleteEnquiry(id: number) {
     if (!confirm('Delete this enquiry?')) return;
     await this.enquiryService.deleteEnquiry(id);
+    this.cache.invalidate('enquiries');
   }
 
   // === Orders ===
@@ -877,11 +1003,13 @@ export class AdminDashboardComponent implements OnInit {
 
   async updateOrderStatus(id: number, status: string) {
     await this.ordersService.updateStatus(id, status);
+    this.cache.invalidate('orders');
   }
 
   async deleteOrder(id: number) {
     if (!confirm('Delete this order?')) return;
     await this.ordersService.deleteOrder(id);
+    this.cache.invalidate('orders');
   }
 
   // === Products ===
@@ -917,12 +1045,14 @@ export class AdminDashboardComponent implements OnInit {
     } else {
       await this.productsService.createProduct(data);
     }
+    this.cache.invalidate('products');
     this.productFormOpen.set(false);
   }
 
   async deleteProduct(id: number) {
     if (!confirm('Delete this product?')) return;
     await this.productsService.deleteProduct(id);
+    this.cache.invalidate('products');
   }
 
   // === Users ===
@@ -946,12 +1076,14 @@ export class AdminDashboardComponent implements OnInit {
     } else {
       await this.userService.createUser(this.userForm);
     }
+    this.cache.invalidate('users');
     this.userFormOpen.set(false);
   }
 
   async deleteUser(id: number) {
     if (!confirm('Delete this user?')) return;
     await this.userService.deleteUser(id);
+    this.cache.invalidate('users');
   }
 
   // === CMS Pages ===
@@ -977,12 +1109,14 @@ export class AdminDashboardComponent implements OnInit {
     } else {
       await this.cmsService.createPage(this.cmsForm);
     }
+    this.cache.invalidate('cms-pages');
     this.cmsFormOpen.set(false);
   }
 
   async deleteCmsPage(id: number) {
     if (!confirm('Delete this page?')) return;
     await this.cmsService.deletePage(id);
+    this.cache.invalidate('cms-pages');
   }
 
   // === Banners ===
@@ -1007,12 +1141,14 @@ export class AdminDashboardComponent implements OnInit {
     } else {
       await this.bannerService.createBanner(this.bannerForm);
     }
+    this.cache.invalidate('banners');
     this.bannerFormOpen.set(false);
   }
 
   async deleteBanner(id: number) {
     if (!confirm('Delete this banner?')) return;
     await this.bannerService.deleteBanner(id);
+    this.cache.invalidate('banners');
   }
 
   get auditSummary() {
@@ -1021,6 +1157,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // === Audit Logs ===
   async loadAuditLogs() {
+    this.cache.invalidate('audit-logs');
     await this.auditLogService.fetchLogs({
       search: this.auditFilters.search || undefined,
       action: this.auditFilters.action || undefined,
@@ -1029,8 +1166,25 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   async refreshAuditLogs() {
+    this.cache.invalidate('audit-logs');
+    this.cache.invalidate('audit-summary');
     await this.loadAuditLogs();
     await this.auditLogService.fetchSummary();
+  }
+
+  async updateExportEnquiryStatus(id: number, status: string) {
+    await this.exportEnquiryService.updateStatus(id, status as any);
+    this.cache.invalidate('export-enquiries');
+  }
+
+  async deleteExportEnquiry(id: number) {
+    if (!confirm('Delete this export enquiry?')) return;
+    await this.exportEnquiryService.deleteEnquiry(id);
+    this.cache.invalidate('export-enquiries');
+  }
+
+  getStorageUrl(path: string): string {
+    return `${environment.apiUrl}/storage/${path}`;
   }
 
   async logout() {
@@ -1038,3 +1192,12 @@ export class AdminDashboardComponent implements OnInit {
     this.router.navigate(['/admin']);
   }
 }
+
+
+
+
+
+
+
+
+

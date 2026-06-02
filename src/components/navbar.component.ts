@@ -47,15 +47,13 @@ import { WishlistService } from '../services/wishlist.service';
               >
                 Contact
               </a>
-              @if (authService.isAdmin()) {
-                <a
-                  routerLink="/admin/export"
-                  routerLinkActive="text-safs-gold font-bold"
-                  class="text-white/80 hover:text-safs-gold transition-colors font-medium"
-                >
-                  Export
-                </a>
-              }
+              <a
+                routerLink="/export"
+                routerLinkActive="text-safs-gold font-bold"
+                class="text-white/80 hover:text-safs-gold transition-colors font-medium"
+              >
+                Exports
+              </a>
             </nav>
 
            <!-- Cart Icon -->
@@ -127,16 +125,14 @@ import { WishlistService } from '../services/wishlist.service';
               >
                 Contact
               </a>
-              @if (authService.isAdmin()) {
-                <a
-                  routerLink="/admin/export"
-                  routerLinkActive="text-safs-gold font-bold"
-                  (click)="closeMenu()"
-                  class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
-                >
-                  Export Data
-                </a>
-              }
+              <a
+                routerLink="/export"
+                routerLinkActive="text-safs-gold font-bold"
+                (click)="closeMenu()"
+                class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
+              >
+                Exports
+              </a>
             </div>
          </nav>
        }

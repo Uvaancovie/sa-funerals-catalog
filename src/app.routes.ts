@@ -8,7 +8,7 @@ import { AboutPageComponent } from './pages/about-page.component';
 import { ContactPageComponent } from './pages/contact-page.component';
 import { LandingPageComponent } from './pages/landing-page.component';
 import { ServicesPageComponent } from './pages/services-page.component';
-import { ExportPageComponent } from './pages/export-page.component';
+import { ExportEnquiryPageComponent } from './pages/export-enquiry-page.component';
 import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
@@ -19,8 +19,8 @@ export const routes: Routes = [
   { path: 'about', component: AboutPageComponent },
   { path: 'services', component: ServicesPageComponent },
   { path: 'contact', component: ContactPageComponent },
+  { path: 'export', component: ExportEnquiryPageComponent },
   { path: 'admin', component: AdminLoginComponent },
   { path: 'admin/dashboard', component: AdminDashboardComponent, canActivate: [adminGuard] },
-  { path: 'admin/export', component: ExportPageComponent, canActivate: [adminGuard] },
   { path: '**', redirectTo: '/catalog' }
 ];
