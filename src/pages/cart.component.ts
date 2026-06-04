@@ -120,7 +120,7 @@ export class CartComponent {
     try {
       const cartItems = this.store.cart();
       const items = cartItems.map(i => ({
-        productName: i.product.name,
+        name: i.product.name,
         category: i.product.category,
         variant: i.variant,
         quantity: i.quantity,
@@ -144,7 +144,8 @@ export class CartComponent {
         this.enquiryData = { name: '', email: '', phone: '' };
         this.router.navigate(['/catalog']);
       }, 3000);
-    } catch {
+    } catch (err) {
+      console.error('Order submission failed:', err);
       this.isSubmitting.set(false);
       this.submitError.set(true);
     }

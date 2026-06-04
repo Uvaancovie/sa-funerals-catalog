@@ -5,13 +5,11 @@ import { lastValueFrom } from 'rxjs';
 import jsPDF from 'jspdf';
 
 export interface OrderItem {
-  productId: string;
-  productName: string;
+  name: string;
   category: string;
   variant: string;
   quantity: number;
   price: number;
-  total: number;
 }
 
 export interface Order {
@@ -50,7 +48,7 @@ export class OrdersService {
     customer_name: string;
     customer_email: string;
     customer_phone: string;
-    items: { productName: string; category: string; variant: string; quantity: number; price: number }[];
+    items: { name: string; category: string; variant: string; quantity: number; price: number }[];
     total: number;
   }): Promise<Order> {
     const res = await lastValueFrom(
@@ -95,10 +93,10 @@ export class OrdersService {
     y += 10;
 
     order.items.forEach(item => {
-      doc.text(item.productName, 20, y);
+      doc.text(item.name, 20, y);
       doc.text(item.quantity.toString(), 120, y);
       doc.text(`R${item.price.toFixed(2)}`, 140, y);
-      doc.text(`R${item.total.toFixed(2)}`, 170, y);
+      doc.text(`R${Number(item.price * item.quantity).toFixed(2)}`, 170, y);
       y += 10;
     });
 
