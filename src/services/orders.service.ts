@@ -7,6 +7,8 @@ import jsPDF from 'jspdf';
 export interface OrderItem {
   productId: string;
   productName: string;
+  category: string;
+  variant: string;
   quantity: number;
   price: number;
   total: number;
@@ -48,7 +50,7 @@ export class OrdersService {
     customer_name: string;
     customer_email: string;
     customer_phone: string;
-    items: { name: string; quantity: number; price: number }[];
+    items: { productName: string; category: string; variant: string; quantity: number; price: number }[];
     total: number;
   }): Promise<Order> {
     const res = await lastValueFrom(

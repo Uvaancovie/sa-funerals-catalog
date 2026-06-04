@@ -9,15 +9,19 @@ import { VideoPlayerComponent } from '../components/video-player.component';
   imports: [CommonModule, RouterLink, VideoPlayerComponent],
   template: `
     <!-- Hero Section with Background Carousel -->
-    <section class="relative min-h-screen flex items-center overflow-hidden">
+    <section class="relative min-h-screen flex items-center overflow-hidden" aria-label="About SAFS hero">
+      <!-- Decorative texture overlay -->
+      <div class="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRjMC0yLjIuOC00LjMgMi4yLTUuN2wxLjQtMS40IDQuMiA0LjItMS40IDEuNGMtMS41IDEuNS0zLjYgMi4zLTUuNyAyLjMtMS4zIDAtMi41LS4zLTMuNi0uOGwxLjUtMS41Yy42LjIgMS4zLjUgMiAuNXoiLz48L2c+PC9nPjwvc3ZnPg==')] pointer-events-none"></div>
+
       @for (img of heroBgImages; track img.id; let i = $index) {
         <div
           class="absolute inset-0 transition-all duration-1000 ease-in-out"
           [class.opacity-100]="i === heroSlide"
           [class.opacity-0]="i !== heroSlide"
           [style.transform]="'scale(' + (i === heroSlide ? 1.05 : 1) + ')'"
+          [attr.aria-hidden]="i !== heroSlide"
         >
-          <img [src]="img.src" alt="" class="w-full h-full object-cover" />
+          <img [src]="img.src" alt="" class="w-full h-full object-cover" [attr.fetchpriority]="i === 0 ? 'high' : null" [loading]="i === 0 ? 'eager' : 'lazy'" />
         </div>
       }
       <div class="absolute inset-0 bg-gradient-to-r from-safs-dark/95 via-safs-dark/80 to-safs-dark/60"></div>
@@ -25,40 +29,46 @@ import { VideoPlayerComponent } from '../components/video-player.component';
 
       <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 py-32 sm:py-40">
         <div class="max-w-3xl">
-          <div class="flex items-center gap-3 mb-6 reveal fade-up">
-            <div class="w-10 h-0.5 bg-safs-gold"></div>
+          <div class="flex items-center gap-3 mb-6 reveal fade-up" style="transition-delay: 0.1s">
+            <div class="w-10 h-0.5 bg-safs-gold" aria-hidden="true"></div>
             <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">About Us</span>
           </div>
-          <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-tight mb-6 reveal fade-up" style="transition-delay: 0.1s">
+          <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold text-white leading-tight mb-6 reveal fade-up" style="transition-delay: 0.2s">
             South Africa's Trusted<br>
             <span class="text-safs-gold">Funeral Supply Partner</span>
           </h1>
-          <p class="text-lg sm:text-xl text-white/70 leading-relaxed max-w-2xl mb-10 reveal fade-up" style="transition-delay: 0.2s">
+          <p class="text-base sm:text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl mb-10 reveal fade-up" style="transition-delay: 0.3s">
             Servicing the funeral industry since 1998. We combine decades of experience with
             uncompromising quality to provide funeral homes across South Africa with premium
             caskets, equipment, and supplies.
           </p>
-          <div class="flex flex-wrap gap-4 reveal fade-up" style="transition-delay: 0.3s">
-            <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold-light transition-all shadow-lg hover:shadow-xl active:scale-95">
+          <div class="flex flex-wrap gap-4 reveal fade-up" style="transition-delay: 0.4s">
+            <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold-light transition-all shadow-lg hover:shadow-xl active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
               Browse Our Range
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
-            <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               +27 31 508 6700
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Slide Indicators -->
+      <!-- Slide Controls -->
       <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
-        <div class="flex gap-2">
+        <nav class="flex gap-2" aria-label="Hero slide navigation">
           @for (img of heroBgImages; track img.id; let i = $index) {
-            <span (click)="heroSlide = i" class="inline-block h-2 rounded-full transition-all duration-300 cursor-pointer" [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/30'"></span>
+            <button
+              (click)="heroSlide = i"
+              [attr.aria-label]="'Go to slide ' + (i + 1)"
+              [attr.aria-current]="i === heroSlide ? 'true' : null"
+              class="h-2 rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
+              [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/30 hover:bg-white/50'"
+            ></button>
           }
-        </div>
-        <div class="flex flex-col items-center gap-2 text-white/40">
+        </nav>
+        <div class="flex flex-col items-center gap-2 text-white/40" aria-hidden="true">
           <span class="text-xs tracking-[0.2em] uppercase font-medium">Scroll</span>
           <div class="scroll-indicator w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center pt-2">
             <div class="scroll-dot w-1.5 h-1.5 rounded-full bg-safs-gold"></div>
@@ -222,20 +232,36 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Our Journey</span>
             <div class="w-8 h-0.5 bg-safs-gold"></div>
           </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark reveal fade-up" style="transition-delay: 0.1s">Decades of Dedicated Service</h2>
+          <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark reveal fade-up" style="transition-delay: 0.1s">From Foundation to the Future</h2>
         </div>
 
         <div class="relative">
           <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-safs-gold/50 via-safs-gold/20 to-transparent -translate-x-1/2"></div>
 
-          @for (milestone of milestones; track milestone.year; let i = $index) {
+          @for (milestone of milestones; track $index; let i = $index) {
             <div class="relative mb-12 md:mb-16 last:mb-0 reveal fade-up" [style.transition-delay]="i * 0.1 + 's'">
-              <div class="hidden md:block absolute left-1/2 top-6 w-3 h-3 rounded-full bg-safs-gold border-2 border-white shadow -translate-x-1/2 z-10"></div>
+              @if (i === milestones.length - 1) {
+                <div class="hidden md:block absolute left-1/2 top-6 w-4 h-4 rounded-full bg-safs-gold border-4 border-white shadow-lg -translate-x-1/2 z-10 animate-pulse"></div>
+              } @else {
+                <div class="hidden md:block absolute left-1/2 top-6 w-3 h-3 rounded-full bg-safs-gold border-2 border-white shadow -translate-x-1/2 z-10"></div>
+              }
 
               <div class="md:w-[calc(50%-2rem)]" [class.md:ml-auto]="$even" [class.md:mr-auto]="$odd" [class.md:text-right]="$odd" [class.md:pl-8]="$even" [class.md:pr-8]="$odd">
-                <div class="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100 hover:border-safs-gold/30 hover:shadow-lg transition-all">
+                <div class="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100 transition-all" [ngClass]="{
+                  'hover:border-safs-gold/30': i !== milestones.length - 1,
+                  'hover:shadow-lg': i !== milestones.length - 1,
+                  'border-safs-gold/40': i === milestones.length - 1,
+                  'shadow-md': i === milestones.length - 1
+                }">
                   <div class="flex items-center gap-3 mb-3" [class.md:flex-row-reverse]="$odd">
-                    <span class="inline-block bg-safs-dark text-safs-gold font-bold text-sm px-4 py-1 rounded-full">{{ milestone.year }}</span>
+                    @if (milestone.year) {
+                      <span class="inline-block bg-safs-dark text-safs-gold font-bold text-sm px-4 py-1 rounded-full">{{ milestone.year }}</span>
+                    } @else {
+                      <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-safs-gold to-amber-500 text-black font-bold text-sm px-4 py-1 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        Present
+                      </span>
+                    }
                   </div>
                   <h3 class="text-xl font-bold text-safs-dark mb-2">{{ milestone.title }}</h3>
                   <p class="text-gray-500 leading-relaxed">{{ milestone.description }}</p>
@@ -366,8 +392,8 @@ export class AboutPageComponent implements AfterViewInit, OnDestroy {
   stats = [
     { value: '26+', label: 'Years of Service' },
     { value: '60+', label: 'Products Available' },
-    { value: '1000+', label: 'Funeral Homes Served' },
-    { value: '98%', label: 'Client Satisfaction' },
+    { value: '100+', label: 'Funeral Homes Served' },
+    { value: '', label: 'Proven Customer Satisfaction' },
   ];
 
   values = [
@@ -406,14 +432,9 @@ export class AboutPageComponent implements AfterViewInit, OnDestroy {
       description: 'Our distribution network grew to cover all nine provinces, bringing reliable delivery and consistent quality to funeral homes countrywide.'
     },
     {
-      year: '2020',
-      title: 'Digital Transformation',
-      description: 'Launched our online catalog and ordering platform, making it easier for funeral professionals to browse and order from anywhere.'
-    },
-    {
-      year: '2024',
-      title: 'Continued Growth & Innovation',
-      description: 'Today we serve over a thousand funeral homes, continuously expanding our range and improving our service with modern technology and deeper expertise.'
+      year: '',
+      title: 'Continuing the Journey',
+      description: 'Today we serve over a hundred funeral homes, continuously expanding our range and improving our service with modern technology and deeper expertise.'
     }
   ];
 

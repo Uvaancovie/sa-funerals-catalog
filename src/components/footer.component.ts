@@ -13,7 +13,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
           
           <!-- Brand -->
           <div class="col-span-1 md:col-span-1">
-            <img src="assets/logo/OIP.webp" alt="South African Funeral Supplies" class="h-20 w-auto rounded-lg mb-4" width="80" height="80" />
+            <img src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/logo/SAFS-Logo-Retina.png" alt="South African Funeral Supplies" class="h-20 w-auto mb-4" width="160" height="80" />
             <p class="text-gray-200 text-sm leading-relaxed mb-6">
               Servicing the funeral industry since 1998. Committed to quality, value, service, and innovation.
             </p>
@@ -22,9 +22,9 @@ import { GoogleReviewsComponent } from './google-reviews.component';
                 <a href="https://www.facebook.com/people/South-African-Funeral-Supplies/100069383543820/" target="_blank" rel="noopener noreferrer" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold transition-colors cursor-pointer">
                  <span class="font-bold text-xs">FB</span>
               </a>
-                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold transition-colors cursor-pointer">
+                <a href="https://www.linkedin.com/company/south-african-funeral-supplies/posts/?feedView=all" target="_blank" rel="noopener noreferrer" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold transition-colors cursor-pointer">
                  <span class="font-bold text-xs">LI</span>
-              </div>
+               </a>
             </div>
             
             <div class="scale-90 origin-top-left opacity-90">

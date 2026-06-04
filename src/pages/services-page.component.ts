@@ -196,7 +196,7 @@ import { RouterLink } from '@angular/router';
           <span class="inline-block text-safs-gold font-bold text-sm tracking-[0.2em] uppercase mb-4">Why Choose Us</span>
           <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark">
             Industry-Leading<br class="sm:hidden">
-            <span class="text-safs-gold">Service Standards</span>
+            <span class="text-safs-gold">&nbsp;Service Standards</span>
           </h2>
         </div>
 

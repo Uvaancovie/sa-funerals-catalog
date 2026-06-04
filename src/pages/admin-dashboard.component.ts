@@ -176,7 +176,26 @@ type TabId = 'stats' | 'enquiries' | 'export-enquiries' | 'orders' | 'products' 
                     <div class="data-card-body">
                       <div><span class="data-card-field-label">Email</span><p class="font-medium text-safs-text-main">{{ enquiry.customer_email }}</p></div>
                       <div><span class="data-card-field-label">Phone</span><p class="font-medium text-safs-text-main">{{ enquiry.customer_phone }}</p></div>
-                      <div><span class="data-card-field-label">Items</span><p class="font-medium text-safs-text-main">{{ enquiry.items?.length || 0 }} product(s)</p></div>
+                      <div class="col-span-full">
+                        <span class="data-card-field-label">Items</span>
+                        <div class="mt-2 space-y-1">
+                          @for (item of enquiry.items; track $index) {
+                            <div class="flex items-center gap-2 bg-white/40 rounded-lg px-3 py-1.5 text-sm">
+                              <span class="font-medium text-safs-dark flex-1">{{ item.name }}</span>
+                              <span class="text-xs text-safs-text-muted">Qty: {{ item.quantity }}</span>
+                              @if (item.price) {
+                                <span class="font-semibold text-safs-dark">R{{ item.price.toFixed(2) }}</span>
+                              }
+                            </div>
+                          }
+                        </div>
+                        @if (enquiry.notes) {
+                          <div class="mt-2">
+                            <span class="data-card-field-label">Message</span>
+                            <p class="text-sm text-safs-text-main mt-1 bg-white/30 rounded-lg px-3 py-2">{{ enquiry.notes }}</p>
+                          </div>
+                        }
+                      </div>
                     </div>
                   </div>
                 }
@@ -318,7 +337,24 @@ type TabId = 'stats' | 'enquiries' | 'export-enquiries' | 'orders' | 'products' 
                     <div class="data-card-body">
                       <div><span class="data-card-field-label">Email</span><p class="font-medium text-safs-text-main">{{ order.customer_email }}</p></div>
                       <div><span class="data-card-field-label">Phone</span><p class="font-medium text-safs-text-main">{{ order.customer_phone }}</p></div>
-                      <div><span class="data-card-field-label">Items</span><p class="font-medium text-safs-text-main">{{ order.items?.length || 0 }} item(s)</p></div>
+                      <div class="col-span-full">
+                        <span class="data-card-field-label">Items</span>
+                        <div class="mt-2 space-y-2">
+                          @for (item of order.items; track $index) {
+                            <div class="flex items-center gap-3 bg-white/40 rounded-lg px-3 py-2 text-sm">
+                              <span class="status-badge status-badge--new" style="font-size:0.625rem;padding:0.0625rem 0.5rem">{{ item.category || 'General' }}</span>
+                              <span class="font-medium text-safs-dark flex-1">{{ item.productName || item.name }}</span>
+                              @if (item.variant) {
+                                <span class="text-xs text-safs-text-muted">Color: {{ item.variant }}</span>
+                              }
+                              <span class="text-xs text-safs-text-muted">Qty: {{ item.quantity }}</span>
+                              @if (item.price) {
+                                <span class="font-semibold text-safs-dark">R{{ (item.price * item.quantity).toFixed(2) }}</span>
+                              }
+                            </div>
+                          }
+                        </div>
+                      </div>
                     </div>
                   </div>
                 }

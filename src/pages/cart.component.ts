@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { StoreService } from '../services/store.service';
-import { EnquiryService } from '../services/enquiry.service';
+import { OrdersService } from '../services/orders.service';
 
 @Component({
   selector: 'app-cart',
@@ -88,7 +88,7 @@ import { EnquiryService } from '../services/enquiry.service';
 })
 export class CartComponent {
   store = inject(StoreService);
-  private enquiryService = inject(EnquiryService);
+  private ordersService = inject(OrdersService);
   private router = inject(Router);
 
   isSubmitting = signal(false);
@@ -119,14 +119,20 @@ export class CartComponent {
 
     try {
       const cartItems = this.store.cart();
-      await this.enquiryService.addEnquiry({
+      const items = cartItems.map(i => ({
+        productName: i.product.name,
+        category: i.product.category,
+        variant: i.variant,
+        quantity: i.quantity,
+        price: i.product.price || 0
+      }));
+
+      await this.ordersService.createOrder({
         customer_name: this.enquiryData.name,
         customer_email: this.enquiryData.email,
         customer_phone: this.enquiryData.phone,
-        items: cartItems.map(i => ({
-          name: i.product.name,
-          quantity: i.quantity
-        }))
+        items,
+        total: this.store.cartTotal()
       });
 
       this.isSubmitting.set(false);

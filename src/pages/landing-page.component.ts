@@ -32,7 +32,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
           </p>
           <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-[1.15] sm:leading-[1.1] mb-8 reveal fade-up" style="transition-delay: 0.1s">
             Premium Funeral Supplies<br>
-            <span class="text-safs-gold">For Dignified Farewells</span>
+            <span class="text-safs-gold block mt-3">For Dignified Farewells</span>
           </h1>
           <p class="text-lg sm:text-xl text-white/70 leading-[1.8] max-w-2xl mx-auto mb-12 reveal fade-up" style="transition-delay: 0.2s">
             From handcrafted caskets to essential equipment, we provide everything your funeral home needs
@@ -103,7 +103,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             <div class="text-white/60 text-sm mt-1">Products</div>
           </div>
           <div>
-            <div class="text-3xl font-bold text-safs-gold">1000+</div>
+            <div class="text-3xl font-bold text-safs-gold">100+</div>
             <div class="text-white/60 text-sm mt-1">Funeral Homes</div>
           </div>
           <div>

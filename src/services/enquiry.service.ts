@@ -39,6 +39,7 @@ export class EnquiryService {
     customer_email: string;
     customer_phone: string;
     items: { name: string; quantity: number }[];
+    notes?: string;
   }): Promise<void> {
     await lastValueFrom(
       this.http.post(`${this.apiUrl}/api/enquiries`, data)
