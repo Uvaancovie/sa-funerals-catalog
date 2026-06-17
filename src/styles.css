@@ -536,3 +536,41 @@ html {
   color: var(--safs-text-muted);
   margin-bottom: 0.125rem;
 }
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(21, 26, 64, 0.05);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--safs-accent);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4B06A;
+}
+
+/* ── Ambient Glow Drops ── */
+.ambient-glow {
+  filter: blur(120px);
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+}
+
+/* ── Hover Lift Utilities ── */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(21, 26, 64, 0.12);
+}
+

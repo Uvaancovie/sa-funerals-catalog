@@ -35,83 +35,79 @@ import { ImageOptimizationService } from '../services/image-optimization.service
 
        <div class="flex flex-1">
          <!-- Filters Sidebar (Desktop) -->
-         <div class="hidden lg:block w-[320px] sticky top-[72px] h-[calc(100vh-72px)] overflow-y-auto border-r border-gray-200 bg-white p-8 space-y-8 flex-shrink-0 shadow-sm" style="contain: layout style;">
+          <div class="hidden lg:block w-[320px] sticky top-[92px] h-[calc(100vh-120px)] overflow-y-auto glass-panel p-6 m-4 rounded-3xl space-y-8 flex-shrink-0" style="contain: layout style;">
 
-           <!-- Desktop Filters Header -->
-           <div class="sticky top-0 bg-white z-20 pb-4 mb-4 border-b border-gray-100">
-             <h2 class="text-2xl font-bold text-safs-dark">Filters</h2>
-             @if (activeFilterCount() > 0) {
-               <button (click)="resetFilters()" class="mt-2 text-safs-gold-dark font-medium hover:text-safs-dark transition-colors">
-                 Clear all filters
-               </button>
-             }
-           </div>
-        <!-- Main Category Filter -->
-        <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-            Categories
-          </h3>
-          <div class="space-y-2">
-            @for (cat of categoryOptions; track cat.value) {
-              <button 
-                (click)="selectCategory(cat.value)"
-                [class.bg-safs-dark]="activeFilter() === cat.value"
-                [class.text-white]="activeFilter() === cat.value"
-                [class.text-gray-600]="activeFilter() !== cat.value"
-                [class.hover:bg-gray-200]="activeFilter() !== cat.value"
-                class="w-full text-left px-4 py-3 rounded-xl font-bold transition-all flex justify-between items-center group text-base shadow-sm border border-transparent"
-                [class.border-gray-200]="activeFilter() !== cat.value">
-                <span>{{ cat.label }}</span>
-                <span class="text-xs font-medium opacity-50 group-hover:opacity-100 bg-black/10 px-2.5 py-1 rounded-full">{{ getCategoryCount(cat.value) }}</span>
-              </button>
-            }
-          </div>
-        </div>
-
-        <!-- Product Style Filter -->
-        @if (showStyleFilter()) {
-          <div class="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 animate-fade-in">
-            <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Product Styles</h3>
-            <div class="flex flex-wrap gap-2">
-              @for (style of casketStyles; track style) {
-                <button 
-                  (click)="toggleStyle(style)"
-                  [class.bg-safs-dark]="selectedStyles().includes(style)"
-                  [class.text-white]="selectedStyles().includes(style)"
-                  [class.bg-white]="!selectedStyles().includes(style)"
-                  [class.text-gray-600]="!selectedStyles().includes(style)"
-                  class="px-4 py-3 rounded-xl text-base font-bold transition-all shadow-sm border border-gray-200 border-b-4 hover:brightness-95 active:border-b active:translate-y-1">
-                  {{ style }}
+            <!-- Desktop Filters Header -->
+            <div class="sticky top-0 bg-white/40 z-20 pb-4 mb-4 border-b border-white/20">
+              <h2 class="text-xl font-bold text-safs-primary">Filters</h2>
+              @if (activeFilterCount() > 0) {
+                <button (click)="resetFilters()" class="mt-1 text-safs-accent font-semibold hover:text-safs-primary transition-colors text-sm">
+                  Clear all filters
                 </button>
               }
             </div>
-          </div>
-        }
-
-        <!-- Color/Finish Filter -->
-        <div class="bg-gray-50 p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 mb-12">
-          <h3 class="font-bold text-safs-dark mb-4 uppercase tracking-wider text-sm">Finishes & Colors</h3>
-          <div class="grid grid-cols-1 gap-3">
-            @for (finish of availableFinishes; track finish) {
-              <button 
-                (click)="toggleFinish(finish)"
-                [class.ring-2]="selectedFinishes().includes(finish)"
-                [class.ring-safs-dark]="selectedFinishes().includes(finish)"
-                [class.ring-offset-2]="selectedFinishes().includes(finish)"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white hover:bg-gray-100 transition-all text-base font-medium shadow-sm border border-gray-200 group">
-                <div [style.background-color]="getFinishColor(finish)" class="w-5 h-5 rounded-full border-2 border-gray-300 shadow-inner"></div>
-                <span class="text-gray-700 group-hover:text-safs-dark text-left whitespace-normal break-words leading-tight">{{ finish }}</span>
-              </button>
-            }
-          </div>
-        </div>
-
-           <button (click)="resetFilters()" class="w-full py-4 text-safs-gold-dark font-bold text-lg uppercase tracking-widest hover:bg-orange-50 rounded-xl transition-colors mb-12">
-             Clear All Filters
-           </button>
+         <!-- Main Category Filter -->
+         <div class="bg-white/40 p-4 rounded-2xl border border-white/20 shadow-sm">
+           <h3 class="font-bold text-safs-primary mb-3 uppercase tracking-wider text-xs flex items-center gap-2">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+             Categories
+           </h3>
+           <div class="space-y-1.5">
+              @for (cat of categoryOptions; track cat.value) {
+                  <button (click)="selectCategory(cat.value)" [class.bg-safs-primary]="activeFilter() === cat.value" [class.text-white]="activeFilter() === cat.value" [class.text-safs-primary]="activeFilter() !== cat.value" [class.bg-white]="activeFilter() !== cat.value" [class.border-safs-accent]="activeFilter() !== cat.value" [class.border-white]="activeFilter() === cat.value" [class.bg-opacity-60]="activeFilter() !== cat.value" [class.border-opacity-20]="activeFilter() !== cat.value" [class.border-opacity-40]="activeFilter() === cat.value" class="w-full text-left px-3.5 py-2.5 rounded-xl font-bold transition-all hover-lift flex justify-between items-center group text-sm border shadow-sm border-transparent">
+                  <span>{{ cat.label }}</span>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" [class.bg-white]="activeFilter() === cat.value" [class.bg-safs-primary]="activeFilter() !== cat.value" [class.bg-opacity-20]="activeFilter() === cat.value" [class.bg-opacity-10]="activeFilter() !== cat.value">{{ getCategoryCount(cat.value) }}</span>
+                </button>
+              }
+           </div>
          </div>
 
+         <!-- Product Style Filter -->
+         @if (showStyleFilter()) {
+           <div class="bg-white/40 p-4 rounded-2xl border border-white/20 shadow-sm animate-fade-in">
+             <h3 class="font-bold text-safs-primary mb-3 uppercase tracking-wider text-xs">Product Styles</h3>
+             <div class="flex flex-wrap gap-1.5">
+               @for (style of casketStyles; track style) {
+                  <button 
+                    (click)="toggleStyle(style)"
+                    [class.bg-safs-primary]="selectedStyles().includes(style)"
+                    [class.text-white]="selectedStyles().includes(style)"
+                    [class.bg-white]="!selectedStyles().includes(style)"
+                    [class.text-safs-primary]="!selectedStyles().includes(style)"
+                    [class.bg-opacity-80]="!selectedStyles().includes(style)"
+                    class="px-3 py-2 rounded-xl text-xs font-semibold transition-all hover-lift border border-white/40 shadow-sm"
+                  >
+                    {{ style }}
+                  </button>
+               }
+             </div>
+           </div>
+         }
+
+         <!-- Color/Finish Filter -->
+         <div class="bg-white/40 p-4 rounded-2xl border border-white/20 shadow-sm mb-6">
+           <h3 class="font-bold text-safs-primary mb-3 uppercase tracking-wider text-xs">Finishes & Colors</h3>
+           <div class="grid grid-cols-1 gap-2">
+             @for (finish of availableFinishes; track finish) {
+                <button 
+                  (click)="toggleFinish(finish)"
+                  [class.border-safs-accent]="selectedFinishes().includes(finish)"
+                  [class.bg-safs-primary]="selectedFinishes().includes(finish)"
+                  [class.bg-opacity-5]="selectedFinishes().includes(finish)"
+                  class="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/70 hover:bg-white transition-all text-sm font-medium shadow-sm border border-white/40 group hover-lift"
+                >
+                  <div [style.background-color]="getFinishColor(finish)" class="w-4 h-4 rounded-full border border-gray-300 shadow-inner shrink-0"></div>
+                  <span class="text-safs-primary group-hover:text-safs-accent text-left whitespace-normal break-words leading-tight font-medium">{{ finish }}</span>
+                </button>
+             }
+           </div>
+         </div>
+
+            <button (click)="resetFilters()" class="w-full py-3 text-safs-accent font-bold text-sm uppercase tracking-widest hover:bg-white/40 rounded-xl border border-white/20 transition-colors mb-6">
+              Clear All Filters
+            </button>
+          </div>
+         
          <!-- Mobile Filters Modal -->
          @if (showMobileFilters()) {
            <div class="lg:hidden fixed inset-0 z-50 flex items-start justify-center pt-16">
@@ -214,17 +210,18 @@ import { ImageOptimizationService } from '../services/image-optimization.service
       <div class="flex-1 bg-gray-50 flex flex-col relative w-full">
         
         <!-- Header & Search -->
-        <div class="bg-gradient-to-r from-safs-dark to-[#2A3470] px-4 py-2 sm:px-6 sm:py-3 md:px-10 md:py-3.5 lg:px-16 lg:py-4 border-b-[3px] border-safs-gold shadow-sm relative z-20 flex-shrink-0">
-          <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-3 md:gap-4 items-center justify-between relative z-10">
+        <div class="bg-gradient-to-r from-safs-primary to-[#2A3470] px-4 py-4 sm:px-8 sm:py-6 md:px-12 md:py-8 border-b border-white/10 shadow-lg relative z-20 flex-shrink-0 m-4 rounded-3xl">
+          <div class="absolute inset-0 bg-radial-gradient from-safs-accent/10 via-transparent to-transparent pointer-events-none rounded-3xl"></div>
+          <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-4 sm:gap-6 items-center justify-between relative z-10">
             <div class="text-center md:text-left">
-              <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-0.5 font-serif tracking-wide">Premium Catalog</h1>
-              <p class="text-safs-gold text-xs sm:text-sm font-medium tracking-wider uppercase">Explore our exclusive range of caskets & domes</p>
+              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 tracking-wide font-sans">SAFS Catalog</h1>
+              <p class="text-safs-accent text-xs sm:text-sm font-semibold tracking-[0.15em] uppercase">Premium range of caskets & professional funeral equipment</p>
             </div>
             
             <!-- Search Bar -->
-            <div class="w-full md:w-[300px] relative flex-shrink-0">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-safs-dark/60">
+            <div class="w-full md:w-[320px] relative flex-shrink-0">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-safs-primary">
                   <circle cx="11" cy="11" r="8"></circle>
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
@@ -234,10 +231,10 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                 placeholder="Search catalog..." 
                 (input)="onSearch($event)"
                 [value]="searchQuery()"
-                class="w-full pl-9 pr-9 py-2 rounded-lg shadow-sm bg-white/95 border border-transparent focus:bg-white focus:border-safs-gold outline-none transition-all text-safs-dark text-sm placeholder-safs-dark/40 font-semibold" />
+                class="w-full pl-10 pr-10 py-3 rounded-xl shadow-xl bg-white/95 border-2 border-transparent focus:border-safs-accent outline-none transition-all text-safs-primary text-sm placeholder-safs-primary/50 font-semibold" />
               @if (searchQuery()) {
-                <button (click)="clearSearch()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-safs-dark/40 hover:text-safs-dark transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button (click)="clearSearch()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-safs-primary/50 hover:text-safs-primary transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                   </svg>
@@ -247,8 +244,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
           </div>
         </div>
         
-
-         <!-- Product Grid Area -->
+          <!-- Product Grid Area -->
          <div class="p-4 sm:p-6 md:p-10 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32 min-h-[100vh]" id="product-grid">
 
            <!-- Featured Products Section -->
@@ -306,52 +302,53 @@ import { ImageOptimizationService } from '../services/image-optimization.service
           </div>
 
            <!-- Grid -->
-           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
-            @for (product of filteredProducts(); track product.id) {
-              <div data-testid="catalog-card" class="bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 group flex flex-col border border-gray-100 cursor-pointer overflow-hidden transform hover:-translate-y-1" [routerLink]="['/product', product.id]">
-                
-                 <!-- Image Area -->
-                 <div class="relative h-64 sm:h-72 md:h-80 lg:h-96 overflow-hidden bg-gray-50">
-                   <app-optimized-image
-                     [src]="getOptimizedProductImagePath(product)"
-                     [alt]="product.name"
-                     [aspectRatio]="getProductAspectRatio(product)"
-                     [loading]="getImageLoadingStrategy($index, filteredProducts().length, $first)"
-                     [fetchpriority]="getImageFetchPriority($index, $first)"
-                     containerClass="group-hover:scale-105 transition-transform duration-700 ease-out"
-                   ></app-optimized-image>
-                  
-                  <div class="absolute inset-0 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100 bg-white/20 backdrop-blur-[2px]">
-                      <span class="bg-safs-dark text-white font-bold py-3 px-8 rounded-full shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 text-lg flex items-center gap-2">
-                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                        View Details
-                    </span>
-                  </div>
-                  
-                  @if (getProductColorVariations(product).length > 0) {
-                    <div class="absolute bottom-4 left-4 inline-flex px-3 py-1.5 rounded-xl bg-white/90 backdrop-blur-md shadow-lg items-center gap-2 border border-gray-100">
-                      <div class="flex -space-x-1">
-                        @for (variation of getProductColorVariations(product).slice(0, 3); track variation.color) {
-                          <div [style.background-color]="getFinishColor(variation.color)" class="w-6 h-6 rounded-full border-2 border-white shadow-sm"></div>
-                        }
-                      </div>
-                      <span class="text-xs font-bold text-gray-700 pl-1">{{ getProductColorVariations(product).length }} Colors</span>
-                    </div>
-                  }
-                </div>
-
-                 <!-- Content -->
-                 <div class="p-4 sm:p-5 md:p-6 flex-1 flex flex-col border-t border-gray-100">
-                   <div class="text-xs font-black text-safs-gold-dark uppercase tracking-[0.2em] mb-2">{{ getCategoryDisplayName(product.category) }}</div>
-                   <h2 class="text-base sm:text-lg md:text-xl font-bold text-safs-dark mb-3 group-hover:text-safs-gold-dark transition-colors leading-tight">{{ product.name }}</h2>
-                  
-                  <div class="mt-auto">
-                    <!-- Actions removed -->
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
+             @for (product of filteredProducts(); track product.id) {
+               <div data-testid="catalog-card" class="glass-card hover-lift rounded-3xl overflow-hidden group flex flex-col cursor-pointer border border-white/40 shadow-sm" [routerLink]="['/product', product.id]">
+                 
+                  <!-- Image Area -->
+                  <div class="relative h-64 sm:h-72 md:h-80 lg:h-90 overflow-hidden bg-white/80 border-b border-white/20">
+                    <app-optimized-image
+                      [src]="getOptimizedProductImagePath(product)"
+                      [alt]="product.name"
+                      [aspectRatio]="getProductAspectRatio(product)"
+                      [loading]="getImageLoadingStrategy($index, filteredProducts().length, $first)"
+                      [fetchpriority]="getImageFetchPriority($index, $first)"
+                      containerClass="group-hover:scale-105 transition-transform duration-700 ease-out"
+                    ></app-optimized-image>
+                   
+                   <div class="absolute inset-0 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100 bg-safs-primary/10 backdrop-blur-[2px]">
+                       <span class="bg-safs-primary text-white font-bold py-2.5 px-6 rounded-xl shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 text-sm flex items-center gap-2 border border-white/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                         View Details
+                     </span>
+                   </div>
+                   
+                   @if (getProductColorVariations(product).length > 0) {
+                     <div class="absolute bottom-3 left-3 inline-flex px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-md shadow-md items-center gap-1.5 border border-white/20">
+                       <div class="flex -space-x-1.5">
+                         @for (variation of getProductColorVariations(product).slice(0, 3); track variation.color) {
+                           <div [style.background-color]="getFinishColor(variation.color)" class="w-4 h-4 rounded-full border border-white shadow-sm"></div>
+                         }
+                       </div>
+                       <span class="text-[10px] font-bold text-safs-primary pl-1">{{ getProductColorVariations(product).length }} Colors</span>
+                     </div>
+                   }
+                 </div>
+ 
+                  <!-- Content -->
+                  <div class="p-5 flex-1 flex flex-col glass-card-inner border-t border-white/20">
+                    <div class="text-[10px] font-black text-safs-accent uppercase tracking-[0.2em] mb-1.5">{{ getCategoryDisplayName(product.category) }}</div>
+                    <h2 class="text-base font-bold text-safs-primary group-hover:text-safs-accent transition-colors leading-tight mb-2">{{ product.name }}</h2>
+                   
+                   <div class="mt-auto">
+                     <!-- Actions removed -->
+                   </div>
+                 </div>
+               </div>
+             }
+           </div>
+        
 
           @if (filteredProducts().length === 0) {
             <div class="text-center py-32 bg-white rounded-3xl border-2 border-dashed border-gray-300">
@@ -371,8 +368,8 @@ import { ImageOptimizationService } from '../services/image-optimization.service
       
       <!-- Quick-View Modal -->
       @if (selectedProductForModal()) {
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 animate-fade-in" style="background-color: rgba(0,0,0,0.6);" (click)="closeQuickView()">
-          <div class="w-full max-w-5xl max-h-full bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row relative animate-modal-pop" (click)="$event.stopPropagation()">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 animate-fade-in bg-black/60 backdrop-blur-sm" (click)="closeQuickView()">
+          <div class="w-full max-w-5xl max-h-full bg-white/90 backdrop-blur-xl rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row relative border border-white/20 animate-modal-pop" (click)="$event.stopPropagation()">
             
             <!-- Close button absolute top right -->
             <button (click)="closeQuickView()" class="absolute top-6 right-6 z-20 p-3 bg-white/80 hover:bg-gray-100 backdrop-blur-md rounded-full shadow-sm transition-all active:scale-95">

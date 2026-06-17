@@ -104,25 +104,26 @@ import { ImageOptimizationService } from '../services/image-optimization.service
 
               <!-- Color/Finish selector -->
               @if (colors().length > 0) {
-                <div class="mt-6 md:mt-8">
-                  <h3 class="font-bold text-safs-dark mb-3 md:mb-4 uppercase tracking-wider text-sm">
-                    Select color
+                <div class="mt-6 md:mt-8 p-5 bg-white/40 border border-white/20 rounded-2xl shadow-sm">
+                  <h3 class="font-bold text-safs-primary mb-3 uppercase tracking-wider text-xs flex justify-between items-center">
+                    Select Color
+                    <span class="text-safs-accent font-bold capitalize text-sm">{{ selectedColor() || 'Standard' }}</span>
                   </h3>
 
-                  <div class="flex flex-wrap gap-2">
+                  <div class="flex flex-wrap gap-3">
                     @for (c of colors(); track c.color) {
                       <button
                         type="button"
-                        class="px-3 md:px-4 py-2.5 md:py-3 rounded-xl font-bold border transition-all shadow-sm text-sm md:text-base"
+                        class="relative group"
+                        [title]="c.color"
                         (click)="selectColor(c.color)"
-                        [class.bg-safs-gold]="selectedColor() === c.color"
-                        [class.text-black]="selectedColor() === c.color"
-                        [class.bg-white]="selectedColor() !== c.color"
-                        [class.text-gray-600]="selectedColor() !== c.color"
-                        [class.border-safs-gold]="selectedColor() === c.color"
-                        [class.border-gray-200]="selectedColor() !== c.color"
                       >
-                        <span class="capitalize">{{ c.color }}</span>
+                        <div class="absolute -inset-1.5 rounded-full transition-all border-2"
+                             [class.border-safs-accent]="selectedColor() === c.color"
+                             [class.border-transparent]="selectedColor() !== c.color"
+                             [class.scale-110]="selectedColor() === c.color"></div>
+                        <div [style.background-color]="getFinishColor(c.color)" 
+                             class="w-10 h-10 rounded-full border-2 border-white shadow-md transition-transform group-hover:scale-105 active:scale-95 z-10 relative"></div>
                       </button>
                     }
                   </div>
@@ -524,5 +525,41 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   resumeCarousel() {
     this.startCarousel();
+  }
+
+  getFinishColor(finish: string): string {
+    const colors: Record<string, string> = {
+      'cherry': '#7e2d2d',
+      'cherry gloss': '#8b2020',
+      'dark cherry': '#451a1a',
+      'kiaat': '#a0522d',
+      'kiaat gloss': '#b5642f',
+      'teak': '#8b4513',
+      'walnut': '#5d3a1a',
+      'white': '#ffffff',
+      'ash': '#b8b8b8',
+      'black': '#000000',
+      'brown': '#5c4033',
+      'green': '#2d5a27',
+      'hemlock': '#d2b48c',
+      'mahogany': '#4a1c1c',
+      'pecan': '#b8864e',
+      'rose': '#d4a0a0',
+      'rose gold': '#c9968c',
+      'gold': '#c9a84c',
+      'red': '#8b1a1a',
+      'imbuia': '#6b4226',
+      'purple': '#6b21a8',
+      'redwood': '#a45a52',
+      'redwood gloss': '#b5635a',
+      'uv dotted mahogany': '#5a2020',
+      'pink': '#ec4899'
+    };
+    const key = finish.toLowerCase();
+    return colors[key] || '#ccc';
+  }
+
+  getProductColorVariations(product: Product): { color: string; images: string[] }[] {
+    return this.store.parseColorVariations(product);
   }
 }

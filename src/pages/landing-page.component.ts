@@ -68,24 +68,28 @@ import { VideoPlayerComponent } from '../components/video-player.component';
 
     <!-- Aerial Brand Video -->
     <section class="bg-safs-dark py-20 sm:py-28 relative overflow-hidden">
+      <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/5 blur-[120px] -bottom-20 -left-20 ambient-glow"></div>
 
       <div class="relative max-w-5xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-10">
+        <div class="text-center mb-12">
           <div class="flex items-center justify-center gap-3 mb-4">
             <div class="w-8 h-0.5 bg-safs-gold"></div>
             <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Brand Film</span>
           </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Craftsmanship & Scale</h2>
           <p class="text-white/50 text-sm max-w-xl mx-auto leading-relaxed">
             A cinematic look at our manufacturing, craft, and nationwide distribution network.
           </p>
         </div>
 
-        <div class="relative">
-          <app-video-player
-            src="/assets/videos/aerial.mp4"
-            [loop]="false"
-            [startMuted]="true"
-          ></app-video-player>
+        <div class="relative p-2 rounded-3xl bg-white/5 border border-white/10 shadow-2xl backdrop-blur-xl max-w-4xl mx-auto">
+          <div class="rounded-2xl overflow-hidden border border-white/10 bg-black/40">
+            <app-video-player
+              src="/assets/videos/aerial.mp4"
+              [loop]="false"
+              [startMuted]="true"
+            ></app-video-player>
+          </div>
         </div>
       </div>
     </section>
@@ -94,19 +98,19 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     <section class="bg-safs-dark border-t border-safs-gold/20">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div>
+          <div class="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
             <div class="text-3xl font-bold text-safs-gold">26+</div>
             <div class="text-white/60 text-sm mt-1">Years of Service</div>
           </div>
-          <div>
+          <div class="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
             <div class="text-3xl font-bold text-safs-gold">60+</div>
             <div class="text-white/60 text-sm mt-1">Products</div>
           </div>
-          <div>
+          <div class="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
             <div class="text-3xl font-bold text-safs-gold">100+</div>
             <div class="text-white/60 text-sm mt-1">Funeral Homes</div>
           </div>
-          <div>
+          <div class="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
             <div class="text-3xl font-bold text-safs-gold">Nationwide</div>
             <div class="text-white/60 text-sm mt-1">Delivery</div>
           </div>
@@ -115,11 +119,12 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- About Section -->
-    <section class="bg-gray-50 py-20 sm:py-28">
+    <section class="bg-gray-50 py-20 sm:py-28 relative">
+      <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-primary/5 blur-[100px] top-1/4 left-10 pointer-events-none"></div>
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
-            <p class="text-sm font-normal tracking-widest uppercase text-safs-gold mb-4">About</p>
+            <p class="text-sm font-bold tracking-widest uppercase text-safs-gold mb-4">About</p>
             <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark mb-6">Who we are</h2>
             <div class="space-y-4 text-gray-600 text-lg leading-relaxed">
               <p>
@@ -136,36 +141,38 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             </div>
           </div>
           <div class="relative">
-            <div class="absolute inset-0 bg-safs-gold rounded-2xl transform translate-x-4 translate-y-4"></div>
-            <img class="relative rounded-2xl shadow-xl w-full h-[400px] object-cover" src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-image.jpg" alt="About us manufacturing facility" />
+            <div class="absolute inset-0 bg-safs-gold rounded-2xl transform translate-x-4 translate-y-4 opacity-80"></div>
+            <img class="relative rounded-2xl shadow-xl w-full h-[400px] object-cover border border-white/20" src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-image.jpg" alt="About us manufacturing facility" />
           </div>
         </div>
       </div>
     </section>
 
     <!-- Services Section -->
-    <section class="bg-white py-20 sm:py-28">
+    <section class="bg-white py-20 sm:py-28 relative">
+      <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/5 blur-[120px] bottom-10 right-10 pointer-events-none"></div>
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-16">
-          <p class="text-sm font-normal tracking-widest uppercase text-safs-gold mb-4">Our Services</p>
+          <p class="text-sm font-bold tracking-widest uppercase text-safs-gold mb-4">Our Services</p>
           <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark mb-4">End-to-End Funeral Supply Solutions</h2>
           <p class="text-gray-500 max-w-2xl mx-auto text-lg">From premium caskets to nationwide logistics, we provide everything your funeral home needs under one roof.</p>
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           @for (svc of services; track svc.title) {
-            <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-safs-gold/30 hover:shadow-lg transition-all group">
-              <div class="relative h-48 overflow-hidden bg-gray-100">
-                <div class="absolute inset-x-0 top-0 h-1 bg-safs-gold/0 group-hover:bg-safs-gold transition-colors z-10"></div>
-                <img [src]="svc.image" [alt]="svc.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="glass-card hover-lift rounded-2xl overflow-hidden group">
+              <div class="relative h-48 overflow-hidden bg-safs-dark/5">
+                <div class="absolute inset-x-0 top-0 h-1 bg-safs-gold/50 z-10"></div>
+                <img [src]="svc.image" [alt]="svc.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div class="absolute inset-0 bg-gradient-to-t from-safs-primary/40 to-transparent"></div>
               </div>
-              <div class="p-6">
-                <h3 class="text-lg font-bold text-safs-dark mb-2">{{ svc.title }}</h3>
-                <p class="text-gray-500 text-sm leading-relaxed mb-4">{{ svc.description }}</p>
+              <div class="p-6 glass-card-inner m-3 rounded-xl border border-white/20">
+                <h3 class="text-lg font-bold text-safs-primary mb-2">{{ svc.title }}</h3>
+                <p class="text-safs-text-muted text-sm leading-relaxed mb-4">{{ svc.description }}</p>
                 <ul class="space-y-1.5 mb-5">
                   @for (feat of svc.features; track feat) {
-                    <li class="flex items-start gap-2 text-xs text-gray-400">
-                      <svg class="w-3.5 h-3.5 text-safs-gold mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <li class="flex items-start gap-2 text-xs text-safs-text-muted">
+                      <svg class="w-3.5 h-3.5 text-safs-accent mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                       </svg>
                       <span>{{ feat }}</span>
@@ -199,10 +206,10 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark">Premium Funeral Products</h2>
           </div>
           <div class="hidden sm:flex gap-3">
-            <button (click)="prevProduct()" class="w-12 h-12 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:border-safs-gold hover:text-safs-gold hover:bg-safs-gold/5 transition-all">
+            <button (click)="prevProduct()" class="w-12 h-12 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:border-safs-accent hover:text-safs-accent hover:bg-safs-accent/5 hover-lift transition-all">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
             </button>
-            <button (click)="nextProduct()" class="w-12 h-12 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:border-safs-gold hover:text-safs-gold hover:bg-safs-gold/5 transition-all">
+            <button (click)="nextProduct()" class="w-12 h-12 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:border-safs-accent hover:text-safs-accent hover:bg-safs-accent/5 hover-lift transition-all">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </button>
           </div>
@@ -211,21 +218,21 @@ import { VideoPlayerComponent } from '../components/video-player.component';
         <!-- Product Carousel Track -->
         <div class="overflow-hidden">
           <div
-            class="flex gap-6 transition-transform duration-500 ease-out"
+            class="flex gap-6 transition-transform duration-500 ease-out py-4"
             [style.transform]="'translateX(-' + productSlide * (100 / 4) + '%)'"
           >
             @for (product of featuredProducts; track product.id) {
               <div class="min-w-[calc(25%-18px)] shrink-0">
                 <a [routerLink]="['/product', product.id]" class="block group">
-                  <div class="relative bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden hover:border-safs-gold/30 hover:shadow-lg transition-all">
-                    <div class="absolute inset-x-0 top-0 h-1 bg-safs-gold/0 group-hover:bg-safs-gold transition-colors z-10"></div>
-                    <div class="h-64 p-6 flex items-center justify-center bg-white">
+                  <div class="glass-card hover-lift rounded-2xl overflow-hidden">
+                    <div class="absolute inset-x-0 top-0 h-1 bg-safs-accent/30 group-hover:bg-safs-accent transition-colors z-10"></div>
+                    <div class="h-64 p-6 flex items-center justify-center bg-white/90 relative">
                       <img [src]="product.image" [alt]="product.name" class="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
                     </div>
-                    <div class="p-5 border-t border-gray-100">
-                      <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">{{ product.category }}</p>
-                      <h3 class="text-lg font-bold text-safs-dark group-hover:text-safs-gold transition-colors">{{ product.name }}</h3>
-                      <span class="inline-flex items-center gap-1 text-safs-gold text-sm font-semibold mt-2 group-hover:gap-2 transition-all">
+                    <div class="p-5 glass-card-inner border-t border-white/20">
+                      <p class="text-xs text-safs-accent uppercase tracking-wider mb-1 font-semibold">{{ product.category }}</p>
+                      <h3 class="text-lg font-bold text-safs-primary group-hover:text-safs-accent transition-colors">{{ product.name }}</h3>
+                      <span class="inline-flex items-center gap-1 text-safs-accent text-sm font-semibold mt-2 group-hover:gap-2 transition-all">
                         View Product
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                       </span>
