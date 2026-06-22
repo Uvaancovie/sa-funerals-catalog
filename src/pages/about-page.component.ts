@@ -104,7 +104,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
 
     <!-- Stats Section -->
     <section class="relative -mt-12 z-10 max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         @for (stat of stats; track stat.label; let i = $index) {
           <div class="reveal fade-up bg-white rounded-2xl shadow-lg border border-gray-100 p-6 text-center hover:shadow-xl transition-shadow" [style.transition-delay]="i * 0.08 + 's'">
             <div class="text-3xl sm:text-4xl font-bold text-safs-dark mb-1">{{ stat.value }}</div>
@@ -393,7 +393,6 @@ export class AboutPageComponent implements AfterViewInit, OnDestroy {
     { value: '26+', label: 'Years of Service' },
     { value: '60+', label: 'Products Available' },
     { value: '100+', label: 'Funeral Homes Served' },
-    { value: '', label: 'Proven Customer Satisfaction' },
   ];
 
   values = [

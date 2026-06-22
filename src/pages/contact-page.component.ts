@@ -45,7 +45,20 @@ import { EnquiryService } from '../services/enquiry.service';
         @for (info of contactInfo; track info.label) {
           <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow group">
             <div class="w-12 h-12 rounded-xl bg-safs-dark flex items-center justify-center mb-4 group-hover:bg-safs-gold transition-colors">
-              <span [innerHTML]="info.icon" class="text-safs-gold group-hover:text-white transition-colors [&_svg]:w-5 [&_svg]:h-5" aria-hidden="true"></span>
+              @switch (info.label) {
+                @case ('Phone') {
+                  <svg class="text-safs-gold group-hover:text-white transition-colors w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                }
+                @case ('Email') {
+                  <svg class="text-safs-gold group-hover:text-white transition-colors w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+                }
+                @case ('Location') {
+                  <svg class="text-safs-gold group-hover:text-white transition-colors w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                }
+                @case ('Response Time') {
+                  <svg class="text-safs-gold group-hover:text-white transition-colors w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                }
+              }
             </div>
             <h3 class="font-bold text-safs-dark mb-1">{{ info.label }}</h3>
             @if (info.href) {
