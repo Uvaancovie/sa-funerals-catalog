@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal, HostListener } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
@@ -14,7 +14,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
   standalone: true,
   imports: [CommonModule, RouterLink, OptimizedImageComponent, FormsModule],
   template: `
-    <div class="bg-gray-50 min-h-screen">
+    <div class="bg-gray-50 min-h-screen select-none" (contextmenu)="$event.preventDefault()" (dragstart)="$event.preventDefault()">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
         <div class="flex items-center gap-3 mb-4 md:mb-6">
           <a routerLink="/catalog" class="text-safs-dark font-bold hover:text-safs-gold-dark transition-colors">
@@ -258,6 +258,22 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   productId = signal('');
   private routeSubscription: Subscription | null = null;
+
+  @HostListener('window:keydown', ['$event'])
+  preventCopyShortcuts(event: KeyboardEvent) {
+    const isCopy = (event.ctrlKey || event.metaKey) && (event.key === 'c' || event.key === 'x');
+    const isSave = (event.ctrlKey || event.metaKey) && event.key === 's';
+    const isPrint = (event.ctrlKey || event.metaKey) && event.key === 'p';
+    
+    if (isCopy || isSave || isPrint) {
+      event.preventDefault();
+    }
+  }
+
+  @HostListener('window:copy', ['$event'])
+  preventClipboardCopy(event: ClipboardEvent) {
+    event.preventDefault();
+  }
 
   product = computed<Product | null>(() => {
     const id = this.productId();
