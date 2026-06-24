@@ -41,9 +41,26 @@ export class EnquiryService {
     items: { name: string; quantity: number }[];
     notes?: string;
   }): Promise<void> {
-    await lastValueFrom(
-      this.http.post(`${this.apiUrl}/api/enquiries`, data)
-    );
+    const isLocalhost = typeof window !== 'undefined' && 
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+    if (isLocalhost) {
+      await lastValueFrom(
+        this.http.post(`${this.apiUrl}/api/enquiries`, data)
+      );
+    } else {
+      const payload = {
+        name: data.customer_name,
+        email: data.customer_email,
+        phone: data.customer_phone,
+        company: '',
+        subject: data.items[0]?.name || 'General Inquiry',
+        message: data.notes || ''
+      };
+      await lastValueFrom(
+        this.http.post(`/api/contact`, payload)
+      );
+    }
   }
 
   async updateStatus(id: number, status: 'new' | 'contacted' | 'closed'): Promise<void> {
