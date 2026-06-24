@@ -1,3 +1,6 @@
+check-supabase-local*
+check-vercel-api.js
+
 # Logs
 logs
 *.log
