@@ -214,7 +214,6 @@ import { ImageOptimizationService } from '../services/image-optimization.service
           <div class="absolute inset-0 bg-radial-gradient from-safs-accent/10 via-transparent to-transparent pointer-events-none rounded-3xl"></div>
           <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-4 sm:gap-6 items-center justify-between relative z-10">
             <div class="text-center md:text-left">
-              <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 tracking-wide font-sans">SAFS Catalog</h1>
               <p class="text-safs-accent text-xs sm:text-sm font-semibold tracking-[0.15em] uppercase">Premium range of caskets & professional funeral equipment</p>
             </div>
             
