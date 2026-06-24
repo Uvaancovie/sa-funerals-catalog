@@ -38,11 +38,12 @@ export class EnquiryService {
     customer_name: string;
     customer_email: string;
     customer_phone: string;
+    company?: string;
     items: { name: string; quantity: number }[];
     notes?: string;
   }): Promise<void> {
     const isLocalhost = typeof window !== 'undefined' && 
-      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '0.0.0.0');
 
     if (isLocalhost) {
       await lastValueFrom(
@@ -53,7 +54,7 @@ export class EnquiryService {
         name: data.customer_name,
         email: data.customer_email,
         phone: data.customer_phone,
-        company: '',
+        company: data.company || '',
         subject: data.items[0]?.name || 'General Inquiry',
         message: data.notes || ''
       };

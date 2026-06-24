@@ -453,6 +453,7 @@ export class ContactPageComponent {
         customer_name: this.formData.name,
         customer_email: this.formData.email,
         customer_phone: this.formData.phone || '',
+        company: this.formData.company || '',
         items: [{
           name: this.formData.subject,
           quantity: 1
