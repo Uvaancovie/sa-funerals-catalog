@@ -416,11 +416,11 @@ export class ContactPageComponent {
   ];
 
   businessHours = [
-    { day: 'Monday', time: '08:00 – 17:00', isOpen: true },
-    { day: 'Tuesday', time: '08:00 – 17:00', isOpen: true },
-    { day: 'Wednesday', time: '08:00 – 17:00', isOpen: true },
-    { day: 'Thursday', time: '08:00 – 17:00', isOpen: true },
-    { day: 'Friday', time: '08:00 – 16:00', isOpen: true },
+    { day: 'Monday', time: '07:30 – 16:45', isOpen: true },
+    { day: 'Tuesday', time: '07:30 – 16:45', isOpen: true },
+    { day: 'Wednesday', time: '07:30 – 16:45', isOpen: true },
+    { day: 'Thursday', time: '07:30 – 16:45', isOpen: true },
+    { day: 'Friday', time: '07:30 – 16:45', isOpen: true },
     { day: 'Saturday', time: '09:00 – 13:00', isOpen: true },
     { day: 'Sunday', time: 'Closed', isOpen: false },
   ];

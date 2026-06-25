@@ -46,7 +46,7 @@ import { AuthService } from '../services/auth.service';
               }
 
               <button type="submit" [disabled]="loginForm.invalid || loading()"
-                class="w-full bg-safs-primary text-white px-6 py-4 rounded-xl font-bold hover:bg-safs-accent hover-lift transition-colors disabled:opacity-50 shadow-lg text-base mt-2">
+                class="w-full bg-safs-accent text-safs-dark px-6 py-4 rounded-xl font-bold hover:bg-safs-gold-dark hover-lift transition-colors disabled:opacity-50 shadow-lg text-base mt-2">
                 {{ loading() ? 'Signing in...' : 'Sign In' }}
               </button>
             </form>
@@ -60,7 +60,7 @@ export class AdminLoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  email = 'admin@safuneralsupplies.co.za';
+  email = 'uvaancovenden@safuneralsupplies.co.za';
   password = '';
   loginError = signal(false);
   loading = signal(false);
