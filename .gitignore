@@ -93,6 +93,7 @@ dotnet-ef.exe
 docker-compose.override.yml
 
 # AI assistants / editor configs
+.agent/
 .codex/
 .cursor/
 .gemini/
