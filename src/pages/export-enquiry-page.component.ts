@@ -249,6 +249,9 @@ import { ExportEnquiryService } from '../services/export-enquiry.service';
                         }
                       </div>
                       <p class="text-xs text-gray-400">Accepted format: PDF (Max 10MB)</p>
+                      <p class="text-[11px] text-gray-400 leading-relaxed">
+                        Company registration documents may contain personal information (IDs, addresses, directors' details). These are processed lawfully under POPIA, stored securely with encryption, and retained for up to 6 years as required by the Companies Act. We'll never use them for any other purpose.
+                      </p>
                     </div>
 
                     <!-- Business Industry -->

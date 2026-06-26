@@ -44,7 +44,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
             <a routerLink="/contact" class="inline-flex items-center gap-2 border-2 border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
-              Talk to Sales
+              Contact Our Sales
             </a>
           </div>
         </div>
@@ -74,7 +74,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
         <div class="text-center mb-12">
           <div class="flex items-center justify-center gap-3 mb-4">
             <div class="w-8 h-0.5 bg-safs-gold"></div>
-            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Brand Film</span>
+            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Our Operations</span>
           </div>
           <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Craftsmanship & Scale</h2>
           <p class="text-white/50 text-sm max-w-xl mx-auto leading-relaxed">
@@ -300,10 +300,10 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
 
   heroBgImages = [
     { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg' },
-    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-5.jpg' },
+    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg' },
     { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-3.jpg' },
     { id: 4, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-image.jpg' },
-    { id: 5, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
+    { id: 5, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg' },
   ];
 
   featuredProducts = [
@@ -322,31 +322,31 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Premium Caskets',
       description: 'Handcrafted wooden and metal caskets in various styles and finishes to honour every life with dignity.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/Emperor%20-%20Dark%20Cherry%20(2).jpg',
       features: ['Custom finishes', 'Eco-friendly options', 'Rapid fulfillment']
     },
     {
       title: 'Cremation Urns',
       description: 'Beautiful and respectful urns designed to preserve and honour the memories of the departed.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-2.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/pexels-cottonbro-10496221.jpg',
       features: ['Personalization', 'Quality materials', 'Affordable pricing']
     },
     {
       title: 'Equipment Rental',
       description: 'Complete funeral service equipment including stands, frames, and ceremonial accessories.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-3.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg',
       features: ['Flexible terms', 'Maintenance included', 'Delivery available']
     },
     {
       title: 'Funeral Supplies',
       description: 'Complete range of essentials including memorial items, decorative accessories, and more.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-4.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/funeral-supplies.png',
       features: ['Bulk ordering', 'Wholesale pricing', 'Custom arrangements']
     },
     {
       title: 'Nationwide Delivery',
       description: 'Fast and reliable delivery throughout South Africa with our extensive distribution network.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-5.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg',
       features: ['24-hour turnaround', 'Safe handling', 'Tracking available']
     },
     {

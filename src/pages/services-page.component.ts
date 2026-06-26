@@ -163,7 +163,7 @@ import { RouterLink } from '@angular/router';
           <div class="grid grid-cols-2 gap-4">
             <div class="h-64 rounded-2xl overflow-hidden shadow-lg">
               <img
-                src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-5.jpg"
+                src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/funeral-supplies.png"
                 alt="Distribution Services"
                 class="w-full h-full object-cover"
               />
@@ -258,11 +258,11 @@ export class ServicesPageComponent {
   currentSlide = 0;
 
   carouselItems = [
-    { id: 1, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg', label: 'Premium Caskets & Coffins', tag: 'Quality Craftsmanship' },
-    { id: 2, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-2.jpg', label: 'Memorial & Cremation Urns', tag: 'Dignified Tributes' },
-    { id: 3, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-3.jpg', label: 'Funeral Equipment Rental', tag: 'Complete Solutions' },
+    { id: 1, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/Emperor%20-%20Dark%20Cherry%20(2).jpg', label: 'Premium Caskets & Coffin', tag: 'Quality Craftsmanship' },
+    { id: 2, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/pexels-cottonbro-10496221.jpg', label: 'Memorial & Cremation Urns', tag: 'Dignified Tributes' },
+    { id: 3, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg', label: 'Funeral Equipment Rental', tag: 'Complete Solutions' },
     { id: 4, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-4.jpg', label: 'Essential Funeral Supplies', tag: 'Comprehensive Range' },
-    { id: 5, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg', label: 'Nationwide Distribution', tag: 'Reliable Logistics' },
+    { id: 5, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg', label: 'Nationwide Distribution', tag: 'Reliable Logistics' },
   ];
 
   services = [
@@ -270,21 +270,21 @@ export class ServicesPageComponent {
       id: 1,
       title: 'Premium Caskets',
       description: 'Handcrafted wooden and metal caskets in various styles and finishes to honour every life with dignity.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/Emperor%20-%20Dark%20Cherry%20(2).jpg',
       features: ['Custom finishes', 'Eco-friendly options', 'Rapid fulfillment']
     },
     {
       id: 2,
       title: 'Cremation Urns',
       description: 'Beautiful and respectful urns designed to preserve and honour the memories of the departed.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-2.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/pexels-cottonbro-10496221.jpg',
       features: ['Personalization', 'Quality materials', 'Affordable pricing']
     },
     {
       id: 3,
       title: 'Equipment Rental',
       description: 'Complete funeral service equipment including stands, frames, and ceremonial accessories for rent or purchase.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-3.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg',
       features: ['Flexible terms', 'Maintenance included', 'Delivery available']
     },
     {
@@ -298,7 +298,7 @@ export class ServicesPageComponent {
       id: 5,
       title: 'Nationwide Delivery',
       description: 'Fast and reliable delivery throughout South Africa with our extensive distribution network.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-5.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg',
       features: ['24-hour turnaround', 'Safe handling', 'Tracking available']
     },
     {

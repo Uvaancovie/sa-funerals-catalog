@@ -83,7 +83,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
         <div class="text-center mb-10">
           <div class="flex items-center justify-center gap-3 mb-4 reveal fade-up">
             <div class="w-8 h-0.5 bg-safs-gold"></div>
-            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Brand Film</span>
+            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Our Operations</span>
             <div class="w-8 h-0.5 bg-safs-gold"></div>
           </div>
           <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4 reveal fade-up" style="transition-delay: 0.1s">A Look Inside Our Operation</h2>
@@ -114,46 +114,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
       </div>
     </section>
 
-    <!-- Product Range -->
-    <section class="bg-white py-20 sm:py-28 relative overflow-hidden">
-      <div class="absolute inset-0 opacity-20" style="background: radial-gradient(800px circle at 50% 50%, rgba(197, 160, 89, 0.1), transparent 60%);"></div>
-
-      <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-16">
-          <div class="flex items-center justify-center gap-3 mb-4 reveal fade-up">
-            <div class="w-8 h-0.5 bg-safs-gold"></div>
-            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Our Product Range</span>
-            <div class="w-8 h-0.5 bg-safs-gold"></div>
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark mb-4 reveal fade-up" style="transition-delay: 0.1s">Premium Caskets & Funeral Equipment</h2>
-          <p class="text-gray-500 max-w-2xl mx-auto text-lg reveal fade-up" style="transition-delay: 0.15s">
-            From handcrafted domes and coffins to essential equipment — we manufacture and supply the finest funeral products in South Africa.
-          </p>
-        </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          @for (product of casketImages; track product.name; let i = $index) {
-            <div class="group relative rounded-2xl bg-gray-50 border border-gray-100 overflow-hidden hover:border-safs-gold/30 hover:shadow-lg transition-all reveal fade-up" [style.transition-delay]="i * 0.08 + 's'">
-              <div class="absolute inset-x-0 top-0 h-1 bg-safs-gold/0 group-hover:bg-safs-gold transition-colors z-10"></div>
-              <div class="h-56 p-4 flex items-center justify-center bg-white">
-                <img [src]="product.image" [alt]="product.name" class="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
-              </div>
-              <div class="p-5">
-                <h3 class="font-bold text-safs-dark mb-1">{{ product.name }}</h3>
-                <p class="text-xs text-gray-400 uppercase tracking-wider">{{ product.category }}</p>
-              </div>
-            </div>
-          }
-        </div>
-
-        <div class="text-center mt-12 reveal fade-up">
-          <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold-light transition-all shadow-lg hover:shadow-xl active:scale-95">
-            View Full Catalog
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
+ 
 
     <!-- Mission Section -->
     <section class="bg-white py-20 sm:py-28">
@@ -375,7 +336,7 @@ export class AboutPageComponent implements AfterViewInit, OnDestroy {
     { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-3.jpg' },
     { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg' },
     { id: 4, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-3.jpg' },
-    { id: 5, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
+    { id: 5, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg' },
   ];
 
   casketImages = [
