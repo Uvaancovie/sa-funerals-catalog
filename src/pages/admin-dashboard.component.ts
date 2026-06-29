@@ -13,13 +13,14 @@ import { AuthService } from '../services/auth.service';
 import { ExportEnquiryService, ExportEnquiryRecord } from '../services/export-enquiry.service';
 import { CacheService } from '../services/cache.service';
 import { environment } from '../environments/environment';
+import { ProductInventoryTableComponent } from '../components/product-inventory-table.component';
 
 type TabId = 'stats' | 'enquiries' | 'export-enquiries' | 'orders' | 'products' | 'users' | 'cms' | 'banners' | 'audit';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ProductInventoryTableComponent],
   template: `
     <div class="min-h-screen glass-bg text-slate-900 relative overflow-hidden">
       <div class="absolute inset-0 pointer-events-none">
@@ -366,115 +367,43 @@ type TabId = 'stats' | 'enquiries' | 'export-enquiries' | 'orders' | 'products' 
         <!-- ===== PRODUCTS (CMS) ===== -->
         @if (activeTab() === 'products') {
           <div class="tab-content">
-            @if (tabLoading() === 'products') {
-              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                @for (i of [1,2,3,4,5,6]; track i) {
-                  <div class="data-card p-4"><div class="skeleton-block mb-3"></div><div class="skeleton-line" style="width:40%"></div><div class="skeleton-line" style="width:70%"></div><div class="skeleton-line" style="width:50%"></div></div>
-                }
-              </div>
-            } @else {
-              <div class="glass-panel p-4 sm:p-5 mb-5" style="border-radius:1.25rem">
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                  <div>
-                    <h2 class="text-lg font-bold text-safs-dark">Products Inventory</h2>
-                    <p class="text-xs text-safs-text-muted">Track stock, featured items, and price-on-request products.</p>
-                  </div>
-                  <div class="flex flex-wrap items-center gap-2">
-                    <button (click)="openProductForm()" class="btn-primary">+ Add Product</button>
-                    <button (click)="applyProductFilters()" class="btn-outline" style="color:var(--safs-text-muted);border-color:rgba(127,140,141,0.2);background:rgba(255,255,255,0.6)">Refresh</button>
+            @if (productFormOpen()) {
+              <div class="glass-panel p-6 mb-6" style="border-radius:1.25rem">
+                <h3 class="font-bold text-safs-dark mb-4">{{ editingProduct() ? 'Edit Product' : 'New Product' }}</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div><label class="data-card-field-label mb-1">Name</label><input [(ngModel)]="productForm.name" class="form-input"></div>
+                  <div><label class="data-card-field-label mb-1">Slug</label><input [(ngModel)]="productForm.slug" class="form-input"></div>
+                  <div><label class="data-card-field-label mb-1">Category</label><input [(ngModel)]="productForm.category" class="form-input"></div>
+                  <div><label class="data-card-field-label mb-1">Price</label><input type="number" [(ngModel)]="productForm.price" class="form-input"></div>
+                  <div><label class="data-card-field-label mb-1">Images (JSON array)</label><input [(ngModel)]="productForm.images" class="form-input"></div>
+                  <div class="flex items-center gap-4">
+                    <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.in_stock"> In Stock</label>
+                    <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.featured"> Featured</label>
+                    <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.price_on_request"> Price on Request</label>
                   </div>
                 </div>
-                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
-                  <input [(ngModel)]="productSearch" (input)="applyProductFilters()" placeholder="Search name or description..." class="form-input">
-                  <select [(ngModel)]="productCategoryFilter" (change)="applyProductFilters()" class="form-select">
-                    <option value="">All Categories</option>
-                    @for (category of productsService.categories(); track category) {
-                      <option [value]="category">{{ category }}</option>
-                    }
-                  </select>
-                  <select [(ngModel)]="productStockFilter" (change)="applyProductFilters()" class="form-select">
-                    <option value="all">All Stock</option>
-                    <option value="in">In Stock</option>
-                    <option value="out">Out of Stock</option>
-                  </select>
-                  <label class="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/40 bg-white/60 text-sm cursor-pointer hover:bg-white/80 transition-colors">
-                    <input type="checkbox" [(ngModel)]="productFeaturedOnly" (change)="applyProductFilters()">
-                    Featured only
-                  </label>
-                  <button (click)="clearProductFilters()" class="form-select text-safs-text-main hover:bg-white/80">Clear Filters</button>
+                <div class="mt-4">
+                  <label class="data-card-field-label mb-1">Description</label>
+                  <textarea [(ngModel)]="productForm.description" rows="3" class="form-input"></textarea>
                 </div>
-              </div>
-
-              @if (inventoryCounts(); as counts) {
-                <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
-                  <div class="stat-card"><p class="stat-card-value">{{ counts.total }}</p><p class="stat-card-label">Total</p></div>
-                  <div class="stat-card"><p class="stat-card-value" style="color:#15803D">{{ counts.inStock }}</p><p class="stat-card-label">In Stock</p></div>
-                  <div class="stat-card"><p class="stat-card-value" style="color:#DC2626">{{ counts.outOfStock }}</p><p class="stat-card-label">Out of Stock</p></div>
-                  <div class="stat-card"><p class="stat-card-value" style="color:#B45309">{{ counts.featured }}</p><p class="stat-card-label">Featured</p></div>
-                  <div class="stat-card"><p class="stat-card-value">{{ counts.priceOnRequest }}</p><p class="stat-card-label">Price on Request</p></div>
+                <div class="flex gap-2 mt-4">
+                  <button (click)="saveProduct()" class="btn-primary">Save</button>
+                  <button (click)="productFormOpen.set(false)" class="px-4 py-2 rounded-xl text-sm font-medium bg-white/60 text-safs-text-muted hover:bg-white/80 transition-colors border border-white/40">Cancel</button>
                 </div>
-              }
-
-              @if (productFormOpen()) {
-                <div class="glass-panel p-6 mb-6" style="border-radius:1.25rem">
-                  <h3 class="font-bold text-safs-dark mb-4">{{ editingProduct() ? 'Edit Product' : 'New Product' }}</h3>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div><label class="data-card-field-label mb-1">Name</label><input [(ngModel)]="productForm.name" class="form-input"></div>
-                    <div><label class="data-card-field-label mb-1">Slug</label><input [(ngModel)]="productForm.slug" class="form-input"></div>
-                    <div><label class="data-card-field-label mb-1">Category</label><input [(ngModel)]="productForm.category" class="form-input"></div>
-                    <div><label class="data-card-field-label mb-1">Price</label><input type="number" [(ngModel)]="productForm.price" class="form-input"></div>
-                    <div><label class="data-card-field-label mb-1">Images (JSON array)</label><input [(ngModel)]="productForm.images" class="form-input"></div>
-                    <div class="flex items-center gap-4">
-                      <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.in_stock"> In Stock</label>
-                      <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.featured"> Featured</label>
-                      <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" [(ngModel)]="productForm.price_on_request"> Price on Request</label>
-                    </div>
-                  </div>
-                  <div class="mt-4">
-                    <label class="data-card-field-label mb-1">Description</label>
-                    <textarea [(ngModel)]="productForm.description" rows="3" class="form-input"></textarea>
-                  </div>
-                  <div class="flex gap-2 mt-4">
-                    <button (click)="saveProduct()" class="btn-primary">Save</button>
-                    <button (click)="productFormOpen.set(false)" class="px-4 py-2 rounded-xl text-sm font-medium bg-white/60 text-safs-text-muted hover:bg-white/80 transition-colors border border-white/40">Cancel</button>
-                  </div>
-                </div>
-              }
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                @for (product of productsService.products(); track product.id) {
-                  <div class="data-card">
-                    <div class="h-28 bg-gradient-to-br from-white/60 to-white/10 flex items-center justify-center text-xs text-safs-text-muted overflow-hidden">
-                      @if (resolveImageUrl(product.images?.[0])) {
-                        <img [src]="resolveImageUrl(product.images?.[0])" [alt]="product.name" class="h-full w-full object-cover">
-                      } @else {
-                        <span class="opacity-40">No image</span>
-                      }
-                    </div>
-                    <div class="p-4">
-                      <div class="flex items-start justify-between mb-2 gap-2">
-                        <span class="status-badge status-badge--new" style="font-size:0.625rem;padding:0.0625rem 0.5rem">{{ product.category }}</span>
-                        @if (product.featured) { <span class="status-badge" style="background:rgba(180,83,9,0.1);color:#B45309;border-color:rgba(180,83,9,0.15);font-size:0.625rem;padding:0.0625rem 0.5rem">Featured</span> }
-                      </div>
-                      <h3 class="font-bold text-safs-dark text-sm">{{ product.name }}</h3>
-                      <p class="text-xs text-safs-text-muted mt-1 truncate">{{ product.description || 'No description yet.' }}</p>
-                      <div class="flex items-center justify-between mt-3">
-                        <span class="font-bold text-safs-dark">{{ product.price ? 'R' + product.price : 'Request Price' }}</span>
-                        <span class="text-xs font-medium" [style.color]="product.in_stock ? '#15803D' : '#DC2626'">{{ product.in_stock ? 'In Stock' : 'Out of Stock' }}</span>
-                      </div>
-                      <div class="flex items-center justify-between text-[0.625rem] text-safs-text-muted mt-2">
-                        <span>Last updated</span>
-                        <span>{{ formatDate(product.updated_at || product.created_at) }}</span>
-                      </div>
-                      <div class="flex gap-2 mt-3 pt-3 border-t border-white/30">
-                        <button (click)="editProduct(product)" class="btn-outline">Edit</button>
-                        <button (click)="deleteProduct(product.id)" class="btn-ghost">Delete</button>
-                      </div>
-                    </div>
-                  </div>
-                }
               </div>
             }
+
+            <app-product-inventory-table
+              [categories]="productsService.categories()"
+              [loading]="productsService.loading()"
+              [totalProducts]="productsService.totalProducts()"
+              [currentPage]="productsService.currentPage()"
+              [totalPages]="productsService.totalPages()"
+              [refreshTrigger]="productRefreshKey()"
+              (openForm)="openProductForm()"
+              (editProduct)="editProduct($event)"
+              (deleteProduct)="deleteProduct($event)"
+            />
           </div>
         }
 
@@ -790,11 +719,8 @@ export class AdminDashboardComponent implements OnInit {
 
   enquiryFilter = signal('');
   orderFilter = signal('');
-  productSearch = signal('');
-  productCategoryFilter = signal('');
-  productStockFilter = signal<'all' | 'in' | 'out'>('all');
-  productFeaturedOnly = signal(false);
   productFormOpen = signal(false);
+  productRefreshKey = signal(0);
   editingProduct = signal<Product | null>(null);
   userFormOpen = signal(false);
   editingUser = signal<User | null>(null);
@@ -959,45 +885,6 @@ export class AdminDashboardComponent implements OnInit {
     return `/assets/${normalized}`;
   }
 
-  async searchProducts() {
-    await this.applyProductFilters();
-  }
-
-  async applyProductFilters() {
-    const stock = this.productStockFilter();
-    this.cache.invalidate('products');
-    await this.productsService.fetchProducts({
-      search: this.productSearch() || undefined,
-      category: this.productCategoryFilter() || undefined,
-      in_stock: stock === 'all' ? undefined : stock === 'in',
-      featured: this.productFeaturedOnly() ? true : undefined,
-    });
-  }
-
-  clearProductFilters() {
-    this.productSearch.set('');
-    this.productCategoryFilter.set('');
-    this.productStockFilter.set('all');
-    this.productFeaturedOnly.set(false);
-    void this.applyProductFilters();
-  }
-
-  get inventoryCounts() {
-    return () => {
-      const products = this.productsService.products();
-      const inStock = products.filter(p => p.in_stock).length;
-      const featured = products.filter(p => p.featured).length;
-      const priceOnRequest = products.filter(p => p.price_on_request).length;
-      return {
-        total: products.length,
-        inStock,
-        outOfStock: products.length - inStock,
-        featured,
-        priceOnRequest,
-      };
-    };
-  }
-
   // === Enquiries ===
   get filteredExportEnquiries() {
     return () => {
@@ -1083,12 +970,14 @@ export class AdminDashboardComponent implements OnInit {
     }
     this.cache.invalidate('products');
     this.productFormOpen.set(false);
+    this.productRefreshKey.update(v => v + 1);
   }
 
   async deleteProduct(id: number) {
     if (!confirm('Delete this product?')) return;
     await this.productsService.deleteProduct(id);
     this.cache.invalidate('products');
+    this.productRefreshKey.update(v => v + 1);
   }
 
   // === Users ===
