@@ -60,35 +60,63 @@ const COLOR_KEYWORDS = [
 ];
 
 async function uploadImage(localPath, storagePath) {
-  let fileBuffer;
+  const basePath = storagePath.replace(/\.(jpg|jpeg|png)$/i, '');
+  let jpgUrl = null;
+
   try {
-    // Compress image with Sharp before uploading
-    fileBuffer = await sharp(localPath)
+    const jpgBuffer = await sharp(localPath)
       .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
       .jpeg({ quality: 80 })
       .toBuffer();
+
+    const { error } = await supabase.storage
+      .from(BUCKET)
+      .upload(`${basePath}.jpg`, jpgBuffer, {
+        cacheControl: '31536000',
+        upsert: true,
+        contentType: 'image/jpeg'
+      });
+
+    if (error) {
+      console.error(`  ⚠ JPEG upload failed: ${basePath}.jpg - ${error.message}`);
+    } else {
+      const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(`${basePath}.jpg`);
+      jpgUrl = urlData.publicUrl;
+    }
   } catch (err) {
-    console.error(`  ⚠ Compression failed: ${err.message}`);
-    fileBuffer = fs.readFileSync(localPath);
+    console.error(`  ⚠ JPEG compression failed: ${err.message}`);
+    const rawBuffer = fs.readFileSync(localPath);
+    const { error } = await supabase.storage
+      .from(BUCKET)
+      .upload(`${basePath}.jpg`, rawBuffer, {
+        cacheControl: '31536000',
+        upsert: true,
+        contentType: 'image/jpeg'
+      });
+    if (!error) {
+      const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(`${basePath}.jpg`);
+      jpgUrl = urlData.publicUrl;
+    }
   }
 
-  const contentType = 'image/jpeg';
+  try {
+    const webpBuffer = await sharp(localPath)
+      .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
+      .webp({ quality: 80 })
+      .toBuffer();
 
-  const { data, error } = await supabase.storage
-    .from(BUCKET)
-    .upload(storagePath, fileBuffer, {
-      cacheControl: '31536000',
-      upsert: true,
-      contentType
-    });
-
-  if (error) {
-    console.error(`  ⚠ Upload failed: ${storagePath} - ${error.message}`);
-    return null;
+    await supabase.storage
+      .from(BUCKET)
+      .upload(`${basePath}.webp`, webpBuffer, {
+        cacheControl: '31536000',
+        upsert: true,
+        contentType: 'image/webp'
+      });
+  } catch (err) {
+    console.error(`  ⚠ WebP upload failed: ${basePath}.webp - ${err.message}`);
   }
 
-  const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
-  return urlData.publicUrl;
+  return jpgUrl;
 }
 
 /**

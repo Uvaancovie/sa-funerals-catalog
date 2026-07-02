@@ -41,9 +41,6 @@ export class StoreService {
   readonly wishlist = signal<Product[]>([]);
 
   constructor() {
-    // Always start with the local dataset (SAFS IMAGES), so the catalog
-    // renders correctly even if Supabase is misconfigured/unavailable.
-    this.loadLocalProducts();
     this.loadProducts();
   }
 
@@ -153,29 +150,36 @@ export class StoreService {
   async loadProducts() {
     try {
       const { data, error } = await this.supabaseService.client
-        // Supabase error hints the actual table name is `Products` (capital P).
-        // Using the correct case avoids REST 404s for a non-existent table.
         .from('Products')
         .select('*');
-      
+
       if (error) {
         console.error('Supabase error loading products:', error);
         return;
       }
       if (data && Array.isArray(data) && data.length > 0) {
-        const products = data as Product[];
-        if (!products.some(p => p.images && p.images.includes('SAFS IMAGES'))) {
-          console.warn('Supabase products loaded, but images are not SAFS IMAGES. Keeping local dataset.');
-          this.loadLocalProducts();
-          return;
-        }
-        
-        this.products.set(products);
+        const mapped = data.map((item: any) => ({
+          id: item.Id ?? item.id ?? '',
+          name: item.Name ?? item.name ?? '',
+          category: item.Category ?? item.category ?? '',
+          description: item.Description ?? item.description ?? null,
+          price: item.Price ?? item.price ?? null,
+          priceOnRequest: item.PriceOnRequest ?? item.priceonrequest ?? false,
+          images: item.Images ?? item.images ?? '[]',
+          colorVariations: item.ColorVariations ?? item.colorvariations ?? null,
+          specifications: item.Specifications ?? item.specifications ?? null,
+          features: item.Features ?? item.features ?? null,
+          inStock: item.InStock ?? item.instock ?? true,
+          featured: item.Featured ?? item.featured ?? false,
+          createdAt: item.CreatedAt ?? item.createdat ?? new Date().toISOString(),
+          updatedAt: item.UpdatedAt ?? item.updatedat ?? null,
+        })) as Product[];
+        this.products.set(mapped);
         return;
       }
     } catch (err) {
-      console.error('Failed to load products', err);
-      // Keep local dataset
+      console.error('Failed to load products, falling back to local:', err);
+      this.loadLocalProducts();
     }
   }
 
