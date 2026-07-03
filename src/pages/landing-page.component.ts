@@ -322,7 +322,7 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Premium Caskets',
       description: 'Handcrafted wooden and metal caskets in various styles and finishes to honour every life with dignity.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/Emperor%20-%20Dark%20Cherry%20(2).jpg',
       features: ['Custom finishes', 'Eco-friendly options', 'Rapid fulfillment']
     },
     {
