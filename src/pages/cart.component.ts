@@ -21,7 +21,7 @@ import { OrdersService } from '../services/orders.service';
             <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
           </svg>
           <p class="text-xl font-medium">Your cart is empty.</p>
-          <a routerLink="/catalog" class="mt-6 px-8 py-3.5 bg-safs-primary text-white font-bold rounded-xl hover:bg-safs-accent hover-lift transition-colors inline-block text-sm shadow-md">Browse Catalog</a>
+          <a routerLink="/catalog" class="mt-6 px-8 py-3.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 hover-lift transition-colors inline-block text-sm shadow-md">Browse Catalog</a>
         </div>
       } @else {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -68,7 +68,7 @@ import { OrdersService } from '../services/orders.service';
                   <input type="tel" [(ngModel)]="enquiryData.phone" name="phone" required class="px-4 py-3 rounded-xl border border-white/30 focus:outline-none focus:ring-2 focus:ring-safs-accent w-full text-sm bg-white/70 focus:bg-white transition-all text-safs-primary placeholder-safs-primary/40 font-semibold shadow-sm">
                 </div>
 
-                <button type="submit" [disabled]="cartForm.invalid || isSubmitting()" class="w-full bg-safs-primary text-white px-6 py-4 rounded-xl font-bold hover:bg-safs-accent transition-colors disabled:opacity-50 mt-4 shadow-lg text-base hover-lift">
+                <button type="submit" [disabled]="cartForm.invalid || isSubmitting()" class="w-full bg-blue-600 text-white px-6 py-4 rounded-xl font-bold hover:bg-blue-700 transition-colors disabled:opacity-50 mt-4 shadow-lg text-base hover-lift">
                   {{ isSubmitting() ? 'Processing...' : 'Submit Enquiry' }}
                 </button>
 
