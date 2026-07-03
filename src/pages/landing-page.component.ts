@@ -300,8 +300,8 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
 
   heroBgImages = [
     { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg' },
-    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-5.jpg' },
-    { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-3.jpg' },
+    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg' },
+    { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
     { id: 4, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-image.jpg' },
     { id: 5, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
   ];
@@ -328,13 +328,13 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Cremation Urns',
       description: 'Beautiful and respectful urns designed to preserve and honour the memories of the departed.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-2.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/pexels-cottonbro-10496221.jpg',
       features: ['Personalization', 'Quality materials', 'Affordable pricing']
     },
     {
       title: 'Equipment Rental',
       description: 'Complete funeral service equipment including stands, frames, and ceremonial accessories.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-3.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg',
       features: ['Flexible terms', 'Maintenance included', 'Delivery available']
     },
     {
@@ -346,7 +346,7 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Nationwide Delivery',
       description: 'Fast and reliable delivery throughout South Africa with our extensive distribution network.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-5.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg',
       features: ['24-hour turnaround', 'Safe handling', 'Tracking available']
     },
     {

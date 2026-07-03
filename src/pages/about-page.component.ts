@@ -335,7 +335,7 @@ export class AboutPageComponent implements AfterViewInit, OnDestroy {
     { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-image.jpg' },
     { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-3.jpg' },
     { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg' },
-    { id: 4, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-3.jpg' },
+    { id: 4, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
     { id: 5, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg' },
   ];
 
