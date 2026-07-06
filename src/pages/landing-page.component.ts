@@ -263,6 +263,63 @@ import { VideoPlayerComponent } from '../components/video-player.component';
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="bg-gray-50 py-20 sm:py-28 relative overflow-hidden">
+      <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/5 blur-[120px] top-20 -left-20 pointer-events-none"></div>
+
+      <div class="relative max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="text-center mb-16">
+          <div class="flex items-center justify-center gap-3 mb-4 reveal fade-up">
+            <div class="w-8 h-0.5 bg-safs-gold"></div>
+            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">FAQ</span>
+            <div class="w-8 h-0.5 bg-safs-gold"></div>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark reveal fade-up" style="transition-delay: 0.1s">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="space-y-4">
+          @for (faq of faqs; track $index; let i = $index) {
+            <div class="bg-white rounded-2xl border border-gray-100 hover:border-safs-gold/20 transition-all">
+              <button
+                (click)="toggleFaq(i)"
+                class="w-full flex items-center justify-between gap-4 text-left px-6 sm:px-8 py-5 font-bold text-safs-dark hover:text-safs-gold transition-colors"
+              >
+                <span>{{ faq.question }}</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="flex-shrink-0 transition-transform duration-300"
+                  [class.rotate-180]="activeFaqIndex === i"
+                >
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+              <div
+                class="overflow-hidden transition-all duration-300"
+                [class.max-h-0]="activeFaqIndex !== i"
+                [class.max-h-96]="activeFaqIndex === i"
+              >
+                <div
+                  class="px-6 sm:px-8 pb-5 text-gray-500 leading-relaxed transition-all duration-300"
+                  [class.opacity-0]="activeFaqIndex !== i"
+                  [class.opacity-100]="activeFaqIndex === i"
+                >
+                  {{ faq.answer }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
     <!-- CTA -->
     <section class="bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark py-20 relative overflow-hidden">
       <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-gold/10 blur-[120px] -top-20 -right-20"></div>
@@ -356,6 +413,43 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
       features: ['Export expertise', 'Documentation', 'Customs assistance']
     }
   ];
+
+  faqs = [
+    {
+      question: 'What products does SAFS offer?',
+      answer: 'We offer a comprehensive range including premium handcrafted caskets, cremation urns, funeral equipment rentals, and essential supplies — everything a funeral home needs under one roof.'
+    },
+    {
+      question: 'How long has SAFS been in business?',
+      answer: 'We have been serving the funeral industry since 1998 — over 26 years of experience manufacturing and supplying quality funeral products across South Africa.'
+    },
+    {
+      question: 'Do you deliver nationwide?',
+      answer: 'Yes, we deliver to funeral homes across all nine provinces of South Africa through our extensive hub network, with fast and reliable turnaround times.'
+    },
+    {
+      question: 'What are your business hours?',
+      answer: 'We are open Monday to Thursday from 7:30am to 4:45pm, and Friday from 7:30am to 3pm. We are closed on Saturdays and Sundays.'
+    },
+    {
+      question: 'What sets SAFS apart from competitors?',
+      answer: 'Our uncompromising quality standards, nationwide reach, over 26 years of industry expertise, competitive pricing, and personalised service make us the trusted partner for funeral homes across South Africa.'
+    },
+    {
+      question: 'How do I place an order?',
+      answer: 'Browse our full catalog online or get in touch with our sales team at +27 31 508 6700 or sales@safuneral.co.za for personalised assistance.'
+    },
+    {
+      question: 'Do you offer international shipping?',
+      answer: 'Yes, we export to neighbouring countries, across the African continent, and beyond — with full logistics support, export documentation, and customs assistance.'
+    }
+  ];
+
+  activeFaqIndex: number | null = null;
+
+  toggleFaq(index: number): void {
+    this.activeFaqIndex = this.activeFaqIndex === index ? null : index;
+  }
 
   ngAfterViewInit(): void {
     this.heroInterval = setInterval(() => {
