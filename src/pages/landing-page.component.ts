@@ -97,7 +97,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     <!-- Stats Strip -->
     <section class="bg-safs-dark border-t border-safs-gold/20">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           <div class="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
             <div class="text-3xl font-bold text-safs-gold">26+</div>
             <div class="text-white/60 text-sm mt-1">Years of Service</div>
@@ -109,10 +109,6 @@ import { VideoPlayerComponent } from '../components/video-player.component';
           <div class="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
             <div class="text-3xl font-bold text-safs-gold">100+</div>
             <div class="text-white/60 text-sm mt-1">Funeral Homes</div>
-          </div>
-          <div class="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
-            <div class="text-3xl font-bold text-safs-gold">Nationwide</div>
-            <div class="text-white/60 text-sm mt-1">Delivery</div>
           </div>
         </div>
       </div>
@@ -400,12 +396,7 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
       image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-4.jpg',
       features: ['Bulk ordering', 'Wholesale pricing', 'Custom arrangements']
     },
-    {
-      title: 'Nationwide Delivery',
-      description: 'Fast and reliable delivery throughout South Africa with our extensive distribution network.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg',
-      features: ['24-hour turnaround', 'Safe handling', 'Tracking available']
-    },
+
     {
       title: 'International Shipping',
       description: 'We deliver to neighbouring countries, across Africa, and beyond with full logistics support.',
