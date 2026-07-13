@@ -28,7 +28,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
       <div class="relative w-full max-w-6xl mx-auto px-6 sm:px-8 py-32 sm:py-40 text-center">
         <div class="max-w-4xl mx-auto">
           <p class="text-sm font-bold tracking-[0.25em] uppercase mb-8 reveal fade-up">
-            <span class="text-safs-gold">South Africa's Trusted Funeral Supply Partner</span>
+            <span class="text-safs-gold"> Trusted Worlwide As A Funeral Supply Partner</span>
           </p>
           <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-[1.15] sm:leading-[1.1] mb-8 reveal fade-up" style="transition-delay: 0.1s">
             Premium Funeral Supplies<br>

@@ -620,6 +620,15 @@ export class CatalogComponent implements OnInit {
     { value: 'skinz', label: 'Skinz' }
   ];
 
+  // Affordable funeral supplies are surfaced first. Flatlids and coffins
+  // take priority over every other category; everything else falls back to
+  // the default priority and keeps its source order.
+  private readonly categorySortPriority: Record<string, number> = {
+    'flatlids': 0,
+    'coffins': 1,
+  };
+  private readonly defaultSortPriority = 99;
+
   // Derived filter options
   readonly casketStyles = ['Dome', 'Halfview', 'Coffin', 'Figurine', 'Woodturning', 'Glitter', 'Senator', 'Porthole', 'Pongee'];
   readonly availableFinishes = [
@@ -671,7 +680,21 @@ export class CatalogComponent implements OnInit {
       );
     }
 
-    return products;
+    // 5. Affordable-first ordering: flatlids, then coffins, then everything else.
+    // Within each group, products are sorted by price ascending so the cheapest
+    // options surface first. Items with no price (priceOnRequest) sink to the
+    // bottom of their group. Spread into a new array to avoid mutating the
+    // underlying signal value (also read by `featuredProducts`).
+    const priority = this.categorySortPriority;
+    const fallback = this.defaultSortPriority;
+    return [...products].sort((a, b) => {
+      const pa = priority[a.category] ?? fallback;
+      const pb = priority[b.category] ?? fallback;
+      if (pa !== pb) return pa - pb;
+      const priceA = a.price ?? Number.POSITIVE_INFINITY;
+      const priceB = b.price ?? Number.POSITIVE_INFINITY;
+      return priceA - priceB;
+    });
   });
 
   featuredProducts = computed(() => {
