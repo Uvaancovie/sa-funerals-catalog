@@ -26,9 +26,9 @@ import { ExportEnquiryService } from '../services/export-enquiry.service';
         <div class="max-w-3xl">
           <span class="inline-block text-safs-gold font-bold text-sm tracking-[0.2em] uppercase mb-6">Export Enquiries</span>
           <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
-            Servicing the<br>
-            <span class="text-safs-gold">African Continent</span><br>
-            Since 1998
+            Servicing <br>
+            <span class="text-safs-gold">Worldwide</span><br>
+            
           </h1>
           <p class="text-lg sm:text-xl text-white/70 leading-relaxed max-w-2xl mb-8">
             South African Funeral Supplies is well known for our superior product quality,
