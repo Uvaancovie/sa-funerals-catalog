@@ -8,11 +8,12 @@ import { Product, StoreService } from '../services/store.service';
 import { FormsModule } from '@angular/forms';
 import { OptimizedImageComponent } from '../components/optimized-image.component';
 import { ImageOptimizationService } from '../services/image-optimization.service';
+import { ProductFaqComponent } from '../components/product-faq.component';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, OptimizedImageComponent, FormsModule],
+  imports: [CommonModule, RouterLink, OptimizedImageComponent, FormsModule, ProductFaqComponent],
   template: `
     <div class="bg-gray-50 min-h-screen select-none" (contextmenu)="$event.preventDefault()" (dragstart)="$event.preventDefault()">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
@@ -170,6 +171,9 @@ import { ImageOptimizationService } from '../services/image-optimization.service
               </div>
             </div>
           </div>
+
+          <!-- Frequently Asked Questions -->
+          <app-product-faq [category]="product()?.category"></app-product-faq>
 
           @if (relatedProducts().length > 0) {
             <div
