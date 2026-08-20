@@ -10,27 +10,27 @@ import { ExportEnquiryService } from '../services/export-enquiry.service';
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark">
+    <section class="relative overflow-hidden bg-white">
       <div class="absolute inset-0">
         <img
           src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/exports/exports.jpg"
           alt=""
-          class="w-full h-full object-cover opacity-40"
+          class="w-full h-full object-cover opacity-30"
         />
-        <div class="absolute inset-0 bg-gradient-to-r from-safs-dark/90 via-safs-dark/70 to-safs-dark/60"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-white/60"></div>
         <div class="absolute w-[600px] h-[600px] rounded-full bg-safs-gold/10 blur-[120px] -top-32 -left-32"></div>
-        <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-gold/5 blur-[100px] -bottom-20 right-10"></div>
+        <div class="absolute w-[400px] h-[400px] rounded-full bg-slate-200/40 blur-[100px] -bottom-20 right-10"></div>
       </div>
 
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-32">
         <div class="max-w-3xl">
           <span class="inline-block text-safs-gold font-bold text-sm tracking-[0.2em] uppercase mb-6">Export Enquiries</span>
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 leading-tight mb-6">
             Servicing <br>
             <span class="text-safs-gold">Worldwide</span><br>
             
           </h1>
-          <p class="text-lg sm:text-xl text-white/70 leading-relaxed max-w-2xl mb-8">
+          <p class="text-lg sm:text-xl text-slate-700 leading-relaxed max-w-2xl mb-8">
             South African Funeral Supplies is well known for our superior product quality,
             exceptional service delivery, innovation and value for money.
           </p>
@@ -39,7 +39,7 @@ import { ExportEnquiryService } from '../services/export-enquiry.service';
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               +27 31 508 6700
             </a>
-            <a href="mailto:rovilan&#64;safuneral.co.za" class="inline-flex items-center gap-2 border-2 border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
+            <a href="mailto:rovilan&#64;safuneral.co.za" class="inline-flex items-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
               Email Exports Team
             </a>
@@ -49,7 +49,7 @@ import { ExportEnquiryService } from '../services/export-enquiry.service';
     </section>
 
     <!-- Form + Contact Sidebar -->
-    <section class="bg-gray-50 py-20 sm:py-28">
+    <section class="bg-white py-20 sm:py-28">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="grid lg:grid-cols-5 gap-8 lg:gap-12">
 

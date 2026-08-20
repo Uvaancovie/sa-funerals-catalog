@@ -16,22 +16,22 @@ import {
     <div class="glass-panel rounded-3xl border border-white/50 shadow-xl overflow-hidden mb-8 backdrop-blur-md">
       
       <!-- Header Banner with Compliance Badge -->
-      <div class="bg-gradient-to-r from-safs-dark via-slate-900 to-safs-dark text-white p-6 relative overflow-hidden border-b border-gold-500/20">
+      <div class="bg-white p-6 relative overflow-hidden border-b border-slate-200">
         <div class="absolute right-0 top-0 translate-x-4 -translate-y-4 w-40 h-40 bg-safs-gold/10 rounded-full blur-2xl"></div>
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <div class="flex items-center gap-2 text-xs font-semibold text-safs-gold tracking-widest uppercase mb-1">
+            <div class="flex items-center gap-2 text-xs font-semibold text-safs-gold-dark tracking-widest uppercase mb-1">
               <span class="inline-block w-2 h-2 rounded-full bg-safs-gold animate-pulse"></span>
               SA Market Compliant Engine
             </div>
-            <h2 class="text-2xl font-bold text-white tracking-tight">Enterprise Delivery Cost Calculator</h2>
-            <p class="text-xs text-slate-300 mt-1 max-w-xl">
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Enterprise Delivery Cost Calculator</h2>
+            <p class="text-xs text-slate-500 mt-1 max-w-xl">
               Calculated using standard NBCRFLI statutory wages, SANRAL N3 heavy vehicle tolls, and 4,000 cm³/kg volumetric road freight rules.
             </p>
           </div>
 
-          <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-2xl border border-white/20 text-xs font-mono text-safs-gold">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-400">
+          <div class="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-200 text-xs font-mono text-safs-gold-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-emerald-600">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               <path d="m9 12 2 2 4-4"/>
             </svg>

@@ -8,21 +8,21 @@ import { RouterLink } from '@angular/router';
   imports: [CommonModule, RouterLink],
   template: `
     <!-- Hero Section with Carousel -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark">
+    <section class="relative overflow-hidden bg-white">
       <div class="absolute inset-0">
         <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/10 blur-[120px] -top-32 -left-32"></div>
-        <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-gold/5 blur-[100px] -bottom-20 right-10"></div>
+        <div class="absolute w-[400px] h-[400px] rounded-full bg-slate-200/40 blur-[100px] -bottom-20 right-10"></div>
       </div>
 
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div class="max-w-xl">
             <span class="inline-block text-safs-gold font-bold text-sm tracking-[0.2em] uppercase mb-6">Our Services</span>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 leading-tight mb-6">
               Comprehensive Funeral<br>
               <span class="text-safs-gold">Supply Solutions</span>
             </h1>
-            <p class="text-lg sm:text-xl text-white/70 leading-relaxed mb-10">
+            <p class="text-lg sm:text-xl text-slate-700 leading-relaxed mb-10">
               From casket supply to equipment rental and nationwide distribution, we provide everything
               your funeral service needs to serve families with dignity and professionalism.
             </p>
@@ -31,7 +31,7 @@ import { RouterLink } from '@angular/router';
                 Get in Touch
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
-              <a routerLink="/catalog" class="inline-flex items-center gap-2 border-2 border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
+              <a routerLink="/catalog" class="inline-flex items-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
                 Browse Catalog
               </a>
             </div>
@@ -39,7 +39,7 @@ import { RouterLink } from '@angular/router';
 
           <!-- Interactive Carousel -->
           <div class="relative">
-            <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-safs-dark/50 border border-white/10">
+            <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-slate-100 border border-slate-200">
               <div class="relative h-72 sm:h-80 md:h-96 overflow-hidden">
                 @for (item of carouselItems; track item.id; let i = $index) {
                   <div
@@ -61,17 +61,17 @@ import { RouterLink } from '@angular/router';
               </div>
 
               <!-- Navigation Arrows -->
-              <button (click)="prevSlide()" aria-label="Previous slide" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-safs-gold hover:border-safs-gold transition-all group">
+              <button (click)="prevSlide()" aria-label="Previous slide" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-safs-gold hover:border-safs-gold transition-all group">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-black transition-colors"><path d="m15 18-6-6 6-6"/></svg>
               </button>
-              <button (click)="nextSlide()" aria-label="Next slide" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-safs-gold hover:border-safs-gold transition-all group">
+              <button (click)="nextSlide()" aria-label="Next slide" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-safs-gold hover:border-safs-gold transition-all group">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-black transition-colors"><path d="m9 18 6-6-6-6"/></svg>
               </button>
 
               <!-- Dot Indicators -->
               <div class="absolute bottom-4 right-4 flex gap-2">
                 @for (item of carouselItems; track item.id; let idx = $index) {
-                  <span (click)="goToSlide(idx)" class="inline-block h-2 rounded-full transition-all duration-300 cursor-pointer" [ngClass]="idx === currentSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/40'"></span>
+                  <span (click)="goToSlide(idx)" class="inline-block h-2 rounded-full transition-all duration-300 cursor-pointer" [ngClass]="idx === currentSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/60'"></span>
                 }
               </div>
             </div>
@@ -126,7 +126,7 @@ import { RouterLink } from '@angular/router';
     </section>
 
     <!-- Distribution Network -->
-    <section class="py-20 sm:py-28 bg-gray-50 relative overflow-hidden">
+    <section class="py-20 sm:py-28 bg-white relative overflow-hidden">
       <div class="absolute inset-0 opacity-30" style="background: radial-gradient(800px circle at 20% 50%, rgba(197, 160, 89, 0.12), transparent 60%);"></div>
 
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
@@ -202,7 +202,7 @@ import { RouterLink } from '@angular/router';
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           @for (benefit of benefits; track benefit.title) {
-            <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-safs-gold/30 hover:shadow-lg transition-all group">
+            <div class="bg-white rounded-2xl p-8 border border-gray-100 hover:border-safs-gold/30 hover:shadow-lg transition-all group">
               <div class="flex items-center gap-3 mb-5">
                 <div class="w-8 h-0.5 bg-safs-gold rounded-full group-hover:w-12 transition-all duration-300"></div>
               </div>
@@ -215,18 +215,18 @@ import { RouterLink } from '@angular/router';
     </section>
 
     <!-- CTA Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark py-16 sm:py-24">
+    <section class="relative overflow-hidden bg-white py-16 sm:py-24 border-t border-slate-100">
       <div class="absolute inset-0">
         <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-gold/10 blur-[120px] -top-32 right-32"></div>
-        <div class="absolute w-[600px] h-[600px] rounded-full bg-white/5 blur-[150px] -bottom-40 -left-40"></div>
+        <div class="absolute w-[600px] h-[600px] rounded-full bg-slate-200/30 blur-[150px] -bottom-40 -left-40"></div>
       </div>
 
       <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-6">
           Ready to Partner with<br>
           <span class="text-safs-gold">South Africa's Finest</span>
         </h2>
-        <p class="text-lg text-white/60 mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
           Contact our team today to discuss your funeral supply needs and discover how our comprehensive
           services can support your business.
         </p>
@@ -240,7 +240,7 @@ import { RouterLink } from '@angular/router';
           </a>
           <a
             routerLink="/catalog"
-            class="inline-flex items-center justify-center gap-2 border-2 border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all"
+            class="inline-flex items-center justify-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all"
           >
             Browse Catalog
           </a>

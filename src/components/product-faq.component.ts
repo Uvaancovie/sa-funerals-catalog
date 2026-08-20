@@ -81,10 +81,10 @@ export interface FaqItem {
         </div>
 
         <!-- Support CTA Banner -->
-        <div class="mt-8 md:mt-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-safs-dark via-safs-dark to-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg">
+        <div class="mt-8 md:mt-10 p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div class="text-center sm:text-left">
-            <h3 class="text-lg sm:text-xl font-bold text-white mb-1">Have more questions about this product?</h3>
-            <p class="text-sm text-gray-300">Our dedicated sales and customer care team is available to assist funeral directors and parlors.</p>
+            <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-1">Have more questions about this product?</h3>
+            <p class="text-sm text-slate-600">Our dedicated sales and customer care team is available to assist funeral directors and parlors.</p>
           </div>
           <a
             routerLink="/contact"

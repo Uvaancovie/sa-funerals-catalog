@@ -9,19 +9,16 @@ import { VideoPlayerComponent } from '../components/video-player.component';
   imports: [CommonModule, RouterLink, VideoPlayerComponent],
   template: `
     <!-- HERO SECTION: High-End Framed Architecture -->
-    <section class="relative bg-gradient-to-b from-slate-50 via-white to-slate-50 py-8 sm:py-12 lg:py-16 overflow-hidden">
+    <section class="relative bg-white py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <!-- Subtle Background Ambient Glows -->
       <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[900px] h-[450px] bg-gradient-to-tr from-amber-200/20 via-slate-200/30 to-transparent blur-3xl pointer-events-none rounded-full"></div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="relative z-10 w-full">
         
-        <!-- Premium Outer Framed Showcase -->
-        <div class="relative bg-white rounded-3xl border border-slate-200/80 shadow-[0_20px_50px_rgba(0,0,0,0.06)] p-6 sm:p-10 lg:p-14 overflow-hidden">
-          
-          <!-- Subtle Inner Frame Accent -->
-          <div class="absolute inset-0 border border-slate-900/5 rounded-3xl pointer-events-none"></div>
-          
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+        <!-- Subtle Inner Frame Accent -->
+        <div class="absolute inset-0 border border-slate-900/5 rounded-3xl pointer-events-none"></div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center w-full">
             
             <!-- LEFT COLUMN: Brand Statement & Primary CTAs (5 Columns) -->
             <div class="lg:col-span-5 flex flex-col justify-between space-y-6 sm:space-y-8">
@@ -30,26 +27,26 @@ import { VideoPlayerComponent } from '../components/video-player.component';
                 <!-- Trust Pill Badge -->
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 text-amber-300 text-xs font-semibold uppercase tracking-widest mb-6 shadow-sm">
                   <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                  Est. 1998 &bull; Global Manufacturing Partner
+                 
                 </div>
 
                 <!-- Structured Hierarchy Typography -->
                 <div class="space-y-1 sm:space-y-2">
-                  <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-none">
+                  <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-slate-950 tracking-tight leading-none">
                     Trusted
                   </h1>
-                  <span class="block text-3xl sm:text-4xl lg:text-5xl font-light text-slate-700 tracking-tight leading-tight">
+                  <span class="block text-4xl sm:text-5xl lg:text-6xl font-light text-slate-700 tracking-tight leading-tight">
                     Worldwide
                   </span>
-                  <span class="block text-3xl sm:text-4xl lg:text-5xl font-light text-slate-700 tracking-tight leading-tight">
+                  <span class="block text-4xl sm:text-5xl lg:text-6xl font-light text-slate-700 tracking-tight leading-tight">
                     Funeral
                   </span>
-                  <span class="block text-3xl sm:text-4xl lg:text-5xl font-light text-slate-700 tracking-tight leading-tight">
+                  <span class="block text-4xl sm:text-5xl lg:text-6xl font-light text-slate-700 tracking-tight leading-tight">
                     Manufacturer
                   </span>
                 </div>
 
-                <p class="text-slate-500 text-sm sm:text-base leading-relaxed mt-5 max-w-md">
+                <p class="text-slate-500 text-base sm:text-lg leading-relaxed mt-5 max-w-md">
                   Delivering handcrafted precision, certified engineering, and bulk wholesale logistics to funeral homes across Africa and overseas.
                 </p>
               </div>
@@ -158,17 +155,9 @@ import { VideoPlayerComponent } from '../components/video-player.component';
 
               <!-- Award Winning Signature Banner -->
               <div class="mt-4 flex flex-col items-center text-center">
-                <div class="flex items-center gap-2 text-amber-600 font-semibold tracking-widest text-xs uppercase mb-1">
-                  <span>&starf;</span>
-                  <span>Excellence in Funeral Manufacturing</span>
-                  <span>&starf;</span>
-                </div>
                 <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
                   Award Winning Quality &amp; Craftsmanship
                 </h2>
-                <p class="text-xs text-slate-400 mt-1 max-w-sm">
-                  Precision-milled hardwood, hand-tailored linings, and ISO-tested hardware.
-                </p>
               </div>
 
             </div>
@@ -176,28 +165,27 @@ import { VideoPlayerComponent } from '../components/video-player.component';
           </div>
         </div>
 
-      </div>
     </section>
 
     <!-- Operational Cinematic Video Strip -->
-    <section class="bg-slate-950 py-20 relative overflow-hidden">
-      <div class="absolute w-[500px] h-[500px] rounded-full bg-amber-500/5 blur-[120px] -bottom-20 -left-20 pointer-events-none"></div>
+    <section class="bg-white py-20 relative overflow-hidden">
+      <div class="absolute w-[500px] h-[500px] rounded-full bg-amber-100/40 blur-[120px] -bottom-20 -left-20 pointer-events-none"></div>
 
       <div class="relative max-w-5xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10">
-          <div class="inline-flex items-center gap-2 text-amber-400 font-bold text-xs tracking-[0.25em] uppercase mb-3">
-            <span class="w-6 h-0.5 bg-amber-400"></span>
+          <div class="inline-flex items-center gap-2 text-amber-600 font-bold text-xs tracking-[0.25em] uppercase mb-3">
+            <span class="w-6 h-0.5 bg-amber-600"></span>
             Factory &amp; Logistics
-            <span class="w-6 h-0.5 bg-amber-400"></span>
+            <span class="w-6 h-0.5 bg-amber-600"></span>
           </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">Craftsmanship at Scale</h2>
-          <p class="text-slate-400 text-sm max-w-xl mx-auto leading-relaxed">
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-950 mb-3">Craftsmanship at Scale</h2>
+          <p class="text-slate-600 text-sm max-w-xl mx-auto leading-relaxed">
             Take an inside look at our specialized manufacturing processes, finish detailing, and distribution capabilities.
           </p>
         </div>
 
-        <div class="relative p-2 rounded-3xl bg-white/5 border border-white/10 shadow-2xl backdrop-blur-xl max-w-4xl mx-auto">
-          <div class="rounded-2xl overflow-hidden border border-white/10 bg-black/50">
+        <div class="relative p-2 rounded-3xl bg-slate-50 border border-slate-200 shadow-2xl backdrop-blur-xl max-w-4xl mx-auto">
+          <div class="rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
             <app-video-player
               src="/assets/videos/aerial.mp4"
               [loop]="false"
@@ -209,22 +197,22 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- Key Metrics Strip -->
-    <section class="bg-slate-900 border-y border-slate-800">
+    <section class="bg-white border-y border-slate-200">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-          <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-            <div class="text-3xl sm:text-4xl font-black text-amber-400">26+</div>
-            <div class="text-slate-300 font-medium text-sm mt-1">Years of Service</div>
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="text-3xl sm:text-4xl font-black text-amber-600">26+</div>
+            <div class="text-slate-800 font-medium text-sm mt-1">Years of Service</div>
             <div class="text-slate-500 text-xs mt-0.5">Established since 1998</div>
           </div>
-          <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-            <div class="text-3xl sm:text-4xl font-black text-amber-400">60+</div>
-            <div class="text-slate-300 font-medium text-sm mt-1">Product Lines</div>
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="text-3xl sm:text-4xl font-black text-amber-600">60+</div>
+            <div class="text-slate-800 font-medium text-sm mt-1">Product Lines</div>
             <div class="text-slate-500 text-xs mt-0.5">Caskets, Domes, Hardware &amp; Requisites</div>
           </div>
-          <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
-            <div class="text-3xl sm:text-4xl font-black text-amber-400">100+</div>
-            <div class="text-slate-300 font-medium text-sm mt-1">Funeral Homes Partnered</div>
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="text-3xl sm:text-4xl font-black text-amber-600">100+</div>
+            <div class="text-slate-800 font-medium text-sm mt-1">Funeral Homes Partnered</div>
             <div class="text-slate-500 text-xs mt-0.5">Nationwide &amp; Export Reach</div>
           </div>
         </div>
@@ -232,7 +220,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- About Section -->
-    <section class="bg-slate-50 py-20 sm:py-28 relative">
+    <section class="bg-white py-20 sm:py-28 relative">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
@@ -299,7 +287,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- Featured Products Carousel -->
-    <section class="bg-slate-50 py-20 sm:py-28 relative overflow-hidden">
+    <section class="bg-white py-20 sm:py-28 relative overflow-hidden">
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div class="flex items-end justify-between mb-12">
           <div>
@@ -389,19 +377,19 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- B2B Closing CTA -->
-    <section class="bg-slate-950 py-20 relative overflow-hidden">
+    <section class="bg-white py-20 relative overflow-hidden">
       <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-950 mb-4">
           Partner with South Africa's Leading Manufacturer
         </h2>
-        <p class="text-slate-400 text-base mb-8 max-w-xl mx-auto">
+        <p class="text-slate-600 text-base mb-8 max-w-xl mx-auto">
           Contact our sales specialists today to discuss trade accounts, bulk discounts, and custom orders.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
           <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-8 py-4 rounded-xl shadow-lg transition-all active:scale-95">
             Browse Full Range
           </a>
-          <a routerLink="/contact" class="inline-flex items-center gap-2 border border-white/20 hover:border-white text-white font-bold px-8 py-4 rounded-xl transition-all hover:bg-white/5">
+          <a routerLink="/contact" class="inline-flex items-center gap-2 border-2 border-slate-300 hover:border-slate-900 text-slate-900 font-bold px-8 py-4 rounded-xl transition-all hover:bg-slate-50">
             Open Trade Inquiry
           </a>
         </div>

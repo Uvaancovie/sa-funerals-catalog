@@ -24,8 +24,8 @@ import { VideoPlayerComponent } from '../components/video-player.component';
           <img [src]="img.src" alt="" class="w-full h-full object-cover" [attr.fetchpriority]="i === 0 ? 'high' : null" [loading]="i === 0 ? 'eager' : 'lazy'" />
         </div>
       }
-      <div class="absolute inset-0 bg-gradient-to-r from-safs-dark/95 via-safs-dark/80 to-safs-dark/60"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-safs-dark/40 via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-white/90 via-white/75 to-white/40"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent"></div>
 
       <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 py-32 sm:py-40">
         <div class="max-w-3xl">
@@ -33,11 +33,11 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             <div class="w-10 h-0.5 bg-safs-gold" aria-hidden="true"></div>
             <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">About Us</span>
           </div>
-          <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold text-white leading-tight mb-6 reveal fade-up" style="transition-delay: 0.2s">
+          <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold text-slate-900 leading-tight mb-6 reveal fade-up" style="transition-delay: 0.2s">
             South Africa's Trusted<br>
             <span class="text-safs-gold">Funeral Supply Partner</span>
           </h1>
-          <p class="text-base sm:text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl mb-10 reveal fade-up" style="transition-delay: 0.3s">
+          <p class="text-base sm:text-lg md:text-xl text-slate-700 leading-relaxed max-w-2xl mb-10 reveal fade-up" style="transition-delay: 0.3s">
             Servicing the funeral industry since 1998. We combine decades of experience with
             uncompromising quality to provide funeral homes across South Africa with premium
             caskets, equipment, and supplies.
@@ -47,7 +47,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
               Browse Our Range
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
-            <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
+            <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               +27 31 508 6700
             </a>
@@ -64,13 +64,13 @@ import { VideoPlayerComponent } from '../components/video-player.component';
               [attr.aria-label]="'Go to slide ' + (i + 1)"
               [attr.aria-current]="i === heroSlide ? 'true' : null"
               class="h-2 rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
-              [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/30 hover:bg-white/50'"
+              [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-slate-300 hover:bg-slate-400'"
             ></button>
           }
         </nav>
-        <div class="flex flex-col items-center gap-2 text-white/40" aria-hidden="true">
+        <div class="flex flex-col items-center gap-2 text-slate-400" aria-hidden="true">
           <span class="text-xs tracking-[0.2em] uppercase font-medium">Scroll</span>
-          <div class="scroll-indicator w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center pt-2">
+          <div class="scroll-indicator w-6 h-10 rounded-full border-2 border-slate-300 flex items-start justify-center pt-2">
             <div class="scroll-dot w-1.5 h-1.5 rounded-full bg-safs-gold"></div>
           </div>
         </div>
@@ -78,7 +78,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- Brand Film -->
-    <section class="bg-safs-dark py-20 sm:py-28 relative overflow-hidden">
+    <section class="bg-white py-20 sm:py-28 relative overflow-hidden">
       <div class="relative max-w-5xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10">
           <div class="flex items-center justify-center gap-3 mb-4 reveal fade-up">
@@ -86,8 +86,8 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Our Operations</span>
             <div class="w-8 h-0.5 bg-safs-gold"></div>
           </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4 reveal fade-up" style="transition-delay: 0.1s">A Look Inside Our Operation</h2>
-          <p class="text-white/50 text-sm max-w-xl mx-auto leading-relaxed reveal fade-up" style="transition-delay: 0.15s">
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 reveal fade-up" style="transition-delay: 0.1s">A Look Inside Our Operation</h2>
+          <p class="text-slate-600 text-sm max-w-xl mx-auto leading-relaxed reveal fade-up" style="transition-delay: 0.15s">
             A cinematic view of our manufacturing facility, craftsmanship, and the team behind South Africa's trusted funeral supply partner.
           </p>
         </div>
@@ -155,7 +155,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- Values -->
-    <section class="bg-gray-50 py-20 sm:py-28 relative overflow-hidden">
+    <section class="bg-white py-20 sm:py-28 relative overflow-hidden">
       <div class="absolute inset-0 opacity-30" style="background: radial-gradient(800px circle at 20% 50%, rgba(197, 160, 89, 0.12), transparent 60%);"></div>
 
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
@@ -208,7 +208,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
               }
 
               <div class="md:w-[calc(50%-2rem)]" [class.md:ml-auto]="$even" [class.md:mr-auto]="$odd" [class.md:text-right]="$odd" [class.md:pl-8]="$even" [class.md:pr-8]="$odd">
-                <div class="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100 transition-all" [ngClass]="{
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 transition-all" [ngClass]="{
                   'hover:border-safs-gold/30': i !== milestones.length - 1,
                   'hover:shadow-lg': i !== milestones.length - 1,
                   'border-safs-gold/40': i === milestones.length - 1,
@@ -235,7 +235,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- Why Choose Us -->
-    <section class="bg-gray-50 py-20 sm:py-28">
+    <section class="bg-white py-20 sm:py-28">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-16">
           <div class="flex items-center justify-center gap-3 mb-4 reveal fade-up">
@@ -265,16 +265,16 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- CTA Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark py-20">
+    <section class="relative overflow-hidden bg-white py-20 border-t border-slate-100">
       <div class="absolute w-[600px] h-[600px] rounded-full bg-safs-gold/10 blur-[150px] -top-40 -right-40"></div>
-      <div class="absolute w-[400px] h-[400px] rounded-full bg-white/5 blur-[100px] -bottom-20 left-10"></div>
+      <div class="absolute w-[400px] h-[400px] rounded-full bg-slate-200/30 blur-[100px] -bottom-20 left-10"></div>
 
       <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-6">
           Ready to Partner with<br>
           <span class="text-safs-gold">South Africa's Finest</span>
         </h2>
-        <p class="text-white/60 text-lg mb-10 max-w-2xl mx-auto">
+        <p class="text-slate-600 text-lg mb-10 max-w-2xl mx-auto">
           Browse our full catalog of premium funeral supplies, or get in touch with our
           team for personalised assistance.
         </p>
@@ -283,7 +283,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             View Full Catalog
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-white/20 text-white font-bold px-10 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
+          <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-10 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
             Contact Sales
           </a>
         </div>

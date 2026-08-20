@@ -15,7 +15,7 @@ import { ProductFaqComponent } from '../components/product-faq.component';
   standalone: true,
   imports: [CommonModule, RouterLink, OptimizedImageComponent, FormsModule, ProductFaqComponent],
   template: `
-    <div class="bg-gray-50 min-h-screen select-none" (contextmenu)="$event.preventDefault()" (dragstart)="$event.preventDefault()">
+    <div class="bg-white min-h-screen select-none" (contextmenu)="$event.preventDefault()" (dragstart)="$event.preventDefault()">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
         <div class="flex items-center gap-3 mb-4 md:mb-6">
           <a routerLink="/catalog" class="text-safs-dark font-bold hover:text-safs-gold-dark transition-colors">

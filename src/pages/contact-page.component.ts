@@ -9,20 +9,20 @@ import { EnquiryService } from '../services/enquiry.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <section class="relative overflow-hidden bg-gradient-to-br from-safs-dark via-safs-dark to-safs-dark">
+    <section class="relative overflow-hidden bg-white">
       <div class="absolute inset-0" aria-hidden="true">
         <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/10 blur-[120px] -top-32 -left-32"></div>
-        <div class="absolute w-[400px] h-[400px] rounded-full bg-safs-gold/5 blur-[100px] -bottom-20 right-10"></div>
+        <div class="absolute w-[400px] h-[400px] rounded-full bg-slate-200/40 blur-[100px] -bottom-20 right-10"></div>
       </div>
 
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-32">
         <div class="max-w-3xl">
           <span class="inline-block text-safs-gold font-bold text-sm tracking-[0.2em] uppercase mb-6">Contact Us</span>
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 leading-tight mb-6">
             Let's Talk About<br>
             <span class="text-safs-gold">Your Requirements</span>
           </h1>
-          <p class="text-lg sm:text-xl text-white/70 leading-relaxed max-w-2xl mb-10">
+          <p class="text-lg sm:text-xl text-slate-700 leading-relaxed max-w-2xl mb-10">
             Whether you're looking for a specific product, need a custom quote, or want
             to discuss a partnership &mdash; our team is here to help.
           </p>
@@ -31,7 +31,7 @@ import { EnquiryService } from '../services/enquiry.service';
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               +27 31 508 6700
             </a>
-            <a href="mailto:sales&#64;safuneral.co.za" class="inline-flex items-center gap-2 border-2 border-white/20 text-white font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
+            <a href="mailto:sales&#64;safuneral.co.za" class="inline-flex items-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
               <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
               Email Sales Team
             </a>
@@ -71,7 +71,7 @@ import { EnquiryService } from '../services/enquiry.service';
       </div>
     </section>
 
-    <section class="bg-gray-50 py-20 sm:py-28">
+    <section class="bg-white py-20 sm:py-28">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="grid lg:grid-cols-5 gap-8 lg:gap-12">
 

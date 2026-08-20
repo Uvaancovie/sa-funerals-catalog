@@ -12,7 +12,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
   standalone: true,
   imports: [CommonModule, RouterLink, OptimizedImageComponent],
    template: `
-     <div class="bg-gray-50 min-h-screen w-full flex flex-col">
+     <div class="bg-white min-h-screen w-full flex flex-col">
 
        <!-- Mobile Filters Toggle -->
        <div class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
@@ -207,14 +207,14 @@ import { ImageOptimizationService } from '../services/image-optimization.service
          }
 
       <!-- Main Content Area (Right Split) -->
-      <div class="flex-1 bg-gray-50 flex flex-col relative w-full">
+      <div class="flex-1 bg-white flex flex-col relative w-full">
         
         <!-- Header & Search -->
-        <div class="bg-gradient-to-r from-safs-primary to-[#2A3470] px-4 py-4 sm:px-8 sm:py-6 md:px-12 md:py-8 border-b border-white/10 shadow-lg relative z-20 flex-shrink-0 m-4 rounded-3xl">
-          <div class="absolute inset-0 bg-radial-gradient from-safs-accent/10 via-transparent to-transparent pointer-events-none rounded-3xl"></div>
+        <div class="bg-white px-4 py-4 sm:px-8 sm:py-6 md:px-12 md:py-8 border border-slate-200 shadow-sm relative z-20 flex-shrink-0 m-4 rounded-3xl">
+          <div class="absolute inset-0 bg-radial-gradient from-safs-gold/10 via-transparent to-transparent pointer-events-none rounded-3xl"></div>
           <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-4 sm:gap-6 items-center justify-between relative z-10">
             <div class="text-center md:text-left">
-              <p class="text-safs-accent text-xs sm:text-sm font-semibold tracking-[0.15em] uppercase">Premium range of caskets & professional funeral equipment</p>
+              <p class="text-safs-gold-dark text-xs sm:text-sm font-semibold tracking-[0.15em] uppercase">Premium range of caskets & professional funeral equipment</p>
             </div>
             
             <!-- Search Bar -->
@@ -230,7 +230,7 @@ import { ImageOptimizationService } from '../services/image-optimization.service
                 placeholder="Search catalog..." 
                 (input)="onSearch($event)"
                 [value]="searchQuery()"
-                class="w-full pl-10 pr-10 py-3 rounded-xl shadow-xl bg-white/95 border-2 border-transparent focus:border-safs-accent outline-none transition-all text-safs-primary text-sm placeholder-safs-primary/50 font-semibold" />
+                class="w-full pl-10 pr-10 py-3 rounded-xl shadow-sm bg-slate-50 border-2 border-slate-200 focus:border-safs-gold outline-none transition-all text-safs-primary text-sm placeholder-safs-primary/50 font-semibold" />
               @if (searchQuery()) {
                 <button (click)="clearSearch()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-safs-primary/50 hover:text-safs-primary transition-colors">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

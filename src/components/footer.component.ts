@@ -7,22 +7,22 @@ import { GoogleReviewsComponent } from './google-reviews.component';
   standalone: true,
   imports: [RouterLink, GoogleReviewsComponent],
   template: `
-    <footer class="bg-safs-dark text-white pt-16 pb-8 border-t-4 border-safs-gold">
+    <footer class="bg-safs-dark text-white pt-16 pb-8 border-t-2 border-safs-gold">
       <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-8 lg:mb-12">
           
           <!-- Brand -->
           <div class="col-span-1 md:col-span-1">
             <img src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/logo/SAFS-Logo-Retina.png" alt="South African Funeral Supplies" class="h-20 w-auto mb-4" width="160" height="80" />
-            <p class="text-gray-200 text-sm leading-relaxed mb-6">
+            <p class="text-slate-300 text-sm leading-relaxed mb-6">
               Servicing the funeral industry since 1998. Committed to quality, value, service, and innovation.
             </p>
             <div class="flex gap-4 mb-8">
               <!-- Social Links -->
-                <a href="https://www.facebook.com/people/South-African-Funeral-Supplies/100069383543820/" target="_blank" rel="noopener noreferrer" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold transition-colors cursor-pointer">
+                <a href="https://www.facebook.com/people/South-African-Funeral-Supplies/100069383543820/" target="_blank" rel="noopener noreferrer" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold hover:text-black transition-colors cursor-pointer">
                  <span class="font-bold text-xs">FB</span>
               </a>
-                <a href="https://www.linkedin.com/company/south-african-funeral-supplies/posts/?feedView=all" target="_blank" rel="noopener noreferrer" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold transition-colors cursor-pointer">
+                <a href="https://www.linkedin.com/company/south-african-funeral-supplies/posts/?feedView=all" target="_blank" rel="noopener noreferrer" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-safs-gold hover:text-black transition-colors cursor-pointer">
                  <span class="font-bold text-xs">LI</span>
                </a>
             </div>
@@ -35,7 +35,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
           <!-- Quick Links -->
           <div>
             <h4 class="font-serif text-lg font-bold text-white mb-6">Quick Links</h4>
-            <ul class="space-y-3 text-sm text-gray-300">
+            <ul class="space-y-3 text-sm text-slate-400">
               <li><a routerLink="/" class="hover:text-safs-gold transition-colors">Home</a></li>
               <li><a routerLink="/catalog" class="hover:text-safs-gold transition-colors">Full Catalogue</a></li>
               <li><a routerLink="/services" class="hover:text-safs-gold transition-colors">Services</a></li>
@@ -48,7 +48,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
           <!-- Products -->
           <div>
             <h4 class="font-serif text-lg font-bold text-white mb-6">Our Products</h4>
-            <ul class="space-y-3 text-sm text-gray-300">
+            <ul class="space-y-3 text-sm text-slate-400">
               <li><a routerLink="/catalog" class="hover:text-safs-gold transition-colors">Adult Caskets</a></li>
               <li><a routerLink="/catalog" class="hover:text-safs-gold transition-colors">Dome Caskets</a></li>
               <li><a routerLink="/catalog" class="hover:text-safs-gold transition-colors">Child Caskets</a></li>
@@ -59,7 +59,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
           <!-- Contact -->
           <div>
             <h4 class="font-serif text-lg font-bold text-white mb-6">Head Office</h4>
-            <ul class="space-y-4 text-sm text-gray-300">
+            <ul class="space-y-4 text-sm text-slate-400">
               <li class="flex items-start gap-3">
                 <svg class="w-5 h-5 text-safs-gold mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 <span>160 Aberdare Drive, Phoenix Industrial Park, Durban, 4090</span>
@@ -76,7 +76,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
           </div>
         </div>
 
-        <div class="border-t border-white/10 pt-6 lg:pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-300">
+        <div class="border-t border-white/10 pt-6 lg:pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400">
            <p class="text-center sm:text-left">&copy; 2024 South African Funeral Supplies. All rights reserved.</p>
            <div class="flex gap-4 mt-3 sm:mt-0">
              <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
