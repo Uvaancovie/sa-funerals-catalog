@@ -24,11 +24,10 @@ import { VideoPlayerComponent } from '../components/video-player.component';
           <img [src]="img.src" alt="" class="w-full h-full object-cover" [attr.fetchpriority]="i === 0 ? 'high' : null" [loading]="i === 0 ? 'eager' : 'lazy'" />
         </div>
       }
-      <div class="absolute inset-0 bg-gradient-to-r from-white/90 via-white/75 to-white/40"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-black/30"></div>
 
       <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 py-32 sm:py-40">
-        <div class="max-w-3xl">
+        <div class="max-w-3xl rounded-3xl p-6 sm:p-8 lg:p-10 bg-gradient-to-r from-white/85 via-white/60 to-white/20 backdrop-blur-[2px]">
           <div class="flex items-center gap-3 mb-6 reveal fade-up" style="transition-delay: 0.1s">
             <div class="w-10 h-0.5 bg-safs-gold" aria-hidden="true"></div>
             <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">About Us</span>
@@ -64,13 +63,13 @@ import { VideoPlayerComponent } from '../components/video-player.component';
               [attr.aria-label]="'Go to slide ' + (i + 1)"
               [attr.aria-current]="i === heroSlide ? 'true' : null"
               class="h-2 rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
-              [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-slate-300 hover:bg-slate-400'"
+              [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/60 hover:bg-white/90'"
             ></button>
           }
         </nav>
-        <div class="flex flex-col items-center gap-2 text-slate-400" aria-hidden="true">
-          <span class="text-xs tracking-[0.2em] uppercase font-medium">Scroll</span>
-          <div class="scroll-indicator w-6 h-10 rounded-full border-2 border-slate-300 flex items-start justify-center pt-2">
+        <div class="flex flex-col items-center gap-2 text-white/80" aria-hidden="true">
+          <span class="text-xs tracking-[0.2em] uppercase font-medium drop-shadow">Scroll</span>
+          <div class="scroll-indicator w-6 h-10 rounded-full border-2 border-white/70 flex items-start justify-center pt-2">
             <div class="scroll-dot w-1.5 h-1.5 rounded-full bg-safs-gold"></div>
           </div>
         </div>
@@ -176,58 +175,6 @@ import { VideoPlayerComponent } from '../components/video-player.component';
               </div>
               <h3 class="font-bold text-safs-dark mb-2">{{ value.title }}</h3>
               <p class="text-sm text-gray-500 leading-relaxed">{{ value.description }}</p>
-            </div>
-          }
-        </div>
-      </div>
-    </section>
-
-    <!-- Timeline / History -->
-    <section class="bg-white py-20 sm:py-28 relative overflow-hidden">
-      <div class="absolute inset-0 opacity-20" style="background: radial-gradient(800px circle at 80% 50%, rgba(197, 160, 89, 0.12), transparent 60%);"></div>
-
-      <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
-        <div class="text-center mb-16">
-          <div class="flex items-center justify-center gap-3 mb-4 reveal fade-up">
-            <div class="w-8 h-0.5 bg-safs-gold"></div>
-            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Our Journey</span>
-            <div class="w-8 h-0.5 bg-safs-gold"></div>
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark reveal fade-up" style="transition-delay: 0.1s">From Foundation to the Future</h2>
-        </div>
-
-        <div class="relative">
-          <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-safs-gold/50 via-safs-gold/20 to-transparent -translate-x-1/2"></div>
-
-          @for (milestone of milestones; track $index; let i = $index) {
-            <div class="relative mb-12 md:mb-16 last:mb-0 reveal fade-up" [style.transition-delay]="i * 0.1 + 's'">
-              @if (i === milestones.length - 1) {
-                <div class="hidden md:block absolute left-1/2 top-6 w-4 h-4 rounded-full bg-safs-gold border-4 border-white shadow-lg -translate-x-1/2 z-10 animate-pulse"></div>
-              } @else {
-                <div class="hidden md:block absolute left-1/2 top-6 w-3 h-3 rounded-full bg-safs-gold border-2 border-white shadow -translate-x-1/2 z-10"></div>
-              }
-
-              <div class="md:w-[calc(50%-2rem)]" [class.md:ml-auto]="$even" [class.md:mr-auto]="$odd" [class.md:text-right]="$odd" [class.md:pl-8]="$even" [class.md:pr-8]="$odd">
-                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 transition-all" [ngClass]="{
-                  'hover:border-safs-gold/30': i !== milestones.length - 1,
-                  'hover:shadow-lg': i !== milestones.length - 1,
-                  'border-safs-gold/40': i === milestones.length - 1,
-                  'shadow-md': i === milestones.length - 1
-                }">
-                  <div class="flex items-center gap-3 mb-3" [class.md:flex-row-reverse]="$odd">
-                    @if (milestone.year) {
-                      <span class="inline-block bg-safs-dark text-safs-gold font-bold text-sm px-4 py-1 rounded-full">{{ milestone.year }}</span>
-                    } @else {
-                      <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-safs-gold to-amber-500 text-black font-bold text-sm px-4 py-1 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                        Present
-                      </span>
-                    }
-                  </div>
-                  <h3 class="text-xl font-bold text-safs-dark mb-2">{{ milestone.title }}</h3>
-                  <p class="text-gray-500 leading-relaxed">{{ milestone.description }}</p>
-                </div>
-              </div>
             </div>
           }
         </div>
@@ -372,29 +319,6 @@ export class AboutPageComponent implements AfterViewInit, OnDestroy {
     {
       title: 'Competitive Pricing',
       description: 'We leverage strong manufacturer relationships to offer premium products at fair, transparent prices.'
-    }
-  ];
-
-  milestones = [
-    {
-      year: '1998',
-      title: 'Founded in Durban',
-      description: 'South African Funeral Supplies was established with a vision to provide quality funeral products to the growing industry in KwaZulu-Natal.'
-    },
-    {
-      year: '2005',
-      title: 'Expanded Product Range',
-      description: 'We expanded beyond basic caskets to offer a comprehensive range including domes, equipment, and specialist funeral supplies.'
-    },
-    {
-      year: '2012',
-      title: 'Nationwide Distribution',
-      description: 'Our distribution network grew to cover all nine provinces, bringing reliable delivery and consistent quality to funeral homes countrywide.'
-    },
-    {
-      year: '',
-      title: 'Continuing the Journey',
-      description: 'Today we serve over a hundred funeral homes, continuously expanding our range and improving our service with modern technology and deeper expertise.'
     }
   ];
 
