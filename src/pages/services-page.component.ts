@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -7,74 +7,79 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <!-- Hero Section with Carousel -->
-    <section class="relative overflow-hidden bg-white">
-      <div class="absolute inset-0">
-        <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/10 blur-[120px] -top-32 -left-32"></div>
-        <div class="absolute w-[400px] h-[400px] rounded-full bg-slate-200/40 blur-[100px] -bottom-20 right-10"></div>
+    <!-- Hero Section with Background Carousel (Matches About Page) -->
+    <section class="relative min-h-screen flex items-center overflow-hidden" aria-label="Services SAFS hero">
+      <!-- Decorative texture overlay -->
+      <div class="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRjMC0yLjIuOC00LjMgMi4yLTUuN2wxLjQtMS40IDQuMiA0LjItMS40IDEuNGMtMS41IDEuNS0zLjYgMi4zLTUuNyAyLjMtMS4zIDAtMi41LS4zLTMuNi0uOGwxLjUtMS41Yy42LjIgMS4zLjUgMiAuNXoiLz48L2c+PC9nPjwvc3ZnPg==')] pointer-events-none"></div>
+
+      @for (img of heroCarouselImages; track img.id; let i = $index) {
+        <div
+          class="absolute inset-0 transition-all duration-1000 ease-in-out"
+          [class.opacity-100]="i === heroSlide"
+          [class.opacity-0]="i !== heroSlide"
+          [style.transform]="'scale(' + (i === heroSlide ? 1.05 : 1) + ')'"
+          [attr.aria-hidden]="i !== heroSlide"
+        >
+          <img
+            [src]="img.src"
+            alt=""
+            class="w-full h-full object-cover"
+            [attr.fetchpriority]="i === 0 ? 'high' : null"
+            [loading]="i === 0 ? 'eager' : 'lazy'"
+          />
+        </div>
+      }
+      <div class="absolute inset-0 bg-black/30"></div>
+
+      <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 py-32 sm:py-40">
+        <div class="max-w-3xl rounded-3xl p-6 sm:p-8 lg:p-10 bg-safs-dark/90 shadow-2xl backdrop-blur-sm">
+          <div class="flex items-center gap-3 mb-6 reveal fade-up" style="transition-delay: 0.1s">
+            <div class="w-10 h-0.5 bg-safs-gold" aria-hidden="true"></div>
+            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Our Services</span>
+          </div>
+          <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold text-white leading-tight mb-6 reveal fade-up" style="transition-delay: 0.2s">
+            Comprehensive Funeral<br>
+            <span class="text-safs-gold"> Solutions</span>
+          </h1>
+          <p class="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl mb-10 reveal fade-up" style="transition-delay: 0.3s">
+            From casket supply to equipment rental and nationwide distribution, we provide everything
+            your funeral service needs to serve families with dignity and professionalism.
+          </p>
+          <div class="flex flex-wrap gap-4 reveal fade-up" style="transition-delay: 0.4s">
+            <a
+              routerLink="/contact"
+              class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold/80 transition-all shadow-lg hover:shadow-xl active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
+            >
+              Get in Touch
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a
+              routerLink="/catalog"
+              class="inline-flex items-center gap-2 border-2 border-safs-gold text-white font-bold px-8 py-4 rounded-xl hover:bg-safs-gold hover:text-black transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
+            >
+              Browse Catalog
+            </a>
+          </div>
+        </div>
       </div>
 
-      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div class="max-w-xl">
-            <span class="inline-block text-safs-gold font-bold text-sm tracking-[0.2em] uppercase mb-6">Our Services</span>
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 leading-tight mb-6">
-              Comprehensive Funeral<br>
-              <span class="text-safs-gold">Supply Solutions</span>
-            </h1>
-            <p class="text-lg sm:text-xl text-slate-700 leading-relaxed mb-10">
-              From casket supply to equipment rental and nationwide distribution, we provide everything
-              your funeral service needs to serve families with dignity and professionalism.
-            </p>
-            <div class="flex flex-wrap gap-4">
-              <a routerLink="/contact" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold-light transition-all shadow-lg hover:shadow-xl active:scale-95">
-                Get in Touch
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              </a>
-              <a routerLink="/catalog" class="inline-flex items-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
-                Browse Catalog
-              </a>
-            </div>
-          </div>
-
-          <!-- Interactive Carousel -->
-          <div class="relative">
-            <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-slate-100 border border-slate-200">
-              <div class="relative h-72 sm:h-80 md:h-96 overflow-hidden">
-                @for (item of carouselItems; track item.id; let i = $index) {
-                  <div
-                    class="absolute inset-0 transition-all duration-700 ease-in-out"
-                    [class.opacity-100]="i === currentSlide"
-                    [class.opacity-0]="i !== currentSlide"
-                    [class.-translate-x-0]="i === currentSlide"
-                    [class.translate-x-full]="i > currentSlide"
-                    [class.-translate-x-full]="i < currentSlide"
-                  >
-                    <img [src]="item.image" [alt]="item.label" class="w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-safs-dark/80 via-safs-dark/10 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                      <span class="text-safs-gold text-xs tracking-[0.2em] uppercase font-bold">{{ item.tag }}</span>
-                      <h3 class="text-white text-xl sm:text-2xl font-bold mt-1">{{ item.label }}</h3>
-                    </div>
-                  </div>
-                }
-              </div>
-
-              <!-- Navigation Arrows -->
-              <button (click)="prevSlide()" aria-label="Previous slide" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-safs-gold hover:border-safs-gold transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-black transition-colors"><path d="m15 18-6-6 6-6"/></svg>
-              </button>
-              <button (click)="nextSlide()" aria-label="Next slide" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-safs-gold hover:border-safs-gold transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-black transition-colors"><path d="m9 18 6-6-6-6"/></svg>
-              </button>
-
-              <!-- Dot Indicators -->
-              <div class="absolute bottom-4 right-4 flex gap-2">
-                @for (item of carouselItems; track item.id; let idx = $index) {
-                  <span (click)="goToSlide(idx)" class="inline-block h-2 rounded-full transition-all duration-300 cursor-pointer" [ngClass]="idx === currentSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/60'"></span>
-                }
-              </div>
-            </div>
+      <!-- Slide Controls -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20">
+        <nav class="flex gap-2" aria-label="Hero slide navigation">
+          @for (img of heroCarouselImages; track img.id; let i = $index) {
+            <button
+              (click)="heroSlide = i"
+              [attr.aria-label]="'Go to slide ' + (i + 1)"
+              [attr.aria-current]="i === heroSlide ? 'true' : null"
+              class="h-2 rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
+              [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/60 hover:bg-white/90'"
+            ></button>
+          }
+        </nav>
+        <div class="flex flex-col items-center gap-2 text-white/80" aria-hidden="true">
+          <span class="text-xs tracking-[0.2em] uppercase font-medium drop-shadow">Scroll</span>
+          <div class="scroll-indicator w-6 h-10 rounded-full border-2 border-white/70 flex items-start justify-center pt-2">
+            <div class="scroll-dot w-1.5 h-1.5 rounded-full bg-safs-gold"></div>
           </div>
         </div>
       </div>
@@ -87,7 +92,7 @@ import { RouterLink } from '@angular/router';
           <span class="inline-block text-safs-gold font-bold text-sm tracking-[0.2em] uppercase mb-4">What We Offer</span>
           <h2 class="text-3xl sm:text-4xl font-bold text-safs-dark">
             Complete Funeral Supply<br class="sm:hidden">
-            <span class="text-safs-gold">Services</span>
+            <span class="text-safs-gold">&nbsp;Services</span>
           </h2>
         </div>
 
@@ -233,7 +238,7 @@ import { RouterLink } from '@angular/router';
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a
             routerLink="/contact"
-            class="inline-flex items-center justify-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold-light transition-all shadow-lg hover:shadow-xl active:scale-95"
+            class="inline-flex items-center justify-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold/80 transition-all shadow-lg hover:shadow-xl active:scale-95"
           >
             Get in Touch
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -252,11 +257,46 @@ import { RouterLink } from '@angular/router';
     :host {
       display: block;
     }
+
+    .reveal {
+      opacity: 0;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.fade-up {
+      transform: translateY(30px);
+    }
+    .reveal.revealed {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    .scroll-indicator {
+      animation: scroll-bounce 2s ease-in-out infinite;
+    }
+    .scroll-dot {
+      animation: scroll-dot 2s ease-in-out infinite;
+    }
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+    @keyframes scroll-dot {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(8px); opacity: 0.4; }
+    }
   `]
 })
-export class ServicesPageComponent {
-  currentSlide = 0;
+export class ServicesPageComponent implements AfterViewInit, OnDestroy {
+  heroSlide = 0;
+  private heroInterval: ReturnType<typeof setInterval> | null = null;
 
+  heroCarouselImages = [
+    { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/funeral-supplies.png' },
+    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-6.jpg' },
+    { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
+  ];
+
+  currentSlide = 0;
   carouselItems = [
     { id: 1, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/Emperor%20-%20Dark%20Cherry%20(2).jpg', label: 'Premium Caskets & Coffin', tag: 'Quality Craftsmanship' },
     { id: 2, image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/pexels-cottonbro-10496221.jpg', label: 'Memorial & Cremation Urns', tag: 'Dignified Tributes' },
@@ -366,5 +406,29 @@ export class ServicesPageComponent {
 
   goToSlide(index: number): void {
     this.currentSlide = index;
+  }
+
+  ngAfterViewInit(): void {
+    this.heroInterval = setInterval(() => {
+      this.heroSlide = (this.heroSlide + 1) % this.heroCarouselImages.length;
+    }, 5000);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.heroInterval) {
+      clearInterval(this.heroInterval);
+    }
   }
 }

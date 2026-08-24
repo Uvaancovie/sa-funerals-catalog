@@ -8,175 +8,81 @@ import { VideoPlayerComponent } from '../components/video-player.component';
   standalone: true,
   imports: [CommonModule, RouterLink, VideoPlayerComponent],
   template: `
-    <!-- HERO SECTION: High-End Framed Architecture -->
-    <section class="relative bg-white py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <!-- Subtle Background Ambient Glows -->
-      <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[900px] h-[450px] bg-gradient-to-tr from-amber-200/20 via-slate-200/30 to-transparent blur-3xl pointer-events-none rounded-full"></div>
+    <!-- Hero Section with Background Carousel -->
+    <section class="relative min-h-screen flex items-center overflow-hidden" aria-label="SAFS hero">
+      <!-- Decorative texture overlay -->
+      <div class="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRjMC0yLjIuOC00LjMgMi4yLTUuN2wxLjQtMS40IDQuMiA0LjItMS40IDEuNGMtMS41IDEuNS0zLjYgMi4zLTUuNyAyLjMtMS4zIDAtMi41LS4zLTMuNi0uOGwxLjUtMS41Yy42LjIgMS4zLjUgMiAuNXoiLz48L2c+PC9nPjwvc3ZnPg==')] pointer-events-none"></div>
 
-      <div class="relative z-10 w-full">
-        
-        <!-- Subtle Inner Frame Accent -->
-        <div class="absolute inset-0 border border-slate-900/5 rounded-3xl pointer-events-none"></div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center w-full">
-            
-            <!-- LEFT COLUMN: Brand Statement & Primary CTAs (5 Columns) -->
-            <div class="lg:col-span-5 flex flex-col justify-between space-y-6 sm:space-y-8">
-              
-              <div>
-                <!-- Trust Pill Badge -->
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 text-amber-300 text-xs font-semibold uppercase tracking-widest mb-6 shadow-sm">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                 
-                </div>
+      @for (img of heroCarouselImages; track img.id; let i = $index) {
+        <div
+          class="absolute inset-0 transition-all duration-1000 ease-in-out"
+          [class.opacity-100]="i === heroSlide"
+          [class.opacity-0]="i !== heroSlide"
+          [style.transform]="'scale(' + (i === heroSlide ? 1.05 : 1) + ')'"
+          [attr.aria-hidden]="i !== heroSlide"
+        >
+          <img [src]="img.src" alt="" class="w-full h-full object-cover" [attr.fetchpriority]="i === 0 ? 'high' : null" [loading]="i === 0 ? 'eager' : 'lazy'" />
+        </div>
+      }
+      <div class="absolute inset-0 bg-black/30"></div>
 
-                <!-- Structured Hierarchy Typography -->
-                <div class="space-y-1 sm:space-y-2">
-                  <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-slate-950 tracking-tight leading-none">
-                    Trusted
-                  </h1>
-                  <span class="block text-4xl sm:text-5xl lg:text-6xl font-light text-slate-700 tracking-tight leading-tight">
-                    Worldwide
-                  </span>
-                  <span class="block text-4xl sm:text-5xl lg:text-6xl font-light text-slate-700 tracking-tight leading-tight">
-                    Funeral
-                  </span>
-                  <span class="block text-4xl sm:text-5xl lg:text-6xl font-light text-slate-700 tracking-tight leading-tight">
-                    Manufacturer
-                  </span>
-                </div>
-
-                <p class="text-slate-500 text-base sm:text-lg leading-relaxed mt-5 max-w-md">
-                  Delivering handcrafted precision, certified engineering, and bulk wholesale logistics to funeral homes across Africa and overseas.
-                </p>
-              </div>
-
-              <!-- Action Buttons -->
-              <div class="flex flex-col sm:flex-row gap-3.5 pt-2">
-                <a
-                  routerLink="/catalog"
-                  class="inline-flex items-center justify-center gap-2 bg-slate-950 text-white hover:bg-amber-600 hover:text-white font-bold text-sm sm:text-base uppercase tracking-wider px-7 py-4 rounded-xl shadow-lg hover:shadow-amber-500/20 transition-all duration-300 active:scale-[0.98]"
-                >
-                  <span>Explore Catalog</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </a>
-                
-                <a
-                  routerLink="/contact"
-                  class="inline-flex items-center justify-center border-2 border-slate-200 hover:border-slate-900 text-slate-800 font-semibold text-sm sm:text-base px-6 py-4 rounded-xl transition-all duration-200 hover:bg-slate-50"
-                >
-                  Contact Sales
-                </a>
-              </div>
-
-              <!-- Quick Trust Badges -->
-              <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
-                <div class="flex items-center gap-1.5 font-medium">
-                  <svg class="w-4 h-4 text-amber-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                  Direct Factory Pricing
-                </div>
-                <div class="flex items-center gap-1.5 font-medium">
-                  <svg class="w-4 h-4 text-amber-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                  Nationwide &amp; Export
-                </div>
-              </div>
-
-            </div>
-
-            <!-- RIGHT COLUMN: Studio Showcase & Carousel (7 Columns) -->
-            <div class="lg:col-span-7 lg:border-l lg:border-slate-200/80 lg:pl-10 flex flex-col items-center">
-              
-              <!-- Showcase Container with Studio Backdrop -->
-              <div class="w-full relative group">
-                <div class="relative rounded-2xl border border-slate-300/80 bg-gradient-to-b from-slate-100 via-slate-50 to-slate-200/70 p-4 sm:p-8 aspect-[16/10] overflow-hidden shadow-inner flex items-center justify-center">
-                  
-                  <!-- Radial Studio Spotlight Effect -->
-                  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/90 via-slate-100/40 to-transparent pointer-events-none"></div>
-
-                  <!-- Badge Overlay -->
-                  <div class="absolute top-4 left-4 z-20">
-                    <span class="px-3 py-1 text-xs font-semibold tracking-wider uppercase bg-white/90 backdrop-blur-md text-slate-800 rounded-full border border-slate-200/80 shadow-sm">
-                      {{ heroSlides[currentHeroSlide].category }}
-                    </span>
-                  </div>
-
-                  <!-- Sliding Showcase Images -->
-                  @for (slide of heroSlides; track slide.id; let i = $index) {
-                    <div
-                      class="absolute inset-0 p-4 sm:p-8 flex flex-col items-center justify-center transition-all duration-700 ease-out"
-                      [class.opacity-100]="i === currentHeroSlide"
-                      [class.opacity-0]="i !== currentHeroSlide"
-                      [class.scale-100]="i === currentHeroSlide"
-                      [class.scale-95]="i !== currentHeroSlide"
-                      [class.pointer-events-none]="i !== currentHeroSlide"
-                    >
-                      <img
-                        [src]="slide.image"
-                        [alt]="slide.title"
-                        class="max-w-full max-h-[82%] object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.25)] transition-transform duration-500 hover:scale-105"
-                      />
-                      <p class="mt-3 text-xs font-semibold tracking-wide text-slate-600 bg-white/70 backdrop-blur-sm px-3 py-1 rounded-full border border-slate-200/60">
-                        {{ slide.title }}
-                      </p>
-                    </div>
-                  }
-
-                  <!-- Carousel Next / Prev Quick Buttons -->
-                  <button 
-                    (click)="prevHeroSlide()" 
-                    aria-label="Previous Slide"
-                    class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md border border-slate-200 text-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white hover:scale-105 shadow-sm"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-                  </button>
-                  <button 
-                    (click)="nextHeroSlide()" 
-                    aria-label="Next Slide"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 backdrop-blur-md border border-slate-200 text-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white hover:scale-105 shadow-sm"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Pagination Dot Controls -->
-              <div class="flex items-center justify-center gap-2.5 mt-5">
-                @for (slide of heroSlides; track slide.id; let i = $index) {
-                  <button
-                    (click)="setHeroSlide(i)"
-                    [attr.aria-label]="'Go to slide ' + (i + 1)"
-                    class="transition-all duration-300 rounded-full focus:outline-none"
-                    [ngClass]="i === currentHeroSlide 
-                      ? 'w-7 h-2.5 bg-slate-900 ring-2 ring-slate-900/20' 
-                      : 'w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400'"
-                  ></button>
-                }
-              </div>
-
-              <!-- Award Winning Signature Banner -->
-              <div class="mt-4 flex flex-col items-center text-center">
-                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                  Award Winning Quality &amp; Craftsmanship
-                </h2>
-              </div>
-
-            </div>
-
+      <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 py-32 sm:py-40">
+        <div class="max-w-3xl rounded-3xl p-6 sm:p-8 lg:p-10 bg-safs-dark/90">
+          <div class="flex items-center gap-3 mb-6 reveal fade-up" style="transition-delay: 0.1s">
+            <div class="w-10 h-0.5 bg-safs-gold" aria-hidden="true"></div>
+            <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Welcome</span>
+          </div>
+          <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold text-white leading-tight mb-6 reveal fade-up" style="transition-delay: 0.2s">
+            Trusted Worldwide<br>
+            <span class="text-safs-gold">Funeral Manufacturer</span>
+          </h1>
+          <p class="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl mb-10 reveal fade-up" style="transition-delay: 0.3s">
+            Delivering handcrafted precision, certified engineering, and bulk wholesale logistics to funeral homes across Africa and overseas.
+          </p>
+          <div class="flex flex-wrap gap-4 reveal fade-up" style="transition-delay: 0.4s">
+            <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold/80 transition-all shadow-lg hover:shadow-xl active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
+              Explore Catalog
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a routerLink="/contact" class="inline-flex items-center gap-2 border-2 border-safs-gold text-white font-bold px-8 py-4 rounded-xl hover:bg-safs-gold hover:text-black transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
+              Contact Sales
+            </a>
           </div>
         </div>
+      </div>
 
+      <!-- Slide Controls -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+        <nav class="flex gap-2" aria-label="Hero slide navigation">
+          @for (img of heroCarouselImages; track img.id; let i = $index) {
+            <button
+              (click)="heroSlide = i"
+              [attr.aria-label]="'Go to slide ' + (i + 1)"
+              [attr.aria-current]="i === heroSlide ? 'true' : null"
+              class="h-2 rounded-full transition-all duration-300 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
+              [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-2 bg-white/60 hover:bg-white/90'"
+            ></button>
+          }
+        </nav>
+        <div class="flex flex-col items-center gap-2 text-white/80" aria-hidden="true">
+          <span class="text-xs tracking-[0.2em] uppercase font-medium drop-shadow">Scroll</span>
+          <div class="scroll-indicator w-6 h-10 rounded-full border-2 border-white/70 flex items-start justify-center pt-2">
+            <div class="scroll-dot w-1.5 h-1.5 rounded-full bg-safs-gold"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Operational Cinematic Video Strip -->
     <section class="bg-white py-20 relative overflow-hidden">
-      <div class="absolute w-[500px] h-[500px] rounded-full bg-amber-100/40 blur-[120px] -bottom-20 -left-20 pointer-events-none"></div>
+      <div class="absolute w-[500px] h-[500px] rounded-full bg-safs-gold/10 blur-[120px] -bottom-20 -left-20 pointer-events-none"></div>
 
       <div class="relative max-w-5xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-10">
-          <div class="inline-flex items-center gap-2 text-amber-600 font-bold text-xs tracking-[0.25em] uppercase mb-3">
-            <span class="w-6 h-0.5 bg-amber-600"></span>
+          <div class="inline-flex items-center gap-2 text-safs-gold font-bold text-xs tracking-[0.25em] uppercase mb-3">
+            <span class="w-6 h-0.5 bg-safs-gold"></span>
             Factory &amp; Logistics
-            <span class="w-6 h-0.5 bg-amber-600"></span>
+            <span class="w-6 h-0.5 bg-safs-gold"></span>
           </div>
           <h2 class="text-3xl sm:text-4xl font-bold text-slate-950 mb-3">Craftsmanship at Scale</h2>
           <p class="text-slate-600 text-sm max-w-xl mx-auto leading-relaxed">
@@ -201,17 +107,17 @@ import { VideoPlayerComponent } from '../components/video-player.component';
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
-            <div class="text-3xl sm:text-4xl font-black text-amber-600">26+</div>
+            <div class="text-3xl sm:text-4xl font-black text-safs-gold">26+</div>
             <div class="text-slate-800 font-medium text-sm mt-1">Years of Service</div>
             <div class="text-slate-500 text-xs mt-0.5">Established since 1998</div>
           </div>
           <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
-            <div class="text-3xl sm:text-4xl font-black text-amber-600">60+</div>
+            <div class="text-3xl sm:text-4xl font-black text-safs-gold">60+</div>
             <div class="text-slate-800 font-medium text-sm mt-1">Product Lines</div>
             <div class="text-slate-500 text-xs mt-0.5">Caskets, Domes, Hardware &amp; Requisites</div>
           </div>
           <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
-            <div class="text-3xl sm:text-4xl font-black text-amber-600">100+</div>
+            <div class="text-3xl sm:text-4xl font-black text-safs-gold">100+</div>
             <div class="text-slate-800 font-medium text-sm mt-1">Funeral Homes Partnered</div>
             <div class="text-slate-500 text-xs mt-0.5">Nationwide &amp; Export Reach</div>
           </div>
@@ -224,7 +130,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
-            <p class="text-xs font-bold tracking-widest uppercase text-amber-600 mb-3">About SAFS</p>
+            <p class="text-xs font-bold tracking-widest uppercase text-safs-gold mb-3">About SAFS</p>
             <h2 class="text-3xl sm:text-4xl font-bold text-slate-950 mb-6">Pioneering Product Design &amp; Quality Since Inception</h2>
             <div class="space-y-4 text-slate-600 text-base leading-relaxed">
               <p>
@@ -235,13 +141,13 @@ import { VideoPlayerComponent } from '../components/video-player.component';
               </p>
             </div>
             <div class="mt-8">
-              <a routerLink="/about" class="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-amber-600 transition-colors pb-1 border-b-2 border-slate-900 hover:border-amber-600">
+              <a routerLink="/about" class="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-safs-gold transition-colors pb-1 border-b-2 border-slate-900 hover:border-safs-gold">
                 Learn more about our heritage &rarr;
               </a>
             </div>
           </div>
           <div class="relative">
-            <div class="absolute inset-0 bg-amber-400 rounded-3xl transform translate-x-3 translate-y-3 opacity-70"></div>
+            <div class="absolute inset-0 bg-safs-gold rounded-3xl transform translate-x-3 translate-y-3 opacity-70"></div>
             <img class="relative rounded-3xl shadow-xl w-full h-[400px] object-cover border border-slate-200" src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-image.jpg" alt="SAFS Manufacturing Facility" />
           </div>
         </div>
@@ -252,7 +158,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     <section class="bg-white py-20 sm:py-28 relative">
       <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-16">
-          <p class="text-xs font-bold tracking-widest uppercase text-amber-600 mb-3">Solutions &amp; Offerings</p>
+          <p class="text-xs font-bold tracking-widest uppercase text-safs-gold mb-3">Solutions &amp; Offerings</p>
           <h2 class="text-3xl sm:text-4xl font-bold text-slate-950 mb-3">End-to-End Funeral Supplies</h2>
           <p class="text-slate-500 max-w-2xl mx-auto text-base">Comprehensive manufacturing and supply chain solutions tailored for professional funeral homes.</p>
         </div>
@@ -272,7 +178,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
                 <ul class="space-y-1.5 pt-3 border-t border-slate-100">
                   @for (feat of svc.features; track feat) {
                     <li class="flex items-start gap-2 text-xs text-slate-500">
-                      <svg class="w-3.5 h-3.5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <svg class="w-3.5 h-3.5 text-safs-gold mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                       </svg>
                       <span>{{ feat }}</span>
@@ -291,8 +197,8 @@ import { VideoPlayerComponent } from '../components/video-player.component';
       <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div class="flex items-end justify-between mb-12">
           <div>
-            <span class="text-amber-600 font-bold text-xs tracking-[0.2em] uppercase block mb-2">Portfolio</span>
-            <h2 class="text-3xl sm:text-4xl font-bold text-slate-950">Featured Range</h2>
+            <span class="text-safs-gold font-bold text-xs tracking-[0.2em] uppercase block mb-2">Portfolio</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-950">Featured Products</h2>
           </div>
           <div class="hidden sm:flex gap-3">
             <button (click)="prevProduct()" aria-label="Previous Product" class="w-11 h-11 rounded-xl border border-slate-300 bg-white flex items-center justify-center text-slate-700 hover:bg-slate-900 hover:text-white transition-all shadow-sm">
@@ -317,8 +223,8 @@ import { VideoPlayerComponent } from '../components/video-player.component';
                       <img [src]="product.image" [alt]="product.name" class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" />
                     </div>
                     <div class="p-5 border-t border-slate-100">
-                      <p class="text-xs text-amber-600 uppercase tracking-wider font-bold mb-1">{{ product.category }}</p>
-                      <h3 class="text-base font-bold text-slate-900 group-hover:text-amber-600 transition-colors">{{ product.name }}</h3>
+                      <p class="text-xs text-safs-gold uppercase tracking-wider font-bold mb-1">{{ product.category }}</p>
+                      <h3 class="text-base font-bold text-slate-900 group-hover:text-safs-gold transition-colors">{{ product.name }}</h3>
                     </div>
                   </div>
                 </a>
@@ -333,7 +239,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     <section class="bg-white py-20 sm:py-28 relative">
       <div class="relative max-w-3xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-14">
-          <span class="text-amber-600 font-bold text-xs tracking-widest uppercase block mb-2">Have Questions?</span>
+          <span class="text-safs-gold font-bold text-xs tracking-widest uppercase block mb-2">Have Questions?</span>
           <h2 class="text-3xl sm:text-4xl font-bold text-slate-950">Frequently Asked Questions</h2>
         </div>
 
@@ -342,7 +248,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             <div class="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden transition-all">
               <button
                 (click)="toggleFaq(i)"
-                class="w-full flex items-center justify-between gap-4 text-left px-6 sm:px-8 py-5 font-bold text-slate-900 hover:text-amber-600 transition-colors"
+                class="w-full flex items-center justify-between gap-4 text-left px-6 sm:px-8 py-5 font-bold text-slate-900 hover:text-safs-gold transition-colors"
               >
                 <span>{{ faq.question }}</span>
                 <svg
@@ -386,7 +292,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
           Contact our sales specialists today to discuss trade accounts, bulk discounts, and custom orders.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-8 py-4 rounded-xl shadow-lg transition-all active:scale-95">
+          <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold hover:bg-safs-gold/80 text-slate-950 font-bold px-8 py-4 rounded-xl shadow-lg transition-all active:scale-95">
             Browse Full Range
           </a>
           <a routerLink="/contact" class="inline-flex items-center gap-2 border-2 border-slate-300 hover:border-slate-900 text-slate-900 font-bold px-8 py-4 rounded-xl transition-all hover:bg-slate-50">
@@ -398,12 +304,49 @@ import { VideoPlayerComponent } from '../components/video-player.component';
   `,
   styles: [`
     :host { display: block; }
+
+    .reveal {
+      opacity: 0;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.fade-up {
+      transform: translateY(30px);
+    }
+    .reveal.slide-right {
+      transform: translateX(30px);
+    }
+    .reveal.revealed {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    .scroll-indicator {
+      animation: scroll-bounce 2s ease-in-out infinite;
+    }
+    .scroll-dot {
+      animation: scroll-dot 2s ease-in-out infinite;
+    }
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+    @keyframes scroll-dot {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(8px); opacity: 0.4; }
+    }
   `]
 })
 export class LandingPageComponent implements AfterViewInit, OnDestroy {
+  heroSlide = 0;
   currentHeroSlide = 0;
   productSlide = 0;
   private heroInterval: ReturnType<typeof setInterval> | null = null;
+
+  heroCarouselImages = [
+    { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/funeral-supplies.png' },
+    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-6.jpg' },
+    { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
+  ];
 
   heroSlides = [
     { 
@@ -500,6 +443,22 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.heroInterval = setInterval(() => {
+      this.heroSlide = (this.heroSlide + 1) % this.heroCarouselImages.length;
+    }, 5000);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+    
     this.resetHeroTimer();
   }
 
