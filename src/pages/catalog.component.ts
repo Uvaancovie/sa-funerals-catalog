@@ -607,27 +607,17 @@ export class CatalogComponent implements OnInit {
     this.closeQuickView();
   }
 
-  // Category options for new 8-category structure
+  // Category options for new 7-category structure
   readonly categoryOptions = [
     { value: 'all', label: 'All Products' },
-    { value: 'baby-caskets', label: 'Baby Caskets' },
-    { value: 'bespoke', label: 'Bespoke' },
-    { value: 'coffins', label: 'Coffins' },
-    { value: 'domes', label: 'Domes' },
-    { value: 'equipment', label: 'Equipment' },
-    { value: 'executive-domes', label: 'Executive Domes' },
     { value: 'flatlids', label: 'Flatlids' },
-    { value: 'skinz', label: 'Skinz' }
+    { value: 'domes', label: 'Domes' },
+    { value: 'skinz', label: 'Skins' },
+    { value: 'exclusive-caskets', label: 'Exclusive Caskets / Range' },
+    { value: 'bespoke-caskets', label: 'Bespoke Caskets' },
+    { value: 'baby-caskets', label: 'Baby Caskets' },
+    { value: 'equipment', label: 'Equipment' }
   ];
-
-  // Affordable funeral supplies are surfaced first. Flatlids and coffins
-  // take priority over every other category; everything else falls back to
-  // the default priority and keeps its source order.
-  private readonly categorySortPriority: Record<string, number> = {
-    'flatlids': 0,
-    'coffins': 1,
-  };
-  private readonly defaultSortPriority = 99;
 
   // Derived filter options
   readonly casketStyles = ['Dome', 'Halfview', 'Coffin', 'Figurine', 'Woodturning', 'Glitter', 'Senator', 'Porthole', 'Pongee'];
@@ -639,8 +629,20 @@ export class CatalogComponent implements OnInit {
   // Show style filter for casket-type categories
   showStyleFilter = computed(() => {
     const f = this.activeFilter();
-    return f === 'all' || f === 'coffins' || f === 'domes' || f === 'executive-domes' || f === 'flatlids' || f === 'skinz';
+    return f === 'all' || f === 'coffins' || f === 'domes' || f === 'executive-domes' || f === 'flatlids' || f === 'skinz' || f === 'exclusive-caskets' || f === 'bespoke-caskets';
   });
+
+  // Category sort priority - determines which categories appear first (affordable-first)
+  private readonly categorySortPriority: Record<string, number> = {
+    'flatlids': 0,
+    'domes': 1,
+    'skinz': 2,
+    'exclusive-caskets': 3,
+    'bespoke-caskets': 4,
+    'baby-caskets': 5,
+    'equipment': 6,
+  };
+  private readonly defaultSortPriority = 99;
 
   filteredProducts = computed(() => {
     const filter = this.activeFilter();
@@ -655,9 +657,23 @@ export class CatalogComponent implements OnInit {
       products = products.filter(p => this.matchesSearch(p, q));
     }
 
-    // 2. Main Category Filter
+    // 2. Main Category Filter - use partial matching for category names
     if (filter !== 'all') {
-      products = products.filter(p => p.category === filter);
+      products = products.filter(p => {
+        // Exact match first
+        if (p.category === filter) return true;
+        
+        const catLower = p.category.toLowerCase();
+        const filterLower = filter.toLowerCase();
+        
+        // Handle "Exclusive Caskets / Range" which might be stored as "executive-domes" or "exclusive"
+        if (filter === 'exclusive-caskets' && (catLower.includes('exclusive') || catLower.includes('executive'))) {
+          return true;
+        }
+        
+        // Try case-insensitive partial match
+        return catLower.includes(filterLower) || filterLower.includes(catLower);
+      });
     }
 
     // 3. Casket Style Filter
