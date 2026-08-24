@@ -27,26 +27,26 @@ import { VideoPlayerComponent } from '../components/video-player.component';
       <div class="absolute inset-0 bg-black/30"></div>
 
       <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 py-32 sm:py-40">
-        <div class="max-w-3xl rounded-3xl p-6 sm:p-8 lg:p-10 bg-gradient-to-r from-white/85 via-white/60 to-white/20 backdrop-blur-[2px]">
+        <div class="max-w-3xl rounded-3xl p-6 sm:p-8 lg:p-10 bg-safs-dark/90">
           <div class="flex items-center gap-3 mb-6 reveal fade-up" style="transition-delay: 0.1s">
             <div class="w-10 h-0.5 bg-safs-gold" aria-hidden="true"></div>
             <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">About Us</span>
           </div>
-          <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold text-slate-900 leading-tight mb-6 reveal fade-up" style="transition-delay: 0.2s">
+          <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold text-white leading-tight mb-6 reveal fade-up" style="transition-delay: 0.2s">
             South Africa's Trusted<br>
-            <span class="text-safs-gold">Funeral Supply Partner</span>
+            <span class="text-safs-gold">Funeral Home Partner</span>
           </h1>
-          <p class="text-base sm:text-lg md:text-xl text-slate-700 leading-relaxed max-w-2xl mb-10 reveal fade-up" style="transition-delay: 0.3s">
+          <p class="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl mb-10 reveal fade-up" style="transition-delay: 0.3s">
             Servicing the funeral industry since 1998. We combine decades of experience with
             uncompromising quality to provide funeral homes across South Africa with premium
             caskets, equipment, and supplies.
           </p>
           <div class="flex flex-wrap gap-4 reveal fade-up" style="transition-delay: 0.4s">
-            <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold-light transition-all shadow-lg hover:shadow-xl active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
-              Browse Our Range
+            <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-8 py-4 rounded-xl hover:bg-safs-gold/80 transition-all shadow-lg hover:shadow-xl active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
+              Browse Our Caskets
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
-            <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-8 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
+            <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-safs-gold text-white font-bold px-8 py-4 rounded-xl hover:bg-safs-gold hover:text-black transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               +27 31 508 6700
             </a>
@@ -212,25 +212,25 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     </section>
 
     <!-- CTA Section -->
-    <section class="relative overflow-hidden bg-white py-20 border-t border-slate-100">
+    <section class="relative overflow-hidden bg-safs-dark py-20 border-t-2 border-safs-gold">
       <div class="absolute w-[600px] h-[600px] rounded-full bg-safs-gold/10 blur-[150px] -top-40 -right-40"></div>
-      <div class="absolute w-[400px] h-[400px] rounded-full bg-slate-200/30 blur-[100px] -bottom-20 left-10"></div>
+      <div class="absolute w-[400px] h-[400px] rounded-full bg-white/5 blur-[100px] -bottom-20 left-10"></div>
 
       <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight mb-6">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
           Ready to Partner with<br>
           <span class="text-safs-gold">South Africa's Finest</span>
         </h2>
-        <p class="text-slate-600 text-lg mb-10 max-w-2xl mx-auto">
+        <p class="text-slate-300 text-lg mb-10 max-w-2xl mx-auto">
           Browse our full catalog of premium funeral supplies, or get in touch with our
           team for personalised assistance.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-10 py-4 rounded-xl hover:bg-safs-gold-light transition-all shadow-lg hover:shadow-xl active:scale-95">
+          <a routerLink="/catalog" class="inline-flex items-center gap-2 bg-safs-gold text-black font-bold px-10 py-4 rounded-xl hover:bg-safs-gold/80 transition-all shadow-lg hover:shadow-xl active:scale-95">
             View Full Catalog
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
-          <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-slate-300 text-slate-900 font-bold px-10 py-4 rounded-xl hover:border-safs-gold hover:text-safs-gold transition-all">
+          <a href="tel:+27315086700" class="inline-flex items-center gap-2 border-2 border-safs-gold text-white font-bold px-10 py-4 rounded-xl hover:bg-safs-gold hover:text-black transition-all">
             Contact Sales
           </a>
         </div>
@@ -279,11 +279,9 @@ export class AboutPageComponent implements AfterViewInit, OnDestroy {
   private heroInterval: ReturnType<typeof setInterval> | null = null;
 
   heroBgImages = [
-    { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-image.jpg' },
+    { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-2.jpg' },
     { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-3.jpg' },
-    { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-1.jpg' },
-    { id: 4, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
-    { id: 5, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg' },
+    { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/about-image/about-3.jpg' },
   ];
 
   casketImages = [
