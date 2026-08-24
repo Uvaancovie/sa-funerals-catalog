@@ -27,11 +27,11 @@ import { WishlistService } from '../services/wishlist.service';
                 Products
               </a>
               <a
-                routerLink="/services"
+                routerLink="/export"
                 routerLinkActive="text-safs-gold font-bold"
                 class="text-white/80 hover:text-safs-gold transition-colors font-medium text-sm"
               >
-                Services
+                Export
               </a>
               <a
                 routerLink="/about"
@@ -48,11 +48,11 @@ import { WishlistService } from '../services/wishlist.service';
                 Contact
               </a>
               <a
-                routerLink="/export"
+                routerLink="/services"
                 routerLinkActive="text-safs-gold font-bold"
                 class="text-white/80 hover:text-safs-gold transition-colors font-medium text-sm"
               >
-                Exports
+                Services
               </a>
             </nav>
 

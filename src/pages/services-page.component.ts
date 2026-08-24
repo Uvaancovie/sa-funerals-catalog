@@ -313,13 +313,7 @@ export class ServicesPageComponent implements AfterViewInit, OnDestroy {
       image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/Emperor%20-%20Dark%20Cherry%20(2).jpg',
       features: ['Custom finishes', 'Eco-friendly options', 'Rapid fulfillment']
     },
-    {
-      id: 2,
-      title: 'Cremation Urns',
-      description: 'Beautiful and respectful urns designed to preserve and honour the memories of the departed.',
-      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/pexels-cottonbro-10496221.jpg',
-      features: ['Personalization', 'Quality materials', 'Affordable pricing']
-    },
+   
     {
       id: 3,
       title: 'Equipment Rental',
