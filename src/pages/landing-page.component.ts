@@ -62,11 +62,11 @@ import { VideoPlayerComponent } from '../components/video-player.component';
           <!-- Headline & Description (Bottom Left) -->
           <div class="max-w-3xl space-y-4 sm:space-y-5">
             <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-bold text-white tracking-tight leading-[1.06] drop-shadow-sm">
-              Trusted Worldwide<br>
+              South African Funeral Supplies<br>
               
             </h1>
             <p class="text-base sm:text-lg md:text-xl text-white/80 font-normal leading-relaxed max-w-xl drop-shadow-sm">
-              Delivering handcrafted precision and bulk wholesale logistics to funeral homes across Africa and overseas.
+              Delivering premium funeral caskets and bulk wholesale logistics to funeral homes across Africa and overseas.
             </p>
           </div>
 
@@ -141,8 +141,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             <div class="text-slate-500 text-xs mt-0.5">Caskets, Domes, Hardware &amp; Requisites</div>
           </div>
           <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
-            <div class="text-3xl sm:text-4xl font-black text-safs-gold">100+</div>
-            <div class="text-slate-800 font-medium text-sm mt-1">Funeral Homes Partnered</div>
+           
             <div class="text-slate-500 text-xs mt-0.5">Nationwide &amp; Export Reach</div>
           </div>
         </div>
