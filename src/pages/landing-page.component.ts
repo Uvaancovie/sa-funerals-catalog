@@ -62,11 +62,11 @@ import { VideoPlayerComponent } from '../components/video-player.component';
           <!-- Headline & Description (Bottom Left) -->
           <div class="max-w-3xl space-y-4 sm:space-y-5">
             <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-bold text-white tracking-tight leading-[1.06] drop-shadow-sm">
-              South African Funeral Supplies<br>
-              
+              <br>
+              South African Funeral Supplies 
             </h1>
             <p class="text-base sm:text-lg md:text-xl text-white/80 font-normal leading-relaxed max-w-xl drop-shadow-sm">
-              Delivering premium funeral caskets and bulk wholesale logistics to funeral homes across Africa and overseas.
+             
             </p>
           </div>
 
@@ -336,8 +336,8 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
 
   heroCarouselImages = [
     { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/funeral-supplies.png' },
-    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-6.jpg' },
-    { id: 3, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-7.jpg' },
+    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/store-front/FRONT%20IMAGE%20.jpeg' },
+
   ];
 
   featuredProducts = [
