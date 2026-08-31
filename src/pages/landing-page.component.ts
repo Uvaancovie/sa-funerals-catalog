@@ -8,39 +8,31 @@ import { VideoPlayerComponent } from '../components/video-player.component';
   standalone: true,
   imports: [CommonModule, RouterLink, VideoPlayerComponent],
   template: `
-    <!-- 100% Uncropped Minimalist Hero Section -->
-    <section class="relative w-full bg-slate-950 overflow-hidden flex flex-col justify-end" aria-label="SAFS Hero">
+    <!-- Classy, Uncropped Hero Section -->
+    <section class="relative w-full overflow-hidden bg-slate-950 flex items-end min-h-[540px] sm:min-h-[620px] lg:min-h-[720px] xl:min-h-[780px]" aria-label="SAFS Hero">
       
-      <!-- Subtle Ambient Glow Backdrop matching photo colors -->
-      <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-        <img
-          src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/store-front/FRONT%20IMAGE%20.jpeg"
-          alt=""
-          class="w-full h-full object-cover blur-3xl scale-125 select-none"
-        />
-      </div>
-
-      <!-- Main Uncropped Image Canvas (Entire photo is fully visible) -->
-      <div class="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] max-h-[750px] flex items-center justify-center bg-slate-950">
+      <!-- Crystal-Clear Full-Frame Background Image -->
+      <div class="absolute inset-0 w-full h-full">
         <img
           src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/store-front/FRONT%20IMAGE%20.jpeg"
           alt="South African Funeral Supplies Storefront"
-          class="w-full h-full object-contain select-none z-0"
+          class="w-full h-full object-cover object-center select-none"
           fetchpriority="high"
           loading="eager"
         />
-
-        <!-- Subtle Bottom Gradient Scrim for crisp text readability -->
-        <div class="absolute inset-x-0 bottom-0 h-48 sm:h-64 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent pointer-events-none z-10"></div>
       </div>
 
-      <!-- Floating Minimalist Text & Actions (Positioned seamlessly at the base) -->
-      <div class="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 -mt-20 sm:-mt-28 lg:-mt-32 pb-10 sm:pb-14">
+      <!-- Subtle Scrim (Light feathering on the bottom only so the image remains bright and clear) -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent pointer-events-none"></div>
+
+      <!-- Content Container -->
+      <div class="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 lg:pb-20 pt-28 sm:pt-36">
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12">
           
           <!-- Headline & Description (Bottom Left) -->
-          <div class="max-w-2xl space-y-2 sm:space-y-3">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-safs-gold text-xs font-semibold uppercase tracking-[0.2em]">
+          <div class="max-w-2xl space-y-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-safs-gold text-xs font-semibold uppercase tracking-[0.2em]">
               <span class="w-1.5 h-1.5 rounded-full bg-safs-gold"></span>
               Est. 1998 • Trusted Manufacturer
             </div>
@@ -55,7 +47,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             </p>
           </div>
 
-          <!-- Refined Pill CTA Action (Bottom Right) -->
+          <!-- Refined Pill CTA Buttons (Bottom Right) -->
           <div class="flex flex-wrap items-center gap-3.5 shrink-0">
             <a
               routerLink="/catalog"
@@ -65,7 +57,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             </a>
             <a
               routerLink="/contact"
-              class="inline-flex items-center justify-center border border-white/40 hover:border-white text-white font-medium text-sm sm:text-base px-7 py-3.5 rounded-full bg-black/40 backdrop-blur-md hover:bg-white/10 transition-all duration-300"
+              class="inline-flex items-center justify-center border border-white/40 hover:border-white text-white font-medium text-sm sm:text-base px-7 py-3.5 rounded-full bg-black/30 backdrop-blur-md hover:bg-white/10 transition-all duration-300"
             >
               Get in Touch
             </a>
