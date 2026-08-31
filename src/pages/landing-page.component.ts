@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { VideoPlayerComponent } from '../components/video-player.component';
@@ -8,89 +8,67 @@ import { VideoPlayerComponent } from '../components/video-player.component';
   standalone: true,
   imports: [CommonModule, RouterLink, VideoPlayerComponent],
   template: `
-    <!-- Editorial Hero Section -->
-    <section class="relative min-h-[90vh] lg:min-h-screen flex items-end overflow-hidden bg-slate-950 group/hero" aria-label="SAFS Hero">
+    <!-- 100% Uncropped Minimalist Hero Section -->
+    <section class="relative w-full bg-slate-950 overflow-hidden flex flex-col justify-end" aria-label="SAFS Hero">
       
-      <!-- Background Image Carousel with Smooth Scale Effect -->
-      @for (img of heroCarouselImages; track img.id; let i = $index) {
-        <div
-          class="absolute inset-0 transition-all duration-1000 ease-in-out"
-          [class.opacity-100]="i === heroSlide"
-          [class.opacity-0]="i !== heroSlide"
-          [style.transform]="'scale(' + (i === heroSlide ? 1.04 : 1) + ')'"
-          [attr.aria-hidden]="i !== heroSlide"
-        >
-          <img
-            [src]="img.src"
-            alt=""
-            class="w-full h-full object-cover object-center"
-            [attr.fetchpriority]="i === 0 ? 'high' : null"
-            [loading]="i === 0 ? 'eager' : 'lazy'"
-          />
-        </div>
-      }
+      <!-- Subtle Ambient Glow Backdrop matching photo colors -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+        <img
+          src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/store-front/FRONT%20IMAGE%20.jpeg"
+          alt=""
+          class="w-full h-full object-cover blur-3xl scale-125 select-none"
+        />
+      </div>
 
-      <!-- Cinematic Gradient Overlays for High-Contrast Readability -->
-      <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20 pointer-events-none"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent pointer-events-none"></div>
+      <!-- Main Uncropped Image Canvas (Entire photo is fully visible) -->
+      <div class="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] max-h-[750px] flex items-center justify-center bg-slate-950">
+        <img
+          src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/store-front/FRONT%20IMAGE%20.jpeg"
+          alt="South African Funeral Supplies Storefront"
+          class="w-full h-full object-contain select-none z-0"
+          fetchpriority="high"
+          loading="eager"
+        />
 
-      <!-- Left & Right Arrow Navigation Controls -->
-      <button
-        (click)="prevHeroSlide()"
-        aria-label="Previous Hero Slide"
-        class="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/30 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="m15 18-6-6 6-6"/>
-        </svg>
-      </button>
+        <!-- Subtle Bottom Gradient Scrim for crisp text readability -->
+        <div class="absolute inset-x-0 bottom-0 h-48 sm:h-64 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent pointer-events-none z-10"></div>
+      </div>
 
-      <button
-        (click)="nextHeroSlide()"
-        aria-label="Next Hero Slide"
-        class="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/30 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-safs-gold"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="m9 18 6-6-6-6"/>
-        </svg>
-      </button>
-
-      <!-- Bottom Content Container -->
-      <div class="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 pb-16 sm:pb-20 lg:pb-24 pt-36">
-        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-12">
+      <!-- Floating Minimalist Text & Actions (Positioned seamlessly at the base) -->
+      <div class="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 -mt-20 sm:-mt-28 lg:-mt-32 pb-10 sm:pb-14">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12">
           
           <!-- Headline & Description (Bottom Left) -->
-          <div class="max-w-3xl space-y-4 sm:space-y-5">
-            <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-bold text-white tracking-tight leading-[1.06] drop-shadow-sm">
-              <br>
-              South African Funeral Supplies 
+          <div class="max-w-2xl space-y-2 sm:space-y-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-safs-gold text-xs font-semibold uppercase tracking-[0.2em]">
+              <span class="w-1.5 h-1.5 rounded-full bg-safs-gold"></span>
+              Est. 1998 • Trusted Manufacturer
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.08] drop-shadow-md">
+              South African<br>
+              <span class="font-light text-slate-100">Funeral Supplies</span>
             </h1>
-            <p class="text-base sm:text-lg md:text-xl text-white/80 font-normal leading-relaxed max-w-xl drop-shadow-sm">
-             
+
+            <p class="text-sm sm:text-base lg:text-lg text-white/90 font-normal leading-relaxed max-w-lg drop-shadow-sm">
+              Handcrafted caskets, premium domes, and certified mortuary equipment engineered for dignified farewells.
             </p>
           </div>
 
-          <!-- Action Button & Slide Indicators (Bottom Right) -->
-          <div class="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end gap-6 shrink-0">
-            <!-- Pill CTA Button -->
+          <!-- Refined Pill CTA Action (Bottom Right) -->
+          <div class="flex flex-wrap items-center gap-3.5 shrink-0">
             <a
               routerLink="/catalog"
-              class="inline-flex items-center justify-center bg-white text-slate-900 hover:bg-safs-gold hover:text-black font-semibold text-sm sm:text-base px-9 py-3.5 rounded-full shadow-2xl transition-all duration-300 active:scale-95"
+              class="inline-flex items-center justify-center bg-white text-slate-950 hover:bg-safs-gold hover:text-black font-semibold text-sm sm:text-base px-8 py-3.5 rounded-full shadow-2xl transition-all duration-300 active:scale-95"
             >
               Explore Catalog
             </a>
-
-            <!-- Slide Pagination Indicators -->
-            <div class="flex items-center gap-2" aria-label="Slide controls">
-              @for (img of heroCarouselImages; track img.id; let i = $index) {
-                <button
-                  (click)="goToHeroSlide(i)"
-                  [attr.aria-label]="'Go to slide ' + (i + 1)"
-                  class="h-1.5 rounded-full transition-all duration-300 cursor-pointer focus:outline-none"
-                  [ngClass]="i === heroSlide ? 'w-6 bg-safs-gold' : 'w-1.5 bg-white/40 hover:bg-white/75'"
-                ></button>
-              }
-            </div>
+            <a
+              routerLink="/contact"
+              class="inline-flex items-center justify-center border border-white/40 hover:border-white text-white font-medium text-sm sm:text-base px-7 py-3.5 rounded-full bg-black/40 backdrop-blur-md hover:bg-white/10 transition-all duration-300"
+            >
+              Get in Touch
+            </a>
           </div>
 
         </div>
@@ -141,7 +119,8 @@ import { VideoPlayerComponent } from '../components/video-player.component';
             <div class="text-slate-500 text-xs mt-0.5">Caskets, Domes, Hardware &amp; Requisites</div>
           </div>
           <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200">
-           
+            <div class="text-3xl sm:text-4xl font-black text-safs-gold">100+</div>
+            <div class="text-slate-800 font-medium text-sm mt-1">Funeral Homes Partnered</div>
             <div class="text-slate-500 text-xs mt-0.5">Nationwide &amp; Export Reach</div>
           </div>
         </div>
@@ -217,7 +196,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
 
     <!-- Featured Products Carousel -->
     <section class="bg-white py-20 sm:py-28 relative overflow-hidden">
-      <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="flex items-end justify-between mb-12">
           <div>
             <span class="text-safs-gold font-bold text-xs tracking-[0.2em] uppercase block mb-2">Portfolio</span>
@@ -260,7 +239,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
 
     <!-- FAQ Accordion -->
     <section class="bg-white py-20 sm:py-28 relative">
-      <div class="relative max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
         <div class="text-center mb-14">
           <span class="text-safs-gold font-bold text-xs tracking-widest uppercase block mb-2">Have Questions?</span>
           <h2 class="text-3xl sm:text-4xl font-bold text-slate-950">Frequently Asked Questions</h2>
@@ -307,7 +286,7 @@ import { VideoPlayerComponent } from '../components/video-player.component';
 
     <!-- B2B Closing CTA -->
     <section class="bg-white py-20 relative overflow-hidden">
-      <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
         <h2 class="text-3xl sm:text-4xl font-bold text-slate-950 mb-4">
           Partner with South Africa's Leading Manufacturer
         </h2>
@@ -329,16 +308,8 @@ import { VideoPlayerComponent } from '../components/video-player.component';
     :host { display: block; }
   `]
 })
-export class LandingPageComponent implements AfterViewInit, OnDestroy {
-  heroSlide = 0;
+export class LandingPageComponent {
   productSlide = 0;
-  private heroInterval: ReturnType<typeof setInterval> | null = null;
-
-  heroCarouselImages = [
-    { id: 1, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/funeral-supplies.png' },
-    { id: 2, src: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/store-front/FRONT%20IMAGE%20.jpeg' },
-
-  ];
 
   featuredProducts = [
     { id: 'royal-dome', name: 'Royal Dome', category: 'Premium Domes', image: '/assets/additional/Royal Dome Cherry.jpg' },
@@ -387,42 +358,8 @@ export class LandingPageComponent implements AfterViewInit, OnDestroy {
 
   activeFaqIndex: number | null = null;
 
-  nextHeroSlide(): void {
-    this.heroSlide = (this.heroSlide + 1) % this.heroCarouselImages.length;
-    this.resetHeroTimer();
-  }
-
-  prevHeroSlide(): void {
-    this.heroSlide = (this.heroSlide - 1 + this.heroCarouselImages.length) % this.heroCarouselImages.length;
-    this.resetHeroTimer();
-  }
-
-  goToHeroSlide(index: number): void {
-    this.heroSlide = index;
-    this.resetHeroTimer();
-  }
-
-  private resetHeroTimer(): void {
-    if (this.heroInterval) {
-      clearInterval(this.heroInterval);
-    }
-    this.heroInterval = setInterval(() => {
-      this.heroSlide = (this.heroSlide + 1) % this.heroCarouselImages.length;
-    }, 5500);
-  }
-
   toggleFaq(index: number): void {
     this.activeFaqIndex = this.activeFaqIndex === index ? null : index;
-  }
-
-  ngAfterViewInit(): void {
-    this.resetHeroTimer();
-  }
-
-  ngOnDestroy(): void {
-    if (this.heroInterval) {
-      clearInterval(this.heroInterval);
-    }
   }
 
   nextProduct(): void {
