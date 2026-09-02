@@ -1,0 +1,7 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "instructions": [
+    ".kilo/rules/safs-design.md",
+    ".kilo/rules/*.md"
+  ]
+}
