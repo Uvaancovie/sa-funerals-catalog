@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OptimizedImageComponent } from '../components/optimized-image.component';
 import { ImageOptimizationService } from '../services/image-optimization.service';
+import { NewsletterComponent } from '../components/newsletter.component';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, RouterLink, OptimizedImageComponent],
+  imports: [CommonModule, RouterLink, OptimizedImageComponent, NewsletterComponent],
    template: `
      <div class="bg-white min-h-screen w-full flex flex-col">
 
@@ -245,6 +246,9 @@ import { ImageOptimizationService } from '../services/image-optimization.service
         
           <!-- Product Grid Area -->
          <div class="p-4 sm:p-6 md:p-10 lg:p-16 flex-1 max-w-[1600px] w-full mx-auto pb-32 min-h-[100vh]" id="product-grid">
+
+           <!-- Newsletter & Digital Catalogue Dispatch (Top) -->
+           <app-newsletter></app-newsletter>
 
            <!-- Featured Products Section -->
            @if (!hasActiveFilters()) {

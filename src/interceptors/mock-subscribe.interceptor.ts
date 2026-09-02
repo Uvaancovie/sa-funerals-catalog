@@ -7,8 +7,13 @@ import { of } from 'rxjs';
  * This prevents `ng serve` from proxying `/api/subscribe` to the unavailable .NET backend.
  */
 export const mockSubscribeInterceptor: HttpInterceptorFn = (req, next) => {
+  const isLocalHost = typeof window !== 'undefined' && (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1'
+  );
+
   if (
-    environment.production ||
+    !isLocalHost ||
     req.method !== 'POST' ||
     !req.url.endsWith('/api/subscribe')
   ) {
@@ -32,7 +37,7 @@ export const mockSubscribeInterceptor: HttpInterceptorFn = (req, next) => {
       status: 200,
       body: {
         success: true,
-        message: 'Subscribed successfully (local development mock)',
+        message: 'Subscribed successfully! Welcome catalogue email dispatched (local development mock)',
       },
     })
   );
