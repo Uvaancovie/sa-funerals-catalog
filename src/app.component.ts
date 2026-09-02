@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar.component';
 import { FooterComponent } from './components/footer.component';
 import { ToastComponent } from './components/toast.component';
+import { inject } from '@vercel/analytics';
 
 @Component({
   selector: 'app-root',
@@ -19,4 +20,8 @@ import { ToastComponent } from './components/toast.component';
     <app-toast></app-toast>
   `
 })
-export class AppComponent { }
+export class AppComponent implements OnInit {
+  ngOnInit() {
+    inject();
+  }
+}
