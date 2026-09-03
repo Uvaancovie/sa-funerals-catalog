@@ -1,130 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-export default async function handler(req: any, res: any) {
-  // 1. Handle CORS for local development and cross-origin requests
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS,POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  // 2. Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  let body = req.body;
-  if (typeof body === 'string') {
-    try {
-      body = JSON.parse(body);
-    } catch {
-      body = {};
-    }
-  }
-
-  const { email, firstName, consent, utm } = body || {};
-
-  if (!email || typeof email !== 'string' || !email.includes('@')) {
-    return res.status(400).json({ error: 'A valid email address is required' });
-  }
-
-  const cleanEmail = email.trim().toLowerCase();
-  const cleanFirstName = firstName ? String(firstName).trim() : '';
-
-  // 3. Supabase Upsert to public.leads (safe execution)
-  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
-
-  if (supabaseUrl && supabaseKey) {
-    try {
-      const supabase = createClient(supabaseUrl, supabaseKey);
-      const { error: dbError } = await supabase
-        .from('leads')
-        .upsert(
-          {
-            email: cleanEmail,
-            first_name: cleanFirstName || null,
-            consent: Boolean(consent),
-            utm_source: utm || null,
-            source: 'catalog_newsletter',
-            updated_at: new Date().toISOString()
-          },
-          { onConflict: 'email' }
-        );
-
-      if (dbError) {
-        console.warn('Supabase leads table upsert warning (table may not exist yet):', dbError.message);
-      }
-    } catch (dbEx: any) {
-      console.warn('Supabase client exception:', dbEx?.message);
-    }
-  }
-
-  // 4. Brevo API credentials
-  const apiKey = process.env.BREVO_API_KEY;
-  const listId = parseInt(process.env.BREVO_LEAD_LIST_ID || '0', 10);
-
-  if (!apiKey) {
-    console.warn('BREVO_API_KEY is not configured on server.');
-    return res.status(200).json({
-      success: true,
-      message: 'Subscribed successfully (DB stored, email service skipped due to missing API key)'
-    });
-  }
-
-  // 5. Add / Update Contact in Brevo
-  const attributes: Record<string, any> = {};
-  if (cleanFirstName) {
-    attributes['FIRSTNAME'] = cleanFirstName;
-  }
-
-  const contactPayload = {
-    email: cleanEmail,
-    attributes: attributes,
-    listIds: listId !== 0 ? [listId] : [],
-    updateEnabled: true
-  };
-
-  try {
-    const contactResponse = await fetch('https://api.brevo.com/v3/contacts', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'api-key': apiKey
-      },
-      body: JSON.stringify(contactPayload)
-    });
-
-    if (!contactResponse.ok && contactResponse.status !== 204 && contactResponse.status !== 201) {
-      const errorData = await contactResponse.json().catch(() => ({}));
-      console.warn('Brevo Contact API Notice:', errorData);
-    }
-
-    // 6. Send Widescreen HTML Catalog Welcome Email
-    const templateId = process.env.BREVO_WELCOME_TEMPLATE_ID
-      ? parseInt(process.env.BREVO_WELCOME_TEMPLATE_ID, 10)
-      : undefined;
-    const senderEmail = process.env.BREVO_SENDER_EMAIL || 'i.t.safuneralsupplies@gmail.com';
-    const senderName = process.env.BREVO_SENDER_NAME || 'South African Funeral Supplies';
-
-    const emailPayload: any = {
-      to: [{ email: cleanEmail, name: cleanFirstName || undefined }],
-      sender: { name: senderName, email: senderEmail }
-    };
-
-    if (templateId && !isNaN(templateId) && templateId > 0) {
-      emailPayload.templateId = templateId;
-      emailPayload.params = {
-        FIRSTNAME: cleanFirstName || 'Valued Partner',
-        CATALOG_URL: 'https://safuneral.co.za/#/catalog'
-      };
-    } else {
-      emailPayload.subject = 'Welcome to South African Funeral Supplies – Official Welcome Bulletin';
-      emailPayload.htmlContent = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="utf-8">
@@ -189,6 +63,7 @@ export default async function handler(req: any, res: any) {
       color: #C5A059;
     }
 
+    /* .btn-primary Hover Transition */
     .btn-primary:hover {
       background-color: #C5A059 !important;
       border-color: #C5A059 !important;
@@ -200,6 +75,7 @@ export default async function handler(req: any, res: any) {
       box-shadow: 0 12px 30px rgba(21, 26, 64, 0.08) !important;
     }
 
+    /* Responsive Breakdown for Tablets & Smartphones */
     @media only screen and (max-width: 840px) {
       .email-container {
         width: 100% !important;
@@ -237,7 +113,7 @@ export default async function handler(req: any, res: any) {
 
 <body style="margin: 0; padding: 0; background-color: #FFFFFF;">
 
-  <!-- Hidden Preview Text -->
+  <!-- Hidden Preview Text (Controls what the user sees in inbox view before opening) -->
   <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all;">
     Welcome to South African Funeral Supplies. Your wholesale digital catalog access is ready. Browse executive domes, caskets, and mortuary equipment.
     &#847; &zwnj; &nbsp; &#8199; &shy; &#847; &zwnj; &nbsp; &#8199; &shy; &#847; &zwnj; &nbsp; &#8199; &shy;
@@ -248,7 +124,7 @@ export default async function handler(req: any, res: any) {
     <tr>
       <td align="center" style="padding: 0;">
 
-        <!-- 1. FULL-WIDTH TOP BAR -->
+        <!-- 1. FULL-WIDTH TOP BAR (Primary Navy #151A40 with Gold Accent #C5A059) -->
         <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#151A40" style="border-bottom: 2px solid #C5A059;">
           <tr>
             <td align="center" style="padding: 12px 24px;">
@@ -290,6 +166,7 @@ export default async function handler(req: any, res: any) {
                           <span style="font-family: 'Poppins', sans-serif; font-size: 12px; color: #7F8C8D;">Wholesale &bull; Nationwide &bull; SADC Export</span>
                         </td>
                         <td>
+                          <!-- .tab-pill--active -->
                           <a href="https://sa-funerals-catalog.vercel.app/#/catalog" target="_blank" style="display: inline-block; background-color: #151A40; color: #FFFFFF; font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; padding: 8px 20px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 4px 12px rgba(21, 26, 64, 0.2); text-decoration: none;">
                             Trade Member Active
                           </a>
@@ -303,14 +180,16 @@ export default async function handler(req: any, res: any) {
           </tr>
         </table>
 
-        <!-- 3. EXPANSIVE WELCOME HERO SHOWCASE -->
+        <!-- 3. EXPANSIVE WELCOME HERO SHOWCASE (.glass-panel inspired) -->
         <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
           <tr>
             <td align="center" style="padding: 36px 24px 28px;">
               <table role="presentation" class="email-container" width="1040" border="0" cellpadding="0" cellspacing="0" style="max-width: 1040px; width: 100%; background: #FFFFFF; border-radius: 24px; border: 1px solid rgba(21, 26, 64, 0.08); box-shadow: 0 20px 50px rgba(30, 35, 82, 0.06); overflow: hidden;">
                 <tr>
-                  <!-- Left Hero Column -->
-                  <td class="stack-column mobile-padding" width="54%" valign="middle" style="padding: 44px 40px;">
+                  <!-- Left Hero Column: Welcome Copy & Direct Catalog Access -->
+                  <td class="stack-column" width="54%" valign="middle" style="padding: 44px 40px;" class="mobile-padding">
+                    
+                    <!-- .status-badge--contacted (Gold Badge) -->
                     <span style="display: inline-block; background-color: rgba(197, 160, 89, 0.14); border: 1px solid rgba(197, 160, 89, 0.3); color: #8B6F2E; font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 9999px; margin-bottom: 16px;">
                       ★ Official Welcome Bulletin
                     </span>
@@ -319,29 +198,16 @@ export default async function handler(req: any, res: any) {
                       Welcome to South African Funeral Supplies
                     </h2>
 
+                    <!-- Dynamic Brevo Name Tag / Fallback -->
                     <p style="margin: 0 0 14px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; color: #151A40;">
-                      Dear ${cleanFirstName || 'Valued Trade Partner'},
+                      Dear {{ contact.FIRSTNAME | default: "Valued Trade Partner" }},
                     </p>
 
-                    <p style="margin: 0 0 20px; font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 24px; color: #2C3E50;">
+                    <p style="margin: 0 0 24px; font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 24px; color: #2C3E50;">
                       Thank you for joining our trade community. As a verified subscriber, you will now receive first-access dispatches on our latest <strong>Executive Domes, Bespoke Skinz Caskets, Cemetery Lowering Sets, and Factory Wholesale Promotions</strong>.
                     </p>
 
-                    <!-- Highlight Card -->
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F8F9FA; border-left: 4px solid #C5A059; border-radius: 0 12px 12px 0; padding: 16px; margin-bottom: 24px;">
-                      <tr>
-                        <td>
-                          <h4 style="margin: 0 0 4px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; color: #151A40;">
-                          
-                          </h4>
-                          <p style="margin: 0; font-family: 'Poppins', sans-serif; font-size: 12px; color: #7F8C8D; line-height: 18px;">
-                           
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <!-- Button -->
+                    <!-- .btn-primary Button -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td bgcolor="#151A40" style="border-radius: 12px; box-shadow: 0 4px 14px rgba(21, 26, 64, 0.25);">
@@ -351,9 +217,10 @@ export default async function handler(req: any, res: any) {
                         </td>
                       </tr>
                     </table>
+
                   </td>
 
-                  <!-- Right Hero Column -->
+                  <!-- Right Hero Column: Double-Bezel Glass Card Image Box -->
                   <td class="stack-column" width="46%" valign="middle" style="padding: 24px; background: rgba(248, 249, 250, 0.7); border-left: 1px solid rgba(21, 26, 64, 0.06);">
                     <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" style="border-radius: 18px; overflow: hidden; background-color: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); box-shadow: 0 10px 30px rgba(30, 35, 82, 0.06);">
                       <tr>
@@ -374,46 +241,59 @@ export default async function handler(req: any, res: any) {
           </tr>
         </table>
 
-        <!-- 4. 4-PILLAR WHOLESALE VALUE STRIP -->
+        <!-- 4. 4-PILLAR WHOLESALE VALUE STRIP (.stat-card) -->
         <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
           <tr>
             <td align="center" style="padding: 0 24px 36px;">
               <table role="presentation" class="email-container" width="1040" border="0" cellpadding="0" cellspacing="0" style="max-width: 1040px; width: 100%;">
                 <tr>
+                  
+                  <!-- Pillar 1 -->
                   <td class="stack-column" width="23.5%" valign="top" style="padding: 20px 16px; background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 18px; box-shadow: 0 8px 24px rgba(30, 35, 82, 0.05); text-align: center;">
                     <span style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 800; color: #151A40; display: block; line-height: 1;">Direct</span>
                     <span style="font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; color: #7F8C8D; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-top: 6px;">Factory Pricing</span>
                     <span style="font-family: 'Poppins', sans-serif; font-size: 11px; color: #C5A059; font-weight: 600;">No Middlemen</span>
                   </td>
+
                   <td width="2%" class="hide-mobile" style="font-size: 0; line-height: 0;">&nbsp;</td>
+
+                  <!-- Pillar 2 -->
                   <td class="stack-column" width="23.5%" valign="top" style="padding: 20px 16px; background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 18px; box-shadow: 0 8px 24px rgba(30, 35, 82, 0.05); text-align: center;">
                     <span style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 800; color: #151A40; display: block; line-height: 1;">60+</span>
                     <span style="font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; color: #7F8C8D; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-top: 6px;">Product Lines</span>
                     <span style="font-family: 'Poppins', sans-serif; font-size: 11px; color: #C5A059; font-weight: 600;">Full Digital Catalog</span>
                   </td>
+
                   <td width="2%" class="hide-mobile" style="font-size: 0; line-height: 0;">&nbsp;</td>
+
+                  <!-- Pillar 3 -->
                   <td class="stack-column" width="23.5%" valign="top" style="padding: 20px 16px; background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 18px; box-shadow: 0 8px 24px rgba(30, 35, 82, 0.05); text-align: center;">
                     <span style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 800; color: #151A40; display: block; line-height: 1;">9 Provinces</span>
                     <span style="font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; color: #7F8C8D; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-top: 6px;">Nationwide Delivery</span>
                     <span style="font-family: 'Poppins', sans-serif; font-size: 11px; color: #C5A059; font-weight: 600;">Extensive Hub Reach</span>
                   </td>
+
                   <td width="2%" class="hide-mobile" style="font-size: 0; line-height: 0;">&nbsp;</td>
+
+                  <!-- Pillar 4 -->
                   <td class="stack-column stack-column-last" width="23.5%" valign="top" style="padding: 20px 16px; background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 18px; box-shadow: 0 8px 24px rgba(30, 35, 82, 0.05); text-align: center;">
                     <span style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 800; color: #151A40; display: block; line-height: 1;">SADC</span>
                     <span style="font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; color: #7F8C8D; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-top: 6px;">Cross-Border Freight</span>
                     <span style="font-family: 'Poppins', sans-serif; font-size: 11px; color: #C5A059; font-weight: 600;">Export Clearance</span>
                   </td>
+
                 </tr>
               </table>
             </td>
           </tr>
         </table>
 
-        <!-- 5. 3-COLUMN FEATURED PRODUCT SHOWCASE -->
+        <!-- 5. 3-COLUMN FEATURED PRODUCT SHOWCASE (Real Product Images from Database) -->
         <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#F8F9FA" style="border-top: 1px solid rgba(21, 26, 64, 0.06); border-bottom: 1px solid rgba(21, 26, 64, 0.06);">
           <tr>
             <td align="center" style="padding: 44px 24px 44px;">
               <table role="presentation" class="email-container" width="1040" border="0" cellpadding="0" cellspacing="0" style="max-width: 1040px; width: 100%;">
+                
                 <tr>
                   <td align="left" style="padding-bottom: 24px;">
                     <span style="font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 700; color: #C5A059; text-transform: uppercase; letter-spacing: 0.16em; display: block; margin-bottom: 4px;">Top Wholesale Highlights</span>
@@ -422,12 +302,15 @@ export default async function handler(req: any, res: any) {
                     </h3>
                   </td>
                 </tr>
+
+                <!-- 3 Product Cards -->
                 <tr>
                   <td>
                     <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
                       <tr>
+
                         <!-- Card 1: Royal Dome -->
-                        <td class="stack-column card-hover" width="31.5%" valign="top" style="background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 20px; box-shadow: 0 4px 16px rgba(30, 35, 82, 0.05); overflow: hidden;">
+                        <td class="stack-column card-hover" width="31.5%" valign="top" style="background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 20px; box-shadow: 0 4px 16px rgba(30, 35, 82, 0.05); overflow: hidden; transition: all 0.25s ease;">
                           <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
                             <tr>
                               <td align="center" style="padding: 20px; background: rgba(248, 249, 250, 0.8); border-bottom: 1px solid rgba(21, 26, 64, 0.06);">
@@ -453,8 +336,8 @@ export default async function handler(req: any, res: any) {
 
                         <td width="2.75%" class="hide-mobile" style="font-size: 0; line-height: 0;">&nbsp;</td>
 
-                        <!-- Card 2: Nguni Horn -->
-                        <td class="stack-column card-hover" width="31.5%" valign="top" style="background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 20px; box-shadow: 0 4px 16px rgba(30, 35, 82, 0.05); overflow: hidden;">
+                        <!-- Card 2: Nguni Horn (Skinz) -->
+                        <td class="stack-column card-hover" width="31.5%" valign="top" style="background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 20px; box-shadow: 0 4px 16px rgba(30, 35, 82, 0.05); overflow: hidden; transition: all 0.25s ease;">
                           <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
                             <tr>
                               <td align="center" style="padding: 20px; background: rgba(248, 249, 250, 0.8); border-bottom: 1px solid rgba(21, 26, 64, 0.06);">
@@ -481,7 +364,7 @@ export default async function handler(req: any, res: any) {
                         <td width="2.75%" class="hide-mobile" style="font-size: 0; line-height: 0;">&nbsp;</td>
 
                         <!-- Card 3: Executive Church Trolley -->
-                        <td class="stack-column stack-column-last card-hover" width="31.5%" valign="top" style="background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 20px; box-shadow: 0 4px 16px rgba(30, 35, 82, 0.05); overflow: hidden;">
+                        <td class="stack-column stack-column-last card-hover" width="31.5%" valign="top" style="background: #FFFFFF; border: 1px solid rgba(21, 26, 64, 0.08); border-radius: 20px; box-shadow: 0 4px 16px rgba(30, 35, 82, 0.05); overflow: hidden; transition: all 0.25s ease;">
                           <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
                             <tr>
                               <td align="center" style="padding: 20px; background: rgba(248, 249, 250, 0.8); border-bottom: 1px solid rgba(21, 26, 64, 0.06);">
@@ -504,16 +387,18 @@ export default async function handler(req: any, res: any) {
                             </tr>
                           </table>
                         </td>
+
                       </tr>
                     </table>
                   </td>
                 </tr>
+
               </table>
             </td>
           </tr>
         </table>
 
-        <!-- 6. FULL-WIDTH CALL TO ACTION -->
+        <!-- 6. FULL-WIDTH CALL TO ACTION (Primary Navy #151A40 Banner) -->
         <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
           <tr>
             <td align="center" style="padding: 44px 24px;">
@@ -545,13 +430,16 @@ export default async function handler(req: any, res: any) {
           </tr>
         </table>
 
-        <!-- 7. WIDE FOOTER -->
+        <!-- 7. WIDE FOOTER (Primary Navy #151A40 with POPIA Notice) -->
         <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#151A40">
           <tr>
             <td align="center" style="padding: 48px 24px;">
               <table role="presentation" class="email-container" width="1040" border="0" cellpadding="0" cellspacing="0" style="max-width: 1040px; width: 100%;">
+                
+                <!-- 3-Column Footer Row on Desktop -->
                 <tr>
-                  <!-- Col 1: Brand & Hub Address -->
+                  
+                  <!-- Col 1: Brand & Durban Hub Address -->
                   <td class="stack-column" width="40%" valign="top" style="padding-bottom: 24px;">
                     <h4 style="margin: 0 0 8px; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 800; color: #FFFFFF;">
                       South African Funeral Supplies
@@ -561,7 +449,7 @@ export default async function handler(req: any, res: any) {
                       Operating Hours: Mon &ndash; Thu: 7:30 &ndash; 16:45 | Fri: 7:30 &ndash; 15:00
                     </p>
                     <p style="margin: 0; font-family: 'Poppins', sans-serif; font-size: 11px; color: #7F8C8D;">
-                      &copy; 1998 &ndash; ${new Date().getFullYear()} South African Funeral Supplies (Pty) Ltd.
+                      &copy; 1998 &ndash; 2026 South African Funeral Supplies (Pty) Ltd.
                     </p>
                   </td>
 
@@ -606,6 +494,7 @@ export default async function handler(req: any, res: any) {
                       </tr>
                     </table>
                   </td>
+
                 </tr>
 
                 <!-- Divider -->
@@ -626,6 +515,7 @@ export default async function handler(req: any, res: any) {
                     <a href="https://safuneral.co.za/terms" style="color: #cbd5e1; text-decoration: underline;">Terms of Trade</a>
                   </td>
                 </tr>
+
               </table>
             </td>
           </tr>
@@ -636,31 +526,4 @@ export default async function handler(req: any, res: any) {
   </table>
 
 </body>
-</html>`;
-    }
-
-    const emailResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'api-key': apiKey
-      },
-      body: JSON.stringify(emailPayload)
-    });
-
-    if (!emailResponse.ok) {
-      const emailError = await emailResponse.json().catch(() => ({}));
-      console.warn('Brevo Email Dispatch Notice:', emailError);
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: 'Subscribed successfully and welcome catalog email dispatched'
-    });
-
-  } catch (error: any) {
-    console.error('Subscription handler error:', error);
-    return res.status(500).json({ error: 'Internal server error', details: error?.message });
-  }
-}
+</html>

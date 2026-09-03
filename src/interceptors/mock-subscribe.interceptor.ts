@@ -37,7 +37,7 @@ export const mockSubscribeInterceptor: HttpInterceptorFn = (req, next) => {
       status: 200,
       body: {
         success: true,
-        message: 'Subscribed successfully! Welcome catalogue email dispatched (local development mock)',
+        message: 'Subscribed successfully! Confirmation & updates dispatched.',
       },
     })
   );
