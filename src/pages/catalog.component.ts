@@ -258,8 +258,8 @@ import { NewsletterComponent } from '../components/newsletter.component';
                </h2>
                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
                  @for (product of featuredProducts(); track product.id) {
-                   <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all group border border-gray-100 cursor-pointer overflow-hidden flex flex-row items-center p-3" [routerLink]="['/product', product.id]">
-                     <div class="w-20 h-20 bg-gray-50 rounded-xl overflow-hidden shrink-0">
+                   <div class="bg-white rounded-none shadow-sm hover:shadow-lg transition-all group border border-gray-100 cursor-pointer overflow-hidden flex flex-row items-center p-3" [routerLink]="['/product', product.id]">
+                     <div class="w-20 h-20 bg-gray-50 rounded-none overflow-hidden shrink-0">
                        <app-optimized-image [src]="getOptimizedProductImagePath(product)" [alt]="product.name" aspectRatio="1/1"></app-optimized-image>
                      </div>
                      <div class="ml-4 flex-1">
@@ -307,7 +307,7 @@ import { NewsletterComponent } from '../components/newsletter.component';
            <!-- Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-8">
              @for (product of filteredProducts(); track product.id) {
-               <div data-testid="catalog-card" class="glass-card hover-lift rounded-3xl overflow-hidden group flex flex-col cursor-pointer border border-white/40 shadow-sm" [routerLink]="['/product', product.id]">
+               <div data-testid="catalog-card" class="glass-card hover-lift rounded-none overflow-hidden group flex flex-col cursor-pointer border border-white/40 shadow-sm" [routerLink]="['/product', product.id]">
                  
                   <!-- Image Area -->
                   <div class="relative h-64 sm:h-72 md:h-80 lg:h-90 overflow-hidden bg-white/80 border-b border-white/20">

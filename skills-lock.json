@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "email-marketing": {
+      "source": "mailerlite/mailerlite-skills",
+      "sourceType": "github",
+      "skillPath": "skills/email-marketing/SKILL.md",
+      "computedHash": "8c13e146c308ee24b86c776035f2d7bb76e30ccb859e0e05f5f3bf30c6e39c08"
+    },
+    "mailerlite-cli": {
+      "source": "mailerlite/mailerlite-skills",
+      "sourceType": "github",
+      "skillPath": "skills/mailerlite-cli/SKILL.md",
+      "computedHash": "a22d6c84ac28237d3b53e1e5d210572b406a548f2dfb2726ee653b43c7e8701b"
+    }
+  }
+}

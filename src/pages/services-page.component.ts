@@ -98,7 +98,7 @@ import { RouterLink } from '@angular/router';
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           @for (service of services; track service.id) {
-            <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-safs-gold/30 hover:shadow-lg transition-all group">
+            <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-safs-gold/30 hover:shadow-lg transition-all group flex flex-col">
               <div class="relative h-56 overflow-hidden bg-gray-100">
                 <div class="absolute inset-x-0 top-0 h-1 bg-safs-gold/0 group-hover:bg-safs-gold transition-colors z-10"></div>
                 <img
@@ -107,7 +107,7 @@ import { RouterLink } from '@angular/router';
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div class="p-6 lg:p-8">
+              <div class="p-6 lg:p-8 flex-1 flex flex-col">
                 <div class="flex items-center gap-3 mb-4">
                   <div class="w-1 h-6 bg-safs-gold rounded-full"></div>
                   <h3 class="text-xl font-bold text-safs-dark">{{ service.title }}</h3>
@@ -123,6 +123,33 @@ import { RouterLink } from '@angular/router';
                     </li>
                   }
                 </ul>
+                @if (service.link) {
+                  <div class="mt-auto pt-5 border-t border-gray-100">
+                    @if (service.isExternal) {
+                      <a
+                        [href]="service.link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-2 text-sm font-bold text-safs-gold hover:text-safs-dark transition-colors group/link"
+                      >
+                        <span>{{ service.linkLabel || 'Visit Website' }}</span>
+                        <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                      </a>
+                    } @else {
+                      <a
+                        [routerLink]="service.link"
+                        class="inline-flex items-center gap-2 text-sm font-bold text-safs-gold hover:text-safs-dark transition-colors group/link"
+                      >
+                        <span>{{ service.linkLabel || 'View Details' }}</span>
+                        <svg class="w-4 h-4 transform group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                      </a>
+                    }
+                  </div>
+                }
               </div>
             </div>
           }
@@ -313,7 +340,16 @@ export class ServicesPageComponent implements AfterViewInit, OnDestroy {
       image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/Emperor%20-%20Dark%20Cherry%20(2).jpg',
       features: ['Custom finishes', 'Eco-friendly options', 'Rapid fulfillment']
     },
-   
+    {
+      id: 2,
+      title: 'Customized Branding on Caskets & Equipment',
+      description: 'Personalized insignia, bespoke organizational crests, and ceremonial branding on caskets, domes, and funeral equipment.',
+      image: '/safs-images/domes/SAPS - 4 Corner Mini Dome Full Lid.jpg',
+      features: ['Custom insignia & emblems', 'Precision dome & lid branding', 'Equipment badges & nameplates'],
+      link: '/product/saps-4-corner-mini-dome',
+      linkLabel: 'View SAPS Mini Dome',
+      isExternal: false
+    },
     {
       id: 3,
       title: 'Equipment Rental',
@@ -330,13 +366,33 @@ export class ServicesPageComponent implements AfterViewInit, OnDestroy {
     },
     {
       id: 5,
+      title: 'Showroom Fitting & Custom Furniture',
+      description: 'Comprehensive showroom layout, fitting, and handcrafted solid hardwood furniture tailored for professional funeral homes.',
+      image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/58d59cbc-43e5-4488-9068-8b0b4f45ffcb/1787293170209-1.jpg',
+      features: ['Handcrafted hardwood furniture', 'Showroom layout & fitting', 'Executive consultation suites'],
+      link: 'https://south-african-furniture.vercel.app/',
+      linkLabel: 'Visit SAFS Furniture',
+      isExternal: true
+    },
+    {
+      id: 6,
+      title: 'Customized Vehicle Branding',
+      description: 'Turnkey vehicle wrapping, hearse fleet branding, signboards, and contravision printing in partnership with Pro Graphics.',
+      image: 'https://prographics.co.za/vehicle-branding/saf-funeral-supplies-poster.jpg',
+      features: ['Hearse & fleet wrap solutions', 'High-durability vinyl graphics', 'Sign boards & contravision'],
+      link: 'https://prographics.co.za/',
+      linkLabel: 'Visit Pro Graphics',
+      isExternal: true
+    },
+    {
+      id: 7,
       title: 'Nationwide Delivery',
       description: 'Fast and reliable delivery throughout South Africa with our extensive distribution network.',
       image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/nationwide-delivery.jpg',
       features: ['24-hour turnaround', 'Safe handling', 'Tracking available']
     },
     {
-      id: 6,
+      id: 8,
       title: 'International Shipping',
       description: 'We deliver to neighbouring countries, across Africa, and beyond with full logistics support.',
       image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/services/services-6.jpg',

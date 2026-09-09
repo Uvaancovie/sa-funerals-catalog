@@ -323,23 +323,9 @@ export default async function handler(req: any, res: any) {
                       Dear ${cleanFirstName || 'Valued Trade Partner'},
                     </p>
 
-                    <p style="margin: 0 0 20px; font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 24px; color: #2C3E50;">
+                    <p style="margin: 0 0 24px; font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 24px; color: #2C3E50;">
                       Thank you for joining our trade community. As a verified subscriber, you will now receive first-access dispatches on our latest <strong>Executive Domes, Bespoke Skinz Caskets, Cemetery Lowering Sets, and Factory Wholesale Promotions</strong>.
                     </p>
-
-                    <!-- Highlight Card -->
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #F8F9FA; border-left: 4px solid #C5A059; border-radius: 0 12px 12px 0; padding: 16px; margin-bottom: 24px;">
-                      <tr>
-                        <td>
-                          <h4 style="margin: 0 0 4px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700; color: #151A40;">
-                          
-                          </h4>
-                          <p style="margin: 0; font-family: 'Poppins', sans-serif; font-size: 12px; color: #7F8C8D; line-height: 18px;">
-                           
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
 
                     <!-- Button -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
