@@ -39,6 +39,7 @@ import { GoogleReviewsComponent } from './google-reviews.component';
               <li><a routerLink="/" class="hover:text-safs-gold transition-colors">Home</a></li>
               <li><a routerLink="/catalog" class="hover:text-safs-gold transition-colors">Full Catalogue</a></li>
               <li><a routerLink="/services" class="hover:text-safs-gold transition-colors">Services</a></li>
+              <li><a routerLink="/branches" class="hover:text-safs-gold transition-colors">Branches & Network</a></li>
               <li><a routerLink="/about" class="hover:text-safs-gold transition-colors">About Us</a></li>
               <li><a routerLink="/contact" class="hover:text-safs-gold transition-colors">Contact Us</a></li>
               <li><a routerLink="/export" class="hover:text-safs-gold transition-colors">Exports</a></li>

@@ -18,13 +18,27 @@ import { WishlistService } from '../services/wishlist.service';
 
          <div class="flex items-center gap-1 sm:gap-3">
             <!-- Desktop menu items -->
-            <nav class="hidden lg:flex items-center space-x-6 mr-1">
+            <nav class="hidden lg:flex items-center space-x-5 xl:space-x-6 mr-1">
               <a
                 routerLink="/catalog"
                 routerLinkActive="text-safs-gold font-bold"
                 class="text-white/80 hover:text-safs-gold transition-colors font-medium text-sm"
               >
                 Products
+              </a>
+              <a
+                routerLink="/services"
+                routerLinkActive="text-safs-gold font-bold"
+                class="text-white/80 hover:text-safs-gold transition-colors font-medium text-sm"
+              >
+                Services
+              </a>
+              <a
+                routerLink="/branches"
+                routerLinkActive="text-safs-gold font-bold"
+                class="text-white/80 hover:text-safs-gold transition-colors font-medium text-sm"
+              >
+                Branches
               </a>
               <a
                 routerLink="/export"
@@ -46,13 +60,6 @@ import { WishlistService } from '../services/wishlist.service';
                 class="text-white/80 hover:text-safs-gold transition-colors font-medium text-sm"
               >
                 Contact
-              </a>
-              <a
-                routerLink="/services"
-                routerLinkActive="text-safs-gold font-bold"
-                class="text-white/80 hover:text-safs-gold transition-colors font-medium text-sm"
-              >
-                Services
               </a>
             </nav>
 
@@ -118,6 +125,14 @@ import { WishlistService } from '../services/wishlist.service';
                  class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
                >
                  Services
+               </a>
+               <a
+                 routerLink="/branches"
+                 routerLinkActive="text-safs-gold font-bold"
+                 (click)="closeMenu()"
+                 class="block py-3 px-4 text-white/80 hover:text-safs-gold hover:bg-white/5 transition-colors rounded-lg font-medium"
+               >
+                 Branches
                </a>
                <a
                  routerLink="/about"

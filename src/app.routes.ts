@@ -9,6 +9,7 @@ import { ContactPageComponent } from './pages/contact-page.component';
 import { LandingPageComponent } from './pages/landing-page.component';
 import { ServicesPageComponent } from './pages/services-page.component';
 import { ExportEnquiryPageComponent } from './pages/export-enquiry-page.component';
+import { BranchesPageComponent } from './pages/branches-page.component';
 import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'catalog', component: CatalogComponent },
   { path: 'product/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
+  { path: 'branches', component: BranchesPageComponent },
   { path: 'about', component: AboutPageComponent },
   { path: 'services', component: ServicesPageComponent },
   { path: 'contact', component: ContactPageComponent },
