@@ -378,7 +378,7 @@ export class ServicesPageComponent implements AfterViewInit, OnDestroy {
       id: 6,
       title: 'Customized Vehicle Branding',
       description: 'Turnkey vehicle wrapping, hearse fleet branding, signboards, and contravision printing in partnership with Pro Graphics.',
-      image: 'https://prographics.co.za/vehicle-branding/saf-funeral-supplies-poster.jpg',
+      image: 'https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/gallery/vehicle-branding/gold-white-truck.jpeg',
       features: ['Hearse & fleet wrap solutions', 'High-durability vinyl graphics', 'Sign boards & contravision'],
       link: 'https://prographics.co.za/',
       linkLabel: 'Visit Pro Graphics',
