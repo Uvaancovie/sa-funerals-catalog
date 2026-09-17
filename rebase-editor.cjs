@@ -1,1 +1,0 @@
-const fs = require('fs'); const file = process.argv[2]; let content = fs.readFileSync(file, 'utf8'); content = content.replace(/pick(.*newsletter\.component\.ts \+ subscribe\.ts)/, 'edit$1'); fs.writeFileSync(file, content);
