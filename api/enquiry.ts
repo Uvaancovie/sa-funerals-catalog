@@ -80,36 +80,42 @@ export default async function handler(req: any, res: any) {
   const senderName = process.env.BREVO_SENDER_NAME || 'South African Funeral Supplies';
   const adminEmail = 'i.t.safuneralsupplies@gmail.com';
 
-  const payload = {
-    sender: { name: senderName, email: senderEmail },
-    to: [
-      { email: adminEmail, name: 'SAFS Order Desk' },
-      { email: customerDetails.email, name: customerDetails.name }
-    ],
-    replyTo: { email: customerDetails.email, name: customerDetails.name },
-    subject: `New Casket Order / Enquiry from ${company} (${customerDetails.name}) - ${cartItems.length} items`,
-    htmlContent: htmlContent
-  };
-
   try {
-    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    // 1. Send Order Notification to Admin
+    await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'api-key': apiKey
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        sender: { name: senderName, email: senderEmail },
+        to: [{ email: adminEmail, name: 'SAFS Admin' }],
+        replyTo: { email: customerDetails.email, name: customerDetails.name },
+        subject: `order received from customer ${customerDetails.name} - ${company}`,
+        htmlContent: htmlContent
+      })
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Brevo API error:', errorText);
-      return res.status(response.status).json({ error: 'Failed to send email', details: errorText });
-    }
+    // 2. Send Confirmation to Customer
+    await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'api-key': apiKey
+      },
+      body: JSON.stringify({
+        sender: { name: senderName, email: senderEmail },
+        to: [{ email: customerDetails.email, name: customerDetails.name }],
+        replyTo: { email: adminEmail, name: senderName },
+        subject: `thank you ${customerDetails.name} we have got your confirmation`,
+        htmlContent: htmlContent
+      })
+    });
 
-    const data = await response.json();
-    return res.status(200).json({ success: true, data });
+    return res.status(200).json({ success: true, message: 'Enquiry emails sent successfully' });
   } catch (error) {
     console.error('Error sending email via Brevo:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
