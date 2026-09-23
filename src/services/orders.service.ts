@@ -1,12 +1,12 @@
-import { Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
-import { lastValueFrom } from 'rxjs';
+import { Injectable, signal, inject } from '@angular/core';
+import { SupabaseService } from './supabase.service';
 import jsPDF from 'jspdf';
 
 export interface OrderItem {
-  name: string;
-  category: string;
+  productId?: string;
+  productName?: string;
+  name?: string;
+  category?: string;
   variant: string;
   quantity: number;
   price: number;
@@ -26,52 +26,132 @@ export interface Order {
 
 @Injectable({ providedIn: 'root' })
 export class OrdersService {
-  private readonly apiUrl = environment.apiUrl;
+  private supabase = inject(SupabaseService);
   private ordersSignal = signal<Order[]>([]);
   orders = this.ordersSignal.asReadonly();
-  private token: string | null = null;
-
-  constructor(private http: HttpClient) {
-    this.token = localStorage.getItem('auth_token');
-  }
 
   async fetchOrders(): Promise<void> {
-    const res = await lastValueFrom(
-      this.http.get<Order[]>(`${this.apiUrl}/api/orders`, {
-        headers: { Authorization: `Bearer ${this.token}` }
-      })
-    );
-    this.ordersSignal.set(res);
+    const { data, error } = await this.supabase.client
+      .from('Orders')
+      .select('*')
+      .order('CreatedAt', { ascending: false });
+
+    if (error) {
+      console.error('Supabase fetchOrders error:', error);
+      return;
+    }
+
+    if (data) {
+      const mapped: Order[] = data.map((d: any) => {
+        let parsedItems: any[] = [];
+        try {
+          parsedItems = typeof d.Items === 'string' ? JSON.parse(d.Items) : (d.Items || []);
+        } catch {
+          parsedItems = [];
+        }
+
+        return {
+          id: d.OrderId,
+          customer_name: d.CustomerContact || d.CustomerCompany || d.CustomerEmail,
+          customer_email: d.CustomerEmail,
+          customer_phone: d.CustomerContact || '',
+          items: parsedItems.map((i: any) => ({
+            name: i.productName || i.name || 'Casket Item',
+            category: i.category || 'Caskets',
+            variant: i.variant || 'Standard',
+            quantity: i.quantity || 1,
+            price: i.price || 0
+          })),
+          total: parsedItems.reduce((sum: number, it: any) => sum + ((it.price || 0) * (it.quantity || 1)), 0),
+          status: d.Status || 'pending',
+          notes: d.Notes,
+          created_at: d.CreatedAt
+        };
+      });
+
+      this.ordersSignal.set(mapped);
+    }
   }
 
-  async createOrder(order: {
+  async createOrder(orderData: {
+    customer_id?: number;
     customer_name: string;
     customer_email: string;
     customer_phone: string;
-    items: { name: string; category: string; variant: string; quantity: number; price: number }[];
-    total: number;
+    customer_company?: string;
+    items: any[];
+    total?: number;
+    notes?: string;
   }): Promise<Order> {
-    const res = await lastValueFrom(
-      this.http.post<Order>(`${this.apiUrl}/api/orders`, order)
-    );
-    return res;
+    const formattedItems: OrderItem[] = orderData.items.map(i => ({
+      productId: i.productId || i.product?.id || i.name || '',
+      productName: i.productName || i.product?.name || i.name || 'Casket Item',
+      name: i.productName || i.product?.name || i.name || 'Casket Item',
+      category: i.category || i.product?.category || 'Caskets',
+      variant: i.variant || 'Standard',
+      quantity: i.quantity || 1,
+      price: i.price || i.product?.price || 0
+    }));
+
+    const { data, error } = await this.supabase.client
+      .from('Orders')
+      .insert([{
+        CustomerId: orderData.customer_id || 2,
+        CustomerEmail: orderData.customer_email,
+        CustomerCompany: orderData.customer_company || null,
+        CustomerContact: `${orderData.customer_name} (${orderData.customer_phone})`,
+        Items: JSON.stringify(formattedItems),
+        Status: 'pending',
+        Notes: orderData.notes || null,
+        CreatedAt: new Date().toISOString()
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase Orders insert error:', error);
+      throw error;
+    }
+
+    const created: Order = {
+      id: data.OrderId,
+      customer_name: data.CustomerContact || data.CustomerCompany || data.CustomerEmail,
+      customer_email: data.CustomerEmail,
+      customer_phone: data.CustomerContact || '',
+      items: formattedItems,
+      total: orderData.total || 0,
+      status: data.Status,
+      notes: data.Notes,
+      created_at: data.CreatedAt
+    };
+
+    // Update in-memory signal
+    this.ordersSignal.update(existing => [created, ...existing]);
+
+    return created;
   }
 
   async updateStatus(id: number, status: string): Promise<void> {
-    await lastValueFrom(
-      this.http.patch(`${this.apiUrl}/api/orders/${id}`, { status }, {
-        headers: { Authorization: `Bearer ${this.token}` }
-      })
-    );
+    const { error } = await this.supabase.client
+      .from('Orders')
+      .update({ Status: status, UpdatedAt: new Date().toISOString() })
+      .eq('OrderId', id);
+
+    if (error) {
+      console.error('Supabase updateStatus error:', error);
+    }
     await this.fetchOrders();
   }
 
   async deleteOrder(id: number): Promise<void> {
-    await lastValueFrom(
-      this.http.delete(`${this.apiUrl}/api/orders/${id}`, {
-        headers: { Authorization: `Bearer ${this.token}` }
-      })
-    );
+    const { error } = await this.supabase.client
+      .from('Orders')
+      .delete()
+      .eq('OrderId', id);
+
+    if (error) {
+      console.error('Supabase deleteOrder error:', error);
+    }
     await this.fetchOrders();
   }
 

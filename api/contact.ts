@@ -62,6 +62,43 @@ export default async function handler(req: any, res: any) {
       return send(res, 500, { error: 'Failed to save submission', details: error.message });
     }
 
+    // Optional email dispatch to i.t.safuneralsupplies@gmail.com if Brevo key is available
+    const brevoApiKey = process.env.BREVO_API_KEY;
+    if (brevoApiKey) {
+      try {
+        await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'api-key': brevoApiKey
+          },
+          body: JSON.stringify({
+            sender: { name: 'SAFS Website Contact', email: 'i.t.safuneralsupplies@gmail.com' },
+            to: [{ email: 'i.t.safuneralsupplies@gmail.com', name: 'SAFS Contact Desk' }],
+            replyTo: { email: email.trim(), name: name.trim() },
+            subject: `Contact Form Message from ${name.trim()} (${company?.trim() || 'General'})`,
+            htmlContent: `
+              <div style="font-family: Arial, sans-serif; color: #151A40; max-width: 600px;">
+                <h3 style="color: #151A40; border-bottom: 2px solid #C5A059; padding-bottom: 8px;">New Contact Message Received</h3>
+                <p><strong>Name:</strong> ${name.trim()}</p>
+                <p><strong>Email:</strong> ${email.trim()}</p>
+                <p><strong>Phone:</strong> ${phone?.trim() || 'N/A'}</p>
+                <p><strong>Company:</strong> ${company?.trim() || 'N/A'}</p>
+                <p><strong>Subject:</strong> ${subject || 'General'}</p>
+                <p><strong>Message:</strong></p>
+                <div style="background: #f8f9fa; border-left: 4px solid #C5A059; padding: 12px; margin-top: 8px;">
+                  ${message.trim().replace(/\n/g, '<br />')}
+                </div>
+              </div>
+            `
+          })
+        });
+      } catch (emailErr) {
+        console.warn('Brevo contact email dispatch notice:', emailErr);
+      }
+    }
+
     return send(res, 200, { success: true, message: 'Enquiry submitted successfully' });
 
   } catch (err: any) {

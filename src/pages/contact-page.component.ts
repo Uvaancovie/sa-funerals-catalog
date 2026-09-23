@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EnquiryService } from '../services/enquiry.service';
+import { BrevoService } from '../services/brevo.service';
 
 @Component({
   selector: 'app-contact-page',
@@ -357,6 +358,7 @@ import { EnquiryService } from '../services/enquiry.service';
 })
 export class ContactPageComponent {
   private enquiryService = inject(EnquiryService);
+  private brevoService = inject(BrevoService);
 
   submitted = signal(false);
   sending = signal(false);
@@ -449,19 +451,17 @@ export class ContactPageComponent {
     this.error.set(null);
 
     try {
-      await this.enquiryService.addEnquiry({
-        customer_name: this.formData.name,
-        customer_email: this.formData.email,
-        customer_phone: this.formData.phone || '',
-        company: this.formData.company || '',
-        items: [{
-          name: this.formData.subject,
-          quantity: 1
-        }],
-        notes: this.formData.message
+      await this.brevoService.sendContactEmails({
+        name: this.formData.name,
+        email: this.formData.email,
+        phone: this.formData.phone,
+        company: this.formData.company,
+        subject: this.formData.subject,
+        message: this.formData.message
       });
       this.submitted.set(true);
     } catch (err) {
+      console.error('Contact form submission error:', err);
       this.error.set('Something went wrong. Please try again or contact us by phone.');
     } finally {
       this.sending.set(false);

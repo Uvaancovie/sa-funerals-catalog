@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ExportEnquiryService } from '../services/export-enquiry.service';
+import { BrevoService } from '../services/brevo.service';
 
 @Component({
   selector: 'app-export-enquiry-page',
@@ -434,7 +435,23 @@ export class ExportEnquiryPageComponent {
     message: ''
   };
 
-  constructor(private exportEnquiryService: ExportEnquiryService) {}
+  constructor(
+    private exportEnquiryService: ExportEnquiryService,
+    private brevoService: BrevoService
+  ) {}
+
+  private readFileAsBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.includes(',') ? result.split(',')[1] : result;
+        resolve(base64);
+      };
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
 
   isFormValid(): boolean {
     return (
@@ -477,31 +494,42 @@ export class ExportEnquiryPageComponent {
     this.errorMessage.set('');
 
     try {
-      const formData = new FormData();
-      formData.append('name', this.formData.name);
-      formData.append('email', this.formData.email);
-      formData.append('phone', this.formData.phone);
-      formData.append('message', this.formData.message);
+      let attachment: { name: string; content: string } | undefined;
+      const file = this.selectedFile();
+      if (file) {
+        try {
+          const base64 = await this.readFileAsBase64(file);
+          attachment = {
+            name: file.name,
+            content: base64
+          };
+        } catch (fileErr) {
+          console.warn('File read error (continuing without attachment):', fileErr);
+        }
+      }
 
-      if (this.formData.company_details) formData.append('company_details', this.formData.company_details);
-      if (this.formData.street_address) formData.append('street_address', this.formData.street_address);
-      if (this.formData.apartment) formData.append('apartment', this.formData.apartment);
-      if (this.formData.city) formData.append('city', this.formData.city);
-      if (this.formData.state_province) formData.append('state_province', this.formData.state_province);
-      if (this.formData.zip_code) formData.append('zip_code', this.formData.zip_code);
-      if (this.formData.country) formData.append('country', this.formData.country);
-      if (this.formData.business_industry) formData.append('business_industry', this.formData.business_industry);
-      if (this.selectedFile()) formData.append('registration_document', this.selectedFile()!);
+      await this.brevoService.sendExportEnquiryEmails({
+        name: this.formData.name,
+        email: this.formData.email,
+        phone: this.formData.phone,
+        company: this.formData.company_details,
+        street_address: this.formData.street_address,
+        apartment: this.formData.apartment,
+        city: this.formData.city,
+        state_province: this.formData.state_province,
+        zip_code: this.formData.zip_code,
+        country: this.formData.country,
+        business_industry: this.formData.business_industry,
+        message: this.formData.message,
+        attachment
+      });
 
-      await this.exportEnquiryService.submitEnquiry(formData);
       this.sending.set(false);
       this.submitted.set(true);
     } catch (error: any) {
+      console.error('Export enquiry dispatch error:', error);
       this.sending.set(false);
-      const detail = error?.error?.errors
-        ? Object.values(error.error.errors).flat().join('; ')
-        : null;
-      this.errorMessage.set(detail || error?.error?.message || error?.message || 'Failed to submit enquiry. Please try again.');
+      this.errorMessage.set('Failed to submit enquiry. Please try again or contact us directly.');
     }
   }
 

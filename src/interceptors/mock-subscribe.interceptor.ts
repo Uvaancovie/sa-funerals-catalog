@@ -12,33 +12,59 @@ export const mockSubscribeInterceptor: HttpInterceptorFn = (req, next) => {
     window.location.hostname === '127.0.0.1'
   );
 
-  if (
-    !isLocalHost ||
-    req.method !== 'POST' ||
-    !req.url.endsWith('/api/subscribe')
-  ) {
+  if (!isLocalHost || req.method !== 'POST') {
     return next(req);
   }
 
-  const body = req.body as { email?: string } | null | undefined;
-  const email = body?.email;
+  // 1. Handle /api/enquiry on localhost
+  if (req.url.endsWith('/api/enquiry')) {
+    const body = req.body as any;
+    if (!body?.customerDetails || !body?.cartItems) {
+      return of(
+        new HttpResponse({
+          status: 400,
+          body: { error: 'Missing customerDetails or cartItems' },
+        })
+      );
+    }
 
-  if (!email) {
+    console.info('[Dev Interceptor] Handled /api/enquiry locally:', body);
+
     return of(
       new HttpResponse({
-        status: 400,
-        body: { error: 'Email is required' },
+        status: 200,
+        body: {
+          success: true,
+          message: 'Enquiry received successfully! (Local dev mode)',
+        },
       })
     );
   }
 
-  return of(
-    new HttpResponse({
-      status: 200,
-      body: {
-        success: true,
-        message: 'Subscribed successfully! Confirmation & updates dispatched.',
-      },
-    })
-  );
+  // 2. Handle /api/subscribe on localhost
+  if (req.url.endsWith('/api/subscribe')) {
+    const body = req.body as { email?: string } | null | undefined;
+    const email = body?.email;
+
+    if (!email) {
+      return of(
+        new HttpResponse({
+          status: 400,
+          body: { error: 'Email is required' },
+        })
+      );
+    }
+
+    return of(
+      new HttpResponse({
+        status: 200,
+        body: {
+          success: true,
+          message: 'Subscribed successfully! Confirmation & updates dispatched.',
+        },
+      })
+    );
+  }
+
+  return next(req);
 };

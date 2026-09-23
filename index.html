@@ -36,8 +36,16 @@
 <body class="bg-safs-light text-gray-800 antialiased font-sans">
   <app-root></app-root>
 
-  <!-- Cloudflare Web Analytics -->
-  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7f4f4468a054436c8ada62fb38b1e16b"}'></script>
+  <!-- Cloudflare Web Analytics (Production only) -->
+  <script>
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      const cfScript = document.createElement('script');
+      cfScript.type = 'module';
+      cfScript.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      cfScript.setAttribute('data-cf-beacon', '{"token": "7f4f4468a054436c8ada62fb38b1e16b"}');
+      document.body.appendChild(cfScript);
+    }
+  </script>
   <!-- End Cloudflare Web Analytics -->
 </body>
 

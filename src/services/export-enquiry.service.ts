@@ -35,12 +35,16 @@ export class ExportEnquiryService {
 
   async fetchEnquiries(): Promise<void> {
     if (!this.token) return;
-    const res = await lastValueFrom(
-      this.http.get<ExportEnquiryRecord[]>(`${this.apiUrl}/api/export-enquiries`, {
-        headers: { Authorization: `Bearer ${this.token}` }
-      })
-    );
-    this.enquiries.set(res);
+    try {
+      const res = await lastValueFrom(
+        this.http.get<ExportEnquiryRecord[]>(`${this.apiUrl}/api/export-enquiries`, {
+          headers: { Authorization: `Bearer ${this.token}` }
+        })
+      );
+      this.enquiries.set(res || []);
+    } catch (err) {
+      console.warn('Backend port 8000 not reachable for fetchExportEnquiries:', err);
+    }
   }
 
   async submitEnquiry(formData: FormData): Promise<void> {

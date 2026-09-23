@@ -12,9 +12,9 @@ export default async function handler(req: any, res: any) {
 
   const apiKey = process.env.BREVO_API_KEY;
 
-  if (!apiKey) {
-    return res.status(500).json({ error: 'Server configuration error: Missing Brevo API Key' });
-  }
+  const company = customerDetails.company || 'Not Specified';
+  const region = customerDetails.region || 'Not Specified';
+  const notes = customerDetails.notes || 'None';
 
   const htmlContent = `
     <html>
@@ -24,13 +24,13 @@ export default async function handler(req: any, res: any) {
                     SOUTH AFRICAN FUNERAL SUPPLIES
                 </h2>
                 <p style='color: #C5A059; margin: 5px 0 0 0; font-size: 13px; font-style: italic;'>
-                    SA's leading caskets supplier
+                    Product Enquiry Confirmation
                 </p>
             </div>
             <div style='padding: 20px;'>
-                <h3 style='font-family: "Playfair Display", serif; color: #1E2352;'>Cart Enquiry Confirmation</h3>
+                <h3 style='font-family: "Playfair Display", serif; color: #1E2352;'>Product Enquiry Received</h3>
                 <p>Dear ${customerDetails.name},</p>
-                <p>Thank you for your enquiry. We have received your request and our team will get back to you shortly with pricing and availability for these items.</p>
+                <p>Thank you for submitting your enquiry. Our sales team has received your request and will contact you promptly with our wholesale catalog pricing and stock availability.</p>
                 
                 <div style='margin-top: 20px; border: 1px solid #E9ECEF; border-radius: 5px; overflow: hidden;'>
                     <table style='width: 100%; border-collapse: collapse; text-align: left;'>
@@ -48,24 +48,46 @@ export default async function handler(req: any, res: any) {
                 </div>
 
                 <div style='margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;'>
-                    <h4 style='margin-top: 0; color: #C5A059; margin-bottom: 5px;'>Contact Details:</h4>
-                    <p style='margin: 0;'><strong>Name:</strong> ${customerDetails.name}</p>
-                    <p style='margin: 0;'><strong>Email:</strong> ${customerDetails.email}</p>
-                    <p style='margin: 0;'><strong>Phone:</strong> ${customerDetails.phone}</p>
+                    <h4 style='margin-top: 0; color: #C5A059; margin-bottom: 8px;'>Customer & Business Details:</h4>
+                    <p style='margin: 0 0 4px 0;'><strong>Business / Parlor:</strong> ${company}</p>
+                    <p style='margin: 0 0 4px 0;'><strong>Contact Person:</strong> ${customerDetails.name}</p>
+                    <p style='margin: 0 0 4px 0;'><strong>Email:</strong> ${customerDetails.email}</p>
+                    <p style='margin: 0 0 4px 0;'><strong>Phone:</strong> ${customerDetails.phone}</p>
+                    <p style='margin: 0 0 4px 0;'><strong>Location / Region:</strong> ${region}</p>
+                    <p style='margin: 0;'><strong>Special Notes:</strong> ${notes}</p>
                 </div>
 
-                <p style='margin-top: 30px; font-size: 13px; color: #7f8c8d;'>
-                    For any immediate inquiries, please contact us at info@safuneralsupplies.co.za or call our Phoenix, Durban head office.
+                <p style='margin-top: 30px; font-size: 12px; color: #7f8c8d; border-top: 1px solid #e9ecef; padding-top: 15px;'>
+                    South African Funeral Supplies (Pty) Ltd | 160 Aberdare Dr, Phoenix Industrial Park, Durban<br />
+                    Direct: (+27) 31 508 6700 | Email: info@safuneralsupplies.co.za
                 </p>
             </div>
         </body>
     </html>
   `;
 
+  if (!apiKey) {
+    console.warn('BREVO_API_KEY is missing in environment. Logging enquiry payload:');
+    console.log(JSON.stringify({ customerDetails, cartItems }, null, 2));
+    return res.status(200).json({ 
+      success: true, 
+      simulated: true, 
+      message: 'Enquiry received in development mode (Brevo key not configured locally)' 
+    });
+  }
+
+  const senderEmail = process.env.BREVO_SENDER_EMAIL || 'i.t.safuneralsupplies@gmail.com';
+  const senderName = process.env.BREVO_SENDER_NAME || 'South African Funeral Supplies';
+  const adminEmail = 'i.t.safuneralsupplies@gmail.com';
+
   const payload = {
-    sender: { name: 'SA Funeral Supplies', email: 'info@safuneralsupplies.co.za' },
-    to: [{ email: customerDetails.email, name: customerDetails.name }],
-    subject: `Cart Enquiry Received - ${cartItems.length} items`,
+    sender: { name: senderName, email: senderEmail },
+    to: [
+      { email: adminEmail, name: 'SAFS Order Desk' },
+      { email: customerDetails.email, name: customerDetails.name }
+    ],
+    replyTo: { email: customerDetails.email, name: customerDetails.name },
+    subject: `New Casket Order / Enquiry from ${company} (${customerDetails.name}) - ${cartItems.length} items`,
     htmlContent: htmlContent
   };
 
@@ -83,7 +105,7 @@ export default async function handler(req: any, res: any) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Brevo API error:', errorText);
-      return res.status(response.status).json({ error: 'Failed to send email' });
+      return res.status(response.status).json({ error: 'Failed to send email', details: errorText });
     }
 
     const data = await response.json();

@@ -26,12 +26,16 @@ export class EnquiryService {
 
   async fetchEnquiries(): Promise<void> {
     if (!this.token) return;
-    const res = await lastValueFrom(
-      this.http.get<EnquiryRecord[]>(`${this.apiUrl}/api/enquiries`, {
-        headers: { Authorization: `Bearer ${this.token}` }
-      })
-    );
-    this.enquiries.set(res);
+    try {
+      const res = await lastValueFrom(
+        this.http.get<EnquiryRecord[]>(`${this.apiUrl}/api/enquiries`, {
+          headers: { Authorization: `Bearer ${this.token}` }
+        })
+      );
+      this.enquiries.set(res || []);
+    } catch (err) {
+      console.warn('Backend port 8000 not reachable for fetchEnquiries (skipping):', err);
+    }
   }
 
   async addEnquiry(data: {
@@ -42,26 +46,18 @@ export class EnquiryService {
     items: { name: string; quantity: number }[];
     notes?: string;
   }): Promise<void> {
-    const isLocalhost = typeof window !== 'undefined' && 
-      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '0.0.0.0');
+    const payload = {
+      name: data.customer_name,
+      email: data.customer_email,
+      phone: data.customer_phone,
+      company: data.company || '',
+      subject: data.items[0]?.name || 'General Inquiry',
+      message: data.notes || ''
+    };
 
-    if (isLocalhost) {
-      await lastValueFrom(
-        this.http.post(`${this.apiUrl}/api/enquiries`, data)
-      );
-    } else {
-      const payload = {
-        name: data.customer_name,
-        email: data.customer_email,
-        phone: data.customer_phone,
-        company: data.company || '',
-        subject: data.items[0]?.name || 'General Inquiry',
-        message: data.notes || ''
-      };
-      await lastValueFrom(
-        this.http.post(`/api/contact`, payload)
-      );
-    }
+    await lastValueFrom(
+      this.http.post(`/api/contact`, payload)
+    );
   }
 
   async updateStatus(id: number, status: 'new' | 'contacted' | 'closed'): Promise<void> {
