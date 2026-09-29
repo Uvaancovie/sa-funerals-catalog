@@ -17,6 +17,8 @@ interface BranchLocation {
   template: `
     <!-- Hero Section -->
     <section class="relative min-h-[60vh] sm:min-h-[70vh] flex items-center bg-safs-dark overflow-hidden" aria-label="Branches SAFS hero">
+      <img src="https://hcestxaffzsqlkiedvfx.supabase.co/storage/v1/object/public/branches/map%20of%20south%20ahh.jpg" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover opacity-55 pointer-events-none" />
+      <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none"></div>
       <!-- Background pattern -->
       <div class="absolute inset-0 opacity-[0.05] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRjMC0yLjIuOC00LjMgMi4yLTUuN2wxLjQtMS40IDQuMiA0LjItMS40IDEuNGMtMS41IDEuNS0zLjYgMi4zLTUuNyAyLjMtMS4zIDAtMi41LS4zLTMuNi0uOGwxLjUtMS41Yy42LjIgMS4zLjUgMiAuNXoiLz48L2c+PC9nPjwvc3ZnPg==')] pointer-events-none"></div>
 
@@ -25,7 +27,7 @@ interface BranchLocation {
       <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-safs-gold/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="relative w-full max-w-6xl mx-auto px-4 sm:px-6 py-24 sm:py-32">
-        <div class="max-w-3xl rounded-3xl p-6 sm:p-8 lg:p-10 bg-safs-dark/95 border border-safs-gold/20 shadow-2xl backdrop-blur-sm">
+        <div class="max-w-3xl rounded-3xl p-6 sm:p-8 lg:p-10 bg-safs-dark/70 border border-safs-gold/20 shadow-2xl backdrop-blur-md">
           <div class="flex items-center gap-3 mb-6">
             <div class="w-10 h-0.5 bg-safs-gold" aria-hidden="true"></div>
             <span class="text-safs-gold font-bold text-sm tracking-[0.2em] uppercase">Distribution Network</span>
